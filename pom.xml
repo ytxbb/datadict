@@ -19,7 +19,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <fastjson>1.2.49</fastjson>
+        <shiro-spring>1.4.0</shiro-spring>
         <druid.version>1.1.10</druid.version>
+        <hutool-all.version>4.1.12</hutool-all.version>
         <lombok.version>1.16.20</lombok.version>
     </properties>
 
@@ -92,13 +94,13 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>4.1.10</version>
+            <version>${hutool-all.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro-spring}</version>
         </dependency>
     </dependencies>
 
@@ -127,15 +129,6 @@
             </properties>
         </profile>
     </profiles>
-
-    <!--<build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-        </plugins>
-    </build>-->
 
     <build>
         <resources>
