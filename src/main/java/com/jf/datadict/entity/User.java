@@ -1,10 +1,15 @@
 package com.jf.datadict.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class User {
 
-    String id;
-    String name;
-    String password;
+    private String id;
+    private String name;
+    private String password;
 
     public User(String id, String name, String password) {
         this.id = id;
