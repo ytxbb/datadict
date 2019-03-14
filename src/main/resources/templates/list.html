@@ -13,8 +13,8 @@
         <th>姓名</th>
     </tr>
     <tr th:each="user:${userList}" class="row">
-        <td th:text="${user.getId()}"></td>
-        <td th:text="${user.getName()}"></td>
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
     </tr>
 </table>
 </body>
