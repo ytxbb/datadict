@@ -12,6 +12,7 @@
     <artifactId>datadict</artifactId>
     <version>1.0</version>
     <name>datadict</name>
+    <packaging>war</packaging>
     <description>在线数据字典</description>
 
     <properties>
@@ -35,7 +36,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
             <!-- provided表明该包只在编译和测试的时候用 -->
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <dependency>
@@ -117,6 +118,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
