@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @RequestMapping("/list")
+    @RequestMapping("/test")
     public String userList2(Model model) throws Exception {
         List<User> userList = new ArrayList<>();
         userList.add(new User("1","aa","123"));
@@ -21,6 +21,8 @@ public class UserController {
         userList.add(new User("3","cc","123"));
 
         model.addAttribute("userList", userList);
-        return "list";
+
+        model.addAttribute("userName", "ABC");
+        return "test";
     }
 }

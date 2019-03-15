@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>用户列表</title>
+    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+<p th:text="'Hello！, ' + ${userName} + '!'">3333</p>
+<div class="container">
+    <table class="table table-striped">
+        <tr>
+            <th>ID</th>
+            <th>姓名</th>
+        </tr>
+        <tr th:each="user:${userList}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
