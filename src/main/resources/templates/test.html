@@ -4,7 +4,19 @@
 <head>
     <meta charset="UTF-8" />
     <title>用户列表</title>
-    <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <!--<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />-->
+    <link th:href="@{/static/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <script>
+        var getProjectPathName = function(){
+            //获取路径
+            var pathName=window.document.location.pathname;
+            //截取，得到项目名称
+            var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+            console.log(projectName);
+            return projectName;
+        }
+        window.onload = getProjectPathName;
+    </script>
 </head>
 <body>
 <p th:text="'Hello！, ' + ${userName} + '!'">3333</p>
