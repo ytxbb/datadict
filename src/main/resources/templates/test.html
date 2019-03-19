@@ -6,6 +6,7 @@
     <title>用户列表</title>
     <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/static/iviewui/css/iview.css}" />
     <style>
         .show-grid [class^=col-] {
             padding-top: 10px;
@@ -51,15 +52,52 @@
     </div>
 </div>
 
+<div id="iviewApp">
+    <i-button @click="show">Click me!</i-button>
+    <Modal v-model="visible" title="Welcome">Welcome to iView</Modal>
+</div>
+
+<template style="background-color: #00F7DE">
+    <Row>
+        <Col span="12">col-12</Col>
+        <Col span="12">col-12</Col>
+    </Row>
+    <br>
+    <Row>
+        <Col span="8">col-8</Col>
+        <Col span="8">col-8</Col>
+        <Col span="8">col-8</Col>
+    </Row>
+    <br>
+    <Row>
+        <Col span="6">col-6</Col>
+        <Col span="6">col-6</Col>
+        <Col span="6">col-6</Col>
+        <Col span="6">col-6</Col>
+    </Row>
+</template>
+
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
-<script th:src="@{/static/vue/vue.js}"></script>
+<script th:src="@{/static/vue/vue.min.js}"></script>
+<script th:src="@{/static/iviewui/js/iview.min.js}"></script>
 <script>
     new Vue({
         el: '#app',
         data: {
             message: 'Hello you are best!'
+        }
+    })
+    new Vue({
+        el: '#iviewApp',
+        data: {
+            visible: false
+        },
+        methods: {
+            show: function () {
+                this.visible = true;
+            }
         }
     })
 </script>
