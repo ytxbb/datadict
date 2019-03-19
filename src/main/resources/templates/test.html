@@ -4,22 +4,21 @@
 <head>
     <meta charset="UTF-8" />
     <title>用户列表</title>
-    <!--<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" />-->
-    <link th:href="@{/static/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
-    <script>
-        var getProjectPathName = function(){
-            //获取路径
-            var pathName=window.document.location.pathname;
-            //截取，得到项目名称
-            var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
-            console.log(projectName);
-            return projectName;
+    <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" />
+    <style>
+        .show-grid [class^=col-] {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background-color: #eee;
+            background-color: rgba(86,61,124,.15);
+            border: 1px solid #ddd;
+            border: 1px solid rgba(86,61,124,.2);
         }
-        window.onload = getProjectPathName;
-    </script>
+    </style>
 </head>
 <body>
-<p th:text="'Hello！, ' + ${userName} + '!'">3333</p>
+<p th:text="'Hello！, ' + ${userName} + '!'">userName</p>
 <div class="container">
     <table class="table table-striped">
         <tr>
@@ -31,6 +30,38 @@
             <td th:text="${user.name}"></td>
         </tr>
     </table>
+    <div class="row show-grid">
+        <div class="col-md-6">.col-md-6</div>
+        <div class="col-md-6">.col-md-6</div>
+    </div>
 </div>
+<div id="app">
+    <p>{{ message }}</p>
+</div>
+
+<div class="layui-container">
+    常规布局（以中型屏幕桌面为例）：
+    <div class="layui-row">
+        <div class="layui-col-md6">
+            你的内容 6/12
+        </div>
+        <div class="layui-col-md6">
+            你的内容 6/12
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
+<script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
+<script th:src="@{/static/layui/layui.all.js}"></script>
+<script th:src="@{/static/vue/vue.js}"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello you are best!'
+        }
+    })
+</script>
 </body>
 </html>
