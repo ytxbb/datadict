@@ -10,11 +10,10 @@ import java.util.List;
 
 
 @Controller
-@RequestMapping("/user")
-public class UserController {
+public class TestController {
 
     @RequestMapping("/test")
-    public String userList2(Model model) throws Exception {
+    public String userList2(Model model) {
         List<User> userList = new ArrayList<>();
         userList.add(new User("1","aa","123"));
         userList.add(new User("2","bb","123"));
