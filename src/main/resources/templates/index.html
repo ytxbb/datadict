@@ -19,32 +19,79 @@
         <p>Designed to easy to exporting and viewing table structures</p>
     </div>
 </div>
-<!--搜索-->
+<!--选择数据库-->
 <div class="container">
-    <form class="layui-form" action="/">
-        <div class="form-div">
-            <label class="layui-form-label">数据库</label>
-            <div class="layui-input-block form-select">
-                <select name="city" lay-verify="required">
-                    <option value=""></option>
-                    <option value="0">北京</option>
-                    <option value="1">上海</option>
-                    <option value="2">广州</option>
-                    <option value="3">深圳</option>
-                    <option value="4">杭州</option>
-                </select>
+    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <ul class="layui-tab-title">
+            <li class="layui-this">默认数据库</li>
+            <li>自定义访问</li>
+        </ul>
+        <!--搜索-->
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <form class="layui-form" action="/">
+                    <div class="form-div">
+                        <label class="layui-form-label">数据库</label>
+                        <div class="layui-input-block form-select">
+                            <select name="city" lay-verify="required">
+                                <option value=""></option>
+                                <option value="0">北京</option>
+                                <option value="1">上海</option>
+                                <option value="2">广州</option>
+                                <option value="3">深圳</option>
+                                <option value="4">杭州</option>
+                            </select>
+                        </div>
+
+                        <label class="layui-form-label">表名</label>
+                        <input type="text" class="form-control form-input" id="inputSearch"
+                               placeholder="请输入要搜索的表名" autocomplete="off">
+
+                        <button type="button" class="btn btn-default submit-button">查询</button>
+                    </div>
+                </form>
             </div>
-
-            <label class="layui-form-label">表名</label>
-            <input type="text" class="form-control form-input" id="inputSearch"
-                   placeholder="请输入要搜索的表名" autocomplete="off">
-
-            <button type="button" class="btn btn-default submit-button">查询</button>
+            <!--输入IP访问-->
+            <div class="layui-tab-item">
+                <div class="right-tab-div">
+                    <form>
+                        <div class="layui-form-item">
+                            <label class="right-tab-form-label">IP</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="ip" required  lay-verify="required" placeholder="数据库IP"
+                                       autocomplete="off" class="form-control form-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="right-tab-form-label">Port</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="port" required  lay-verify="required" placeholder="端口号"
+                                       autocomplete="off" class="form-control form-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="right-tab-form-label">UserName</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="userName" required  lay-verify="required" placeholder="用户名"
+                                       autocomplete="off" class="form-control form-input">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="right-tab-form-label">Password</label>
+                            <div class="layui-input-block">
+                                <input type="password" name="pwd" required  lay-verify="required" placeholder="密码"
+                                       autocomplete="off" class="form-control form-input">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">确定连接</button>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
 </div>
 <!--统计-->
-<div class="container">
+<!--<div class="container">
     <table class="table table-bordered table-hover">
         <tr>
             <th>分类</th>
@@ -55,7 +102,7 @@
             <td th:text="${user.name}"></td>
         </tr>
     </table>
-</div>
+</div>-->
 <!--版本号-->
 <div class="footer">
     <p class="footer-p">
