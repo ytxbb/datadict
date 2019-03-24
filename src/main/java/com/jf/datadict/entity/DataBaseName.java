@@ -12,4 +12,5 @@ public class DataBaseName {
 
     private Integer uid;
     private String name;
+    private Integer status;
 }
