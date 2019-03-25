@@ -147,7 +147,7 @@ public class DruidConfig {
 
         VFS.addImplClass(SpringBootVFS.class);
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath*:/mapping/*.xml"));
+        sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath*:/mapper/*.xml"));
         logger.info("dao层扫描层为：/mapping/*.xml");
         return sqlSessionFactoryBean.getObject();
     }
