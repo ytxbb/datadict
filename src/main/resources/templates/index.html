@@ -54,16 +54,6 @@
                             <th width= "40%">分类</th>
                             <th width= "20%">统计数</th>
                         </tr>
-                        <tr>
-                            <td rowspan="2">JF_01</td>
-                            <td rowspan="2">304</td>
-                            <td>分类01</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>分类02</td>
-                            <td>2</td>
-                        </tr>
                         <tr th:each="ds:${dataStatistics}">
                             <td th:class="'type_'+${ds.dbName}" th:text="${ds.dbName}"></td>
                             <td th:class="'type_'+${ds.version}" th:text="${ds.version}"></td>
@@ -126,11 +116,18 @@
 <script th:inline="javascript">
     function mergeRows(){
         $('.table').find("td[class^='type_']").each(function (index, element) {
-            console.log(element);
+            // console.log(element);
             var cla = $(element).attr("class");
             var obj = $('.table').find("."+cla);
-            console.log(obj);
-            if (obj.dbName = "jf_dc_db") {
+            // console.log(obj);
+            // console.log(obj.eq(1));
+            console.log(obj.eq(2));
+            if (obj.dbName = obj.eq(1)) {
+                obj.eq(0).attr("rowspan",2);
+                obj.eq(0).removeClass(cla);
+                $('.table').find("."+cla).remove();
+            }
+            if (obj.version = "3.04") {
                 obj.eq(0).attr("rowspan",2);
                 obj.eq(0).removeClass(cla);
                 $('.table').find("."+cla).remove();
