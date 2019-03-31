@@ -3,6 +3,7 @@ package com.jf.datadict.service.impl;
 import com.jf.datadict.dao.DataBaseMapper;
 import com.jf.datadict.entity.DataBaseName;
 import com.jf.datadict.exception.ServiceException;
+import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.service.DataBaseService;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class DataBaseServiceImpl implements DataBaseService {
     private DataBaseMapper dataBaseMapper;
 
     @Override
-    public List<DataBaseName> queryAllDataBase() {
+    public JSONResult queryAllDataBase() {
         List<DataBaseName> dataBaseNames;
         try {
             dataBaseNames = dataBaseMapper.queryAllDataBase();
@@ -24,6 +25,6 @@ public class DataBaseServiceImpl implements DataBaseService {
             e.printStackTrace();
             throw new ServiceException("查询数据库列表出错："+e.getMessage());
         }
-        return dataBaseNames;
+        return JSONResult.ok(dataBaseNames);
     }
 }

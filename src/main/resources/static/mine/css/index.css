@@ -60,6 +60,13 @@ html, body, div, ul, li, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, form, input,
     float: left;
 }
 
+.left-tab-container {
+    padding-right: 0;
+    padding-left: 0;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .right-tab-div {
     margin-left: 25%;
 }

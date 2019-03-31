@@ -45,6 +45,33 @@
                         <button type="button" class="btn btn-default submit-button">查询</button>
                     </div>
                 </form>
+                <!--统计-->
+                <div class="left-tab-container">
+                    <table class="table table-bordered table-striped table-hover">
+                        <tr>
+                            <th width= "20%">数据源</th>
+                            <th width= "20%">版本</th>
+                            <th width= "40%">分类</th>
+                            <th width= "20%">统计数</th>
+                        </tr>
+                        <tr>
+                            <td rowspan="2">JF_01</td>
+                            <td rowspan="2">304</td>
+                            <td>分类01</td>
+                            <td>1</td>
+                        </tr>
+                        <tr>
+                            <td>分类02</td>
+                            <td>2</td>
+                        </tr>
+                        <tr th:each="ds:${dataStatistics}">
+                            <td th:class="'type_'+${ds.dbName}" th:text="${ds.dbName}"></td>
+                            <td th:class="'type_'+${ds.version}" th:text="${ds.version}"></td>
+                            <td th:text="${ds.dtName}"></td>
+                            <td th:text="${ds.tableCount}"></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <!--输入IP访问-->
             <div class="layui-tab-item">
@@ -85,19 +112,6 @@
         </div>
     </div>
 </div>
-<!--统计-->
-<!--<div class="container">
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>分类</th>
-            <th>统计数</th>
-        </tr>
-        <tr th:each="user:${userList}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.name}"></td>
-        </tr>
-    </table>
-</div>-->
 <!--版本号-->
 <div class="footer">
     <p class="footer-p">
@@ -109,15 +123,33 @@
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
 <script th:src="@{/static/vue/vue.min.js}"></script>
+<script th:inline="javascript">
+    function mergeRows(){
+        $('.table').find("td[class^='type_']").each(function (index, element) {
+            console.log(element);
+            var cla = $(element).attr("class");
+            var obj = $('.table').find("."+cla);
+            console.log(obj);
+            if (obj.dbName = "jf_dc_db") {
+                obj.eq(0).attr("rowspan",2);
+                obj.eq(0).removeClass(cla);
+                $('.table').find("."+cla).remove();
+            }
+        })
+    }
+
+    $(document).ready(function(){
+        mergeRows();
+    });
+</script>
 <script>
-    layui.use(['form', 'layer'], function () {
-        var form = layui.form;
+    function getDataBaseList(){
         $.ajax({
             type: 'GET',
             dataType: 'json',
             url: '/queryAllDataBase',
             success: function (data) {
-                $.each(data, function (index, item) {
+                $.each(data.data, function (index, item) {
                     console.log(index);
                     console.log(item);
 
@@ -125,32 +157,17 @@
                     $('#dbValue').append(new Option(item.name, item.uid));
                 });
                 layui.form.render("select");
-            }
-        })
-    })
-    function getDataBaseList(){
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: '/queryAllDataBase',
-            success: function (data) {
-                $.each(data, function (index, item) {
-                    $('#xm').append(new Option(item.xm, item.id));// 下拉菜单里添加元素
-                });
-                layui.form.render("select");
+            },
+            error: function (data) {
+                layer.msg(data.msg);
             }
         })
     }
 
-    /*form.on('select(filter)', function(data){
-        console.log(data.elem); //得到select原始DOM对象
-        console.log(data.value); //得到被选中的值
-        console.log(data.othis); //得到美化后的DOM对象
-    });*/
-
-    $(document).ready(function () {
-        // getDataBaseList();
-    });
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form;
+        getDataBaseList();
+    })
 </script>
 <script>
     new Vue({
