@@ -56,7 +56,7 @@
                         </tr>
                         <tr th:each="ds:${dataStatistics}">
                             <td th:class="'type_'+${ds.dbName}" th:text="${ds.dbName}"></td>
-                            <td th:class="'type_'+${ds.version}" th:text="${ds.version}"></td>
+                            <td th:class="'ver_'+${ds.version}" th:text="${ds.version}"></td>
                             <td th:text="${ds.dtName}"></td>
                             <td th:text="${ds.tableCount}"></td>
                         </tr>
@@ -116,19 +116,11 @@
 <script th:inline="javascript">
     function mergeRows(){
         $('.table').find("td[class^='type_']").each(function (index, element) {
-            // console.log(element);
             var cla = $(element).attr("class");
             var obj = $('.table').find("."+cla);
-            // console.log(obj);
-            // console.log(obj.eq(1));
-            console.log(obj.eq(2));
-            if (obj.dbName = obj.eq(1)) {
-                obj.eq(0).attr("rowspan",2);
-                obj.eq(0).removeClass(cla);
-                $('.table').find("."+cla).remove();
-            }
-            if (obj.version = "3.04") {
-                obj.eq(0).attr("rowspan",2);
+            if (obj.length>=1) {
+                console.log(index);
+                obj.eq(0).attr("rowspan",obj.length);
                 obj.eq(0).removeClass(cla);
                 $('.table').find("."+cla).remove();
             }
@@ -147,8 +139,8 @@
             url: '/queryAllDataBase',
             success: function (data) {
                 $.each(data.data, function (index, item) {
-                    console.log(index);
-                    console.log(item);
+                    /*console.log(index);
+                    console.log(item);*/
 
                     // 下拉菜单里添加元素
                     $('#dbValue').append(new Option(item.name, item.uid));
