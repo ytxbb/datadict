@@ -18,5 +18,6 @@
             GROUP BY r.dt_id
         ) r on r.dt_id = t.uid
         where t.status = 1 and db.status = 1
+        order by db.db_name,t.version
     </select>
 </mapper>

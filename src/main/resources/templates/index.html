@@ -47,7 +47,7 @@
                 </form>
                 <!--统计-->
                 <div class="left-tab-container">
-                    <table class="table table-bordered table-striped table-hover">
+                    <table class="table table-bordered table-striped table-hover" id="dbStatistics">
                         <tr>
                             <th width= "20%">数据源</th>
                             <th width= "20%">版本</th>
@@ -56,7 +56,7 @@
                         </tr>
                         <tr th:each="ds:${dataStatistics}">
                             <td th:class="'type_'+${ds.dbName}" th:text="${ds.dbName}"></td>
-                            <td th:class="'ver_'+${ds.version}" th:text="${ds.version}"></td>
+                            <td th:text="${ds.version}"></td>
                             <td th:text="${ds.dtName}"></td>
                             <td th:text="${ds.tableCount}"></td>
                         </tr>
@@ -108,6 +108,15 @@
         <span> By JF From 2019-03-19 </span>
     </p>
 </div>
+<!--<div class="footer">
+    <div class="footer-left"></div>
+    <div class="footer-middle">
+        <p class="footer-p">
+            <span> By JF From 2019-03-19 </span>
+        </p>
+    </div>
+    <div class="footer-right"></div>
+</div>-->
 
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
@@ -119,8 +128,8 @@
             var cla = $(element).attr("class");
             var obj = $('.table').find("."+cla);
             if (obj.length>=1) {
-                console.log(index);
                 obj.eq(0).attr("rowspan",obj.length);
+                obj.eq(0).css("color","#1c93f9");
                 obj.eq(0).removeClass(cla);
                 $('.table').find("."+cla).remove();
             }
