@@ -123,13 +123,34 @@
 <script th:src="@{/static/layui/layui.all.js}"></script>
 <script th:src="@{/static/vue/vue.min.js}"></script>
 <script th:inline="javascript">
+    function queryMenuList(dbName) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {"dbName":dbName},
+            url: '/queryMenuList',
+            success: function (data) {
+                if (data.status == 200) {
+                    console.log(data);
+                } else {
+                    layer.msg(data.msg);
+                }
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+            }
+        })
+    }
+
     function mergeRows(){
         $('.table').find("td[class^='type_']").each(function (index, element) {
             var cla = $(element).attr("class");
             var obj = $('.table').find("."+cla);
             if (obj.length>=1) {
+                let dbName = $(element).text();
                 obj.eq(0).attr("rowspan",obj.length);
-                obj.eq(0).css("color","#1c93f9");
+                obj.eq(0).css("color","#1c93f9")
+                obj.eq(0).wrapInner("<span onclick='queryMenuList(\"" +dbName+ "\")'></span>");
                 obj.eq(0).removeClass(cla);
                 $('.table').find("."+cla).remove();
             }
@@ -148,9 +169,6 @@
             url: '/queryAllDataBase',
             success: function (data) {
                 $.each(data.data, function (index, item) {
-                    /*console.log(index);
-                    console.log(item);*/
-
                     // 下拉菜单里添加元素
                     $('#dbValue').append(new Option(item.name, item.uid));
                 });

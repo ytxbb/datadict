@@ -3,13 +3,23 @@ html, body, div, ul, li, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, form, input,
     padding: 0;
 }
 
+a:link {
+    font-size: 14px;
+    color: #1c93f9;
+    text-decoration: none;
+}
+a:visited {
+    font-size: 14px;
+    color: #1c93f9;
+    text-decoration: none;
+}
+
 .show-grid [class^=col-] {
     padding-top: 10px;
     padding-bottom: 10px;
     background-color: #eee;
     background-color: rgba(86, 61, 124, .15);
     border: 1px solid #ddd;
-    border: 1px solid rgba(86, 61, 124, .2);
 }
 
 .empty-header {

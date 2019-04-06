@@ -1,25 +1,21 @@
 package com.jf.datadict.controller;
 
 import com.jf.datadict.constants.ReturnCode;
-import com.jf.datadict.entity.User;
 import com.jf.datadict.model.JSONResult;
-import com.jf.datadict.service.DataBaseService;
+import com.jf.datadict.service.DetailService;
 import com.jf.datadict.service.DataStatisticsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
-public class DefaultController {
+public class IndexController {
 
     @Resource
-    private DataBaseService dataBaseService;
+    private DetailService dataBaseService;
 
     @Resource
     private DataStatisticsService dataStatisticsService;

@@ -2,10 +2,15 @@ package com.jf.datadict.service;
 
 import com.jf.datadict.model.JSONResult;
 
-public interface DataBaseService {
+public interface DetailService {
 
     /**
      *  查询数据库列表
      */
     JSONResult queryAllDataBase();
+
+    /**
+     * 查询数据源菜单
+     */
+    JSONResult queryMenuList(String dbName);
 }
