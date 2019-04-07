@@ -5,9 +5,11 @@ import com.jf.datadict.service.DetailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class DetailController {
@@ -16,12 +18,8 @@ public class DetailController {
     private DetailService detailService;
 
     @GetMapping("/show")
-    public String show(){
-        return "show";
-    }
-
-    @GetMapping("/show2")
-    public String show2(){
+    public String show(HttpSession httpSession, @RequestParam("dbName") String dbName){
+        httpSession.setAttribute("dbName", dbName);
         return "show";
     }
 

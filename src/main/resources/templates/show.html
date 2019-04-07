@@ -20,6 +20,7 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
+        <input type="hidden" id="hiddenInput" th:text="${session.dbName}"/>
         <div style="padding: 15px;">内容主体区域</div>
     </div>
 
@@ -37,10 +38,10 @@
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            data: {"dbName":"jf_dc_db"},
+            data: {"dbName":"jf_vis_db"},
             url: '/queryMenuList',
             success: function (data) {
-                console.log(data.data);
+                console.log($("#hiddenInput").text());
 
                 var menu = "";
                 $.each(data.data, function(index, item){
