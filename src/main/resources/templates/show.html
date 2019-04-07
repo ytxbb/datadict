@@ -44,7 +44,6 @@
 
                 var menu = "";
                 $.each(data.data, function(index, item){
-                    // debugger;
                     if (item.parentUid == null && item.menuName != null) {
                         menu += "<ul class=\"layui-nav layui-nav-tree\" >";
                         if (index === 0) {
@@ -53,18 +52,17 @@
                             menu += "<li data-name=\"component\" class=\"layui-nav-item\">";
                         }
                         menu += "<a href=\"javascript:;\"><i class=\"layui-icon layui-icon-component\"></i>" +
-                            "<cite>"+item.menuName+"</cite>";
+                            "<cite>&nbsp;"+item.menuName+"</cite>";
                         if (item.childMenus != null && item.childMenus.length > 0) {
                             menu += "<span class=\"layui-nav-more\"></span></a>"; //添加三角图标
                             $.each(item.childMenus, function(index, secItem){
-                                // debugger;
                                 menu += "<dl class=\"layui-nav-child\"><dd data-name=\"grid\">" +
-                                    "<a href=\"##\"><i class=\"layui-icon layui-icon-snowflake\">"+secItem.menuName+"";
+                                    "<a href=\"##\"><i class=\"layui-icon layui-icon-snowflake\">" +
+                                    "&nbsp;&nbsp;"+secItem.menuName+"";
                                 if (secItem.childMenus != null && secItem.childMenus.length > 0) {
                                     menu += "</i><span class=\"layui-nav-more\"></span></a>";
                                     menu += "<dl class=\"layui-nav-child\">";
                                     $.each(secItem.childMenus, function(index, thirdItem){
-                                        // debugger;
                                         menu += "<dd data-name=\"list\">" +
                                             "<a href=\"#\">"+thirdItem.menuName+"</a></dd>";
                                     });
@@ -77,7 +75,6 @@
                     }
                 });
                 $("#nav").html(menu);
-                console.log(menu);
                 var element = layui.element;
                 element.init()//初始化element事件，使菜单展开
             },
