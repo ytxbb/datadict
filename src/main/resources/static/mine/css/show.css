@@ -1,0 +1,15 @@
+.layui-header {
+    width: 200px;
+}
+.layui-layout-admin .layui-body {
+    top: 0;
+}
+.layui-bg-black {
+    background-color: #23262e!important;
+}
+.layui-nav {
+    background-color: #23262e;
+}
+.footer-p {
+    padding-left: 500px;
+}

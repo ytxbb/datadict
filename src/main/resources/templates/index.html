@@ -150,7 +150,9 @@
                 let dbName = $(element).text();
                 obj.eq(0).attr("rowspan",obj.length);
                 obj.eq(0).css("color","#1c93f9")
-                obj.eq(0).wrapInner("<span onclick='queryMenuList(\"" +dbName+ "\")'></span>");
+                /*obj.eq(0).css("cursor","pointer")
+                obj.eq(0).wrapInner("<span onclick='queryMenuList(\"" +dbName+ "\")'></span>");*/
+                obj.eq(0).wrapInner("<a href='/show'></a>");
                 obj.eq(0).removeClass(cla);
                 $('.table').find("."+cla).remove();
             }

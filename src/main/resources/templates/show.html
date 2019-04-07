@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>详情展示</title>
+    <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/static/mine/css/show.css}"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">JF-数据字典</div>
+    </div>
+
+    <div class="layui-side layui-bg-black" id="admin-side">
+        <div class="layui-side-scroll" id="nav">
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div style="padding: 15px;">内容主体区域</div>
+    </div>
+
+    <div class="layui-footer">
+        <p class="footer-p">
+            <span> By JF From 2019-03-19 </span>
+        </p>
+    </div>
+</div>
+<script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
+<script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
+<script th:src="@{/static/layui/layui.all.js}"></script>
+<script>
+    $(function () {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {"dbName":"jf_dc_db"},
+            url: '/queryMenuList',
+            success: function (data) {
+                console.log(data.data);
+
+                var menu = "";
+                $.each(data.data, function(index, item){
+                    // debugger;
+                    if (item.parentUid == null && item.menuName != null) {
+                        menu += "<ul class=\"layui-nav layui-nav-tree\" >";
+                        if (index === 0) {
+                            menu += "<li data-name=\"component\" class=\"layui-nav-item layui-nav-itemed\">";
+                        } else {
+                            menu += "<li data-name=\"component\" class=\"layui-nav-item\">";
+                        }
+                        menu += "<a href=\"javascript:;\"><i class=\"layui-icon layui-icon-component\"></i>" +
+                            "<cite>"+item.menuName+"</cite>";
+                        if (item.childMenus != null && item.childMenus.length > 0) {
+                            menu += "<span class=\"layui-nav-more\"></span></a>"; //添加三角图标
+                            $.each(item.childMenus, function(index, secItem){
+                                // debugger;
+                                menu += "<dl class=\"layui-nav-child\"><dd data-name=\"grid\">" +
+                                    "<a href=\"##\"><i class=\"layui-icon layui-icon-snowflake\">"+secItem.menuName+"";
+                                if (secItem.childMenus != null && secItem.childMenus.length > 0) {
+                                    menu += "</i><span class=\"layui-nav-more\"></span></a>";
+                                    menu += "<dl class=\"layui-nav-child\">";
+                                    $.each(secItem.childMenus, function(index, thirdItem){
+                                        // debugger;
+                                        menu += "<dd data-name=\"list\">" +
+                                            "<a href=\"#\">"+thirdItem.menuName+"</a></dd>";
+                                    });
+                                    menu += "</dl>";
+                                }
+                                menu += "</dd></dl>";
+                            });
+                        }
+                        menu += "</li></ul>";
+                    }
+                });
+                $("#nav").html(menu);
+                console.log(menu);
+                var element = layui.element;
+                element.init()//初始化element事件，使菜单展开
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+            }
+        })
+    })
+</script>
+</body>
+</html>

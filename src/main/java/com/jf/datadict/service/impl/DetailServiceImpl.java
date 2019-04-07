@@ -63,7 +63,6 @@ public class DetailServiceImpl implements DetailService {
         List<DictMenu> resMenuList = new ArrayList<>();
         Map<String, Integer> uidMap = new HashMap<>();
         Map<Integer, List<DictMenu>> thirdChildMenusMap = new HashMap<>();
-        Map<Integer, List<DictMenu>> secChildMenusMap = new HashMap<>();
         // 设置版本作为一级菜单
         for (String v : versionList) {
             int uid = (int) (Math.random()*(10999-1000));
