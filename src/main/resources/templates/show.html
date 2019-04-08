@@ -20,7 +20,6 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <input type="hidden" id="hiddenInput" th:text="${session.dbName}"/>
         <div style="padding: 15px;">内容主体区域</div>
     </div>
 
@@ -29,20 +28,26 @@
             <span> By JF From 2019-03-19 </span>
         </p>
     </div>
+
 </div>
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
+<script th:inline="javascript">
+    var message = [[${session.dbName}]];
+</script>
 <script>
     $(function () {
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            data: {"dbName":"jf_vis_db"},
+            data: {"dbName":message},
             url: '/queryMenuList',
             success: function (data) {
-                console.log($("#hiddenInput").text());
-
+                if (data.status !== 200) {
+                    layer.msg(data.msg);
+                    return;
+                }
                 var menu = "";
                 $.each(data.data, function(index, item){
                     if (item.parentUid == null && item.menuName != null) {

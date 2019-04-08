@@ -133,7 +133,7 @@
                 obj.eq(0).css("color","#1c93f9")
                 /*obj.eq(0).css("cursor","pointer")
                 obj.eq(0).wrapInner("<span onclick='queryMenuList(\"" +dbName+ "\")'></span>");*/
-                obj.eq(0).wrapInner("<a href='/show?dbName=jf_dc_db'></a>");
+                obj.eq(0).wrapInner("<a href='/show?dbName="+dbName+"'></a>");
                 obj.eq(0).removeClass(cla);
                 $('.table').find("."+cla).remove();
             }
