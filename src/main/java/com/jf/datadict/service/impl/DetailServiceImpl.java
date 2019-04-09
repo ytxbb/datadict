@@ -3,6 +3,7 @@ package com.jf.datadict.service.impl;
 import com.jf.datadict.dao.DetailMapper;
 import com.jf.datadict.entity.DataBaseName;
 import com.jf.datadict.entity.DictMenu;
+import com.jf.datadict.entity.DictTableStructure;
 import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.service.DetailService;
@@ -111,6 +112,51 @@ public class DetailServiceImpl implements DetailService {
         }
 
         return JSONResult.ok(resMenuList);
+    }
+
+    @Override
+    public JSONResult queryTableStructure(String dataBaseName,String tableName) {
+        if (MyStringUtil.isEmpty(dataBaseName)) {
+            throw new ServiceException("数据库名不可为空");
+        }
+
+        String realTableName = tableName.substring(tableName.indexOf("[") + 1, tableName.indexOf("]"));
+
+        List<DictTableStructure> dictTableStructures;
+        try {
+            dictTableStructures = detailMapper.queryTableStructure(dataBaseName, realTableName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("查询数据表结构出错："+e.getMessage());
+        }
+
+        if (MyStringUtil.checkListNotEmpty(dictTableStructures)) {
+            for (DictTableStructure ds : dictTableStructures) {
+                if (ds.getType().indexOf("(")>0 && ds.getType().indexOf(")")>0) {
+                    String type = ds.getType().substring(0, ds.getType().indexOf("("));
+                    String length = ds.getType().substring(ds.getType().indexOf("(") + 1, ds.getType().indexOf(")"));
+                    ds.setType(type);
+                    ds.setLength(length);
+                }
+
+                if (ds.getIsNull().equals("YES")) {
+                    ds.setIsNull("Y");
+                } else {
+                    ds.setIsNull("N");
+                }
+
+                if (MyStringUtil.isNotEmpty(ds.getKey())) {
+                    if (ds.getKey().equals("PRI")) {
+                        ds.setKey("主键");
+                    }
+                    if (ds.getKey().equals("MUL")) {
+                        ds.setKey("索引");
+                    }
+                }
+            }
+            return JSONResult.ok(dictTableStructures);
+        }
+        return JSONResult.ok(null);
     }
 
     /**

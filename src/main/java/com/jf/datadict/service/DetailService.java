@@ -13,4 +13,9 @@ public interface DetailService {
      * 查询数据源菜单
      */
     JSONResult queryMenuList(String dbName);
+
+    /**
+     * 查询表结构
+     */
+    JSONResult queryTableStructure(String dataBaseName,String tableName);
 }

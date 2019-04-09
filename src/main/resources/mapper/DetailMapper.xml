@@ -13,6 +13,15 @@
         <result column="table_name" jdbcType="VARCHAR" property="tableName" />
         <result column="parent_uid" jdbcType="VARCHAR" property="parentUid" />
     </resultMap>
+    <resultMap id="DictTableStructureResMap" type="com.jf.datadict.entity.DictTableStructure">
+        <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+        <result column="column_name" jdbcType="VARCHAR" property="field" />
+        <result column="column_type" jdbcType="VARCHAR" property="type" />
+        <result column="is_nullable" jdbcType="VARCHAR" property="isNull" />
+        <result column="column_key" jdbcType="VARCHAR" property="key" />
+        <result column="column_default" jdbcType="VARCHAR" property="defaultValue" />
+        <result column="column_comment" jdbcType="VARCHAR" property="comment" />
+    </resultMap>
 
     <select id="queryAllDataBase" resultMap="DataBaseResultMap">
         select uid, db_name from database_name where status = 1
@@ -30,5 +39,14 @@
         where t.version = p.version and p.status = 1
         and p.db_id = #{dbId}
         order by p.version,r.dt_id
+    </select>
+
+    <select id="queryTableStructure" parameterType="java.lang.String" resultMap="DictTableStructureResMap">
+        select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment
+        from information_schema.columns
+        where table_schema = #{dataBaseName}
+        <if test="tableName != null and tableName != ''">
+            and table_name = #{tableName}
+        </if>
     </select>
 </mapper>

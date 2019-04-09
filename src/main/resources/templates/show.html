@@ -34,14 +34,35 @@
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
 <script th:inline="javascript">
-    var message = [[${session.dbName}]];
+    var dbName = [[${session.dbName}]];
 </script>
 <script>
+    function getTableDetailList(db_name, table_name) {
+        console.log(db_name);
+        console.log(table_name);
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {"db_name":db_name,"table_name":table_name},
+            url: '/queryTableStructure',
+            success: function (data) {
+                if (data.status !== 200) {
+                    layer.msg(data.msg);
+                    return;
+                }
+                console.log(data);
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+            }
+        })
+    }
+
     $(function () {
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            data: {"dbName":message},
+            data: {"dbName":dbName},
             url: '/queryMenuList',
             success: function (data) {
                 if (data.status !== 200) {
@@ -57,20 +78,21 @@
                         } else {
                             menu += "<li data-name=\"component\" class=\"layui-nav-item\">";
                         }
-                        menu += "<a href=\"javascript:;\"><i class=\"layui-icon layui-icon-component\"></i>" +
+                        menu += "<a href=\"javascript:\"><i class=\"layui-icon layui-icon-component\"></i>" +
                             "<cite>&nbsp;"+item.menuName+"</cite>";
                         if (item.childMenus != null && item.childMenus.length > 0) {
                             menu += "<span class=\"layui-nav-more\"></span></a>"; //添加三角图标
                             $.each(item.childMenus, function(index, secItem){
                                 menu += "<dl class=\"layui-nav-child\"><dd data-name=\"grid\">" +
-                                    "<a href=\"##\"><i class=\"layui-icon layui-icon-snowflake\">" +
+                                    "<a href=\"javascript:\"><i class=\"layui-icon layui-icon-snowflake\">" +
                                     "&nbsp;&nbsp;"+secItem.menuName+"";
                                 if (secItem.childMenus != null && secItem.childMenus.length > 0) {
                                     menu += "</i><span class=\"layui-nav-more\"></span></a>";
                                     menu += "<dl class=\"layui-nav-child\">";
                                     $.each(secItem.childMenus, function(index, thirdItem){
                                         menu += "<dd data-name=\"list\">" +
-                                            "<a href=\"#\">"+thirdItem.menuName+"</a></dd>";
+                                            "<a href=\"javascript:\" " +
+                                            "onclick='getTableDetailList(dbName,\""+thirdItem.menuName+"\")'>"+thirdItem.menuName+"</a></dd>";
                                     });
                                     menu += "</dl>";
                                 }
