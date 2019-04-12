@@ -22,6 +22,10 @@
         <result column="column_default" jdbcType="VARCHAR" property="defaultValue" />
         <result column="column_comment" jdbcType="VARCHAR" property="comment" />
     </resultMap>
+    <resultMap id="DictColumnCountResMap" type="com.jf.datadict.entity.DictTableStructure">
+        <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+        <result column="c" jdbcType="INTEGER" property="size" />
+    </resultMap>
 
     <select id="queryAllDataBase" resultMap="DataBaseResultMap">
         select uid, db_name from database_name where status = 1
@@ -48,5 +52,12 @@
         <if test="tableName != null and tableName != ''">
             and table_name = #{tableName}
         </if>
+    </select>
+
+    <select id="queryTableColumnCount" parameterType="java.lang.String" resultMap="DictColumnCountResMap">
+        select table_name,count(table_name) c
+        from information_schema.columns
+        where table_schema = #{dataBaseName}
+        group by table_name
     </select>
 </mapper>

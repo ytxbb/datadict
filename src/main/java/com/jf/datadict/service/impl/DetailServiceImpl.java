@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class DetailServiceImpl implements DetailService {
@@ -120,7 +121,29 @@ public class DetailServiceImpl implements DetailService {
             throw new ServiceException("数据库名不可为空");
         }
 
-        String realTableName = tableName.substring(tableName.indexOf("[") + 1, tableName.indexOf("]"));
+        String realTableName = null;
+        if (MyStringUtil.isNotEmpty(tableName)) {
+            realTableName = tableName.substring(tableName.indexOf("[") + 1, tableName.indexOf("]"));
+        }
+
+        Map<String, Integer> ccMap = new HashMap<>();
+        if (realTableName != null) {
+            List<DictTableStructure> columnCountRes;
+            try {
+                columnCountRes = detailMapper.queryTableColumnCount(dataBaseName);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ServiceException("查询表字段个数出错："+e.getMessage());
+            }
+
+            if (MyStringUtil.checkListNotEmpty(columnCountRes)) {
+                ccMap = columnCountRes.stream().collect(Collectors.toMap(DictTableStructure::getTableName, DictTableStructure::getSize));
+            }
+
+            if (ccMap.isEmpty()) {
+                return JSONResult.build(100, "该库无数据表");
+            }
+        }
 
         List<DictTableStructure> dictTableStructures;
         try {
@@ -152,6 +175,14 @@ public class DetailServiceImpl implements DetailService {
                     if (ds.getKey().equals("MUL")) {
                         ds.setKey("索引");
                     }
+                }
+
+                if (ds.getDefaultValue() == null) {
+                    ds.setDefaultValue("");
+                }
+
+                if (ccMap.containsKey(ds.getTableName())) {
+                    ds.setSize(ccMap.get(ds.getTableName()));
                 }
             }
             return JSONResult.ok(dictTableStructures);

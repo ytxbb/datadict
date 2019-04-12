@@ -20,7 +20,10 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
-        <div style="padding: 15px;">内容主体区域</div>
+        <div class="table-pad">
+            <table class="table table-bordered table-hover" id="list">
+            </table>
+        </div>
     </div>
 
     <div class="layui-footer">
@@ -38,19 +41,46 @@
 </script>
 <script>
     function getTableDetailList(db_name, table_name) {
-        console.log(db_name);
-        console.log(table_name);
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            data: {"db_name":db_name,"table_name":table_name},
+            data: {"db_name":db_name,"table_name":""},
             url: '/queryTableStructure',
             success: function (data) {
                 if (data.status !== 200) {
                     layer.msg(data.msg);
                     return;
                 }
-                console.log(data);
+                var tableShow = "";
+                var count = 0;
+                // var tName = "";
+                $(data.data).each(function (i, item) {
+                    /*if (count === item.size) {
+
+                        count = 0;
+                    }*/
+                    if (i !== item.size) {
+                        tableShow += "<thead><tr><th>字段名</th><th>数据类型</th><th>长度</th><th>键值</th>"+
+                            "<th>是否可空</th><th>默认值</th><th>描述</th></tr></thead>";
+                        tableShow += "<tbody><tr><td colspan='7'>"+item.tableName+"</td></tr>";
+                    }/*else if (tName !== item.tableName) {
+                        tableShow += "<thead><tr><th>字段名</th><th>数据类型</th><th>长度</th><th>键值</th>"+
+                            "<th>是否可空</th><th>默认值</th><th>描述</th></tr></thead>";
+                        tableShow += "<tbody><tr><td colspan='7'>"+item.tableName+"</td></tr>";
+                    }*/
+
+                    tableShow += "<tr><td>"+item.field+"</td>"
+                        +"<td>"+item.type+"</ta></td>"
+                        +"<td>"+item.length+"</td>"
+                        +"<td>"+item.key+"</td>"
+                        +"<td>"+item.isNull+"</td>"
+                        +"<td>"+item.defaultValue+"</td>"
+                        +"<td>"+item.comment+"</td>"
+                        +"</tr></tbody>";
+                    // tName = item.tableName;
+                    count++;
+                });
+                $("#list").html(tableShow);
             },
             error: function (data) {
                 layer.msg(data.msg);

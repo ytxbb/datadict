@@ -18,4 +18,6 @@ public class DictTableStructure {
     private String key;
     private String defaultValue;
     private String comment;
+
+    private Integer size;// 表示字段多少
 }

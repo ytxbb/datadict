@@ -18,4 +18,6 @@ public interface DetailMapper {
     List<DictMenu> queryMenuList(@Param("dbId") Integer dbId);
 
     List<DictTableStructure> queryTableStructure(@Param("dataBaseName") String dataBaseName, @Param("tableName") String tableName);
+
+    List<DictTableStructure> queryTableColumnCount(@Param("dataBaseName") String dataBaseName);
 }

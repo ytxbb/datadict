@@ -3,7 +3,6 @@ package com.jf.datadict.controller;
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.service.DetailService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,11 +31,8 @@ public class DetailController {
 
     @ResponseBody
     @PostMapping("/queryTableStructure")
-    public JSONResult queryTableStructure(Model model,
-                                          @RequestParam("db_name") String dataBaseName,
+    public JSONResult queryTableStructure(@RequestParam("db_name") String dataBaseName,
                                           @RequestParam("table_name") String tableName){
-        JSONResult jsonResult = detailService.queryTableStructure(dataBaseName, tableName);
-        model.addAttribute("tableStructureList", jsonResult);
-        return jsonResult;
+        return detailService.queryTableStructure(dataBaseName, tableName);
     }
 }
