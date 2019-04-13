@@ -26,6 +26,10 @@
         <result column="table_name" jdbcType="VARCHAR" property="tableName" />
         <result column="c" jdbcType="INTEGER" property="size" />
     </resultMap>
+    <resultMap id="TableCommentResMap" type="com.jf.datadict.entity.DictTableStructure">
+        <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+        <result column="table_comment" jdbcType="INTEGER" property="tableChName" />
+    </resultMap>
 
     <select id="queryAllDataBase" resultMap="DataBaseResultMap">
         select uid, db_name from database_name where status = 1
@@ -59,5 +63,11 @@
         from information_schema.columns
         where table_schema = #{dataBaseName}
         group by table_name
+    </select>
+
+    <select id="queryTableComment" parameterType="java.lang.String" resultMap="TableCommentResMap">
+        select table_name,table_comment
+        from information_schema.tables
+        where table_schema = #{dataBaseName}
     </select>
 </mapper>

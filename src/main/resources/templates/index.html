@@ -48,11 +48,11 @@
                 <!--统计-->
                 <div class="left-tab-container">
                     <table class="table table-bordered table-striped table-hover" id="dbStatistics">
-                        <tr>
-                            <th width= "20%" style="background-color: #c4e7ec;">数据源</th>
-                            <th width= "20%" style="background-color: #c4e7ec;">版本</th>
-                            <th width= "40%" style="background-color: #c4e7ec;">分类</th>
-                            <th width= "20%" style="background-color: #c4e7ec;">统计数</th>
+                        <tr style='background-color: #c4e7ec'>
+                            <th width= "20%">数据源</th>
+                            <th width= "20%">版本</th>
+                            <th width= "40%">分类</th>
+                            <th width= "20%">统计数</th>
                         </tr>
                         <tr th:each="ds:${dataStatistics}">
                             <td th:class="'type_'+${ds.dbName}" th:text="${ds.dbName}"></td>

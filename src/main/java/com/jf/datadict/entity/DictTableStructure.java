@@ -19,5 +19,6 @@ public class DictTableStructure {
     private String defaultValue;
     private String comment;
 
-    private Integer size;// 表示字段多少
+    private Integer size;// 字段数
+    private String tableChName;// 汉语表名
 }

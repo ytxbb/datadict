@@ -122,27 +122,42 @@ public class DetailServiceImpl implements DetailService {
         }
 
         String realTableName = null;
+        String tableChName = null;
         if (MyStringUtil.isNotEmpty(tableName)) {
             realTableName = tableName.substring(tableName.indexOf("[") + 1, tableName.indexOf("]"));
+            tableChName = tableName.substring(0, tableName.indexOf("[") + 1);
+        }
+
+        // 查询字段个数
+        /*List<DictTableStructure> columnCountRes;
+        try {
+            columnCountRes = detailMapper.queryTableColumnCount(dataBaseName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("查询表字段个数出错："+e.getMessage());
         }
 
         Map<String, Integer> ccMap = new HashMap<>();
-        if (realTableName != null) {
-            List<DictTableStructure> columnCountRes;
-            try {
-                columnCountRes = detailMapper.queryTableColumnCount(dataBaseName);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new ServiceException("查询表字段个数出错："+e.getMessage());
-            }
+        if (MyStringUtil.checkListNotEmpty(columnCountRes)) {
+            ccMap = columnCountRes.stream().collect(Collectors.toMap(DictTableStructure::getTableName, DictTableStructure::getSize));
+        }
 
-            if (MyStringUtil.checkListNotEmpty(columnCountRes)) {
-                ccMap = columnCountRes.stream().collect(Collectors.toMap(DictTableStructure::getTableName, DictTableStructure::getSize));
-            }
+        if (ccMap.isEmpty()) {
+            return JSONResult.build(100, "该库无数据表");
+        }*/
 
-            if (ccMap.isEmpty()) {
-                return JSONResult.build(100, "该库无数据表");
-            }
+        // 查询表名注释
+        List<DictTableStructure> tableComments;
+        try {
+            tableComments = detailMapper.queryTableComment(dataBaseName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("查询表名注释出错："+e.getMessage());
+        }
+
+        Map<String, String> commentMap = new HashMap<>();
+        if (MyStringUtil.checkListNotEmpty(tableComments)) {
+            commentMap = tableComments.stream().collect(Collectors.toMap(DictTableStructure::getTableName, DictTableStructure::getTableChName));
         }
 
         List<DictTableStructure> dictTableStructures;
@@ -181,9 +196,14 @@ public class DetailServiceImpl implements DetailService {
                     ds.setDefaultValue("");
                 }
 
-                if (ccMap.containsKey(ds.getTableName())) {
-                    ds.setSize(ccMap.get(ds.getTableName()));
+                if (tableChName == null) {
+                    ds.setTableChName(commentMap.get(ds.getTableName()));
+                } else {
+                    ds.setTableChName(tableChName);
                 }
+                /*if (ccMap.containsKey(ds.getTableName())) {
+                    ds.setSize(ccMap.get(ds.getTableName()));
+                }*/
             }
             return JSONResult.ok(dictTableStructures);
         }

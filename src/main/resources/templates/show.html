@@ -10,7 +10,7 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">JF-数据字典</div>
+        <div class="layui-logo"><a href="/" class="a-logo">JF-数据字典</a></div>
     </div>
 
     <div class="layui-side layui-bg-black" id="admin-side">
@@ -20,6 +20,9 @@
 
     <div class="layui-body">
         <!-- 内容主体区域 -->
+        <div class="table-head">
+            <h2 th:text="${session.dbName}+数据字典"></h2>
+        </div>
         <div class="table-pad">
             <table class="table table-bordered table-hover" id="list">
             </table>
@@ -44,7 +47,7 @@
         $.ajax({
             type: 'POST',
             dataType: 'json',
-            data: {"db_name":db_name,"table_name":""},
+            data: {"db_name":db_name,"table_name":table_name},
             url: '/queryTableStructure',
             success: function (data) {
                 if (data.status !== 200) {
@@ -52,22 +55,27 @@
                     return;
                 }
                 var tableShow = "";
-                var count = 0;
-                // var tName = "";
+                var tName = "";
                 $(data.data).each(function (i, item) {
-                    /*if (count === item.size) {
-
-                        count = 0;
-                    }*/
-                    if (i !== item.size) {
-                        tableShow += "<thead><tr><th>字段名</th><th>数据类型</th><th>长度</th><th>键值</th>"+
-                            "<th>是否可空</th><th>默认值</th><th>描述</th></tr></thead>";
-                        tableShow += "<tbody><tr><td colspan='7'>"+item.tableName+"</td></tr>";
-                    }/*else if (tName !== item.tableName) {
-                        tableShow += "<thead><tr><th>字段名</th><th>数据类型</th><th>长度</th><th>键值</th>"+
-                            "<th>是否可空</th><th>默认值</th><th>描述</th></tr></thead>";
-                        tableShow += "<tbody><tr><td colspan='7'>"+item.tableName+"</td></tr>";
-                    }*/
+                    if (i === 0) {
+                        tableShow += "<thead><tr style='background-color: #f1ccd3'>" +
+                            "<td colspan='7'><strong>"+item.tableChName+"&nbsp;&nbsp;"+item.tableName+"</strong></td></tr></thead>" +
+                            "<thead><tr style='background-color: #c4e7ec'><th>字段名</th>" +
+                            "<th width='100px'>数据类型</th>" +
+                            "<th width='100px'>长度</th>" +
+                            "<th width='100px'>键值</th>" +
+                            "<th width='100px'>是否可空</th>" +
+                            "<th>默认值</th>" +
+                            "<th>描述</th></tr></thead><tbody>";
+                    }else {
+                        if (tName !== item.tableName) {
+                            tableShow += "<thead><tr style='background-color: #f1ccd3'>" +
+                                "<td colspan='7'><strong>"+item.tableChName+"&nbsp;&nbsp;"+item.tableName+"</strong></td></tr></thead>" +
+                                "<thead><tr style='background-color: #c4e7ec'><th>字段名</th>" +
+                                "<th>数据类型</th><th>长度</th><th>键值</th><th>是否可空</th><th>默认值</th>" +
+                                "<th>描述</th></tr></thead><tbody>";
+                        }
+                    }
 
                     tableShow += "<tr><td>"+item.field+"</td>"
                         +"<td>"+item.type+"</ta></td>"
@@ -77,8 +85,7 @@
                         +"<td>"+item.defaultValue+"</td>"
                         +"<td>"+item.comment+"</td>"
                         +"</tr></tbody>";
-                    // tName = item.tableName;
-                    count++;
+                    tName = item.tableName;
                 });
                 $("#list").html(tableShow);
             },
@@ -108,8 +115,8 @@
                         } else {
                             menu += "<li data-name=\"component\" class=\"layui-nav-item\">";
                         }
-                        menu += "<a href=\"javascript:\"><i class=\"layui-icon layui-icon-component\"></i>" +
-                            "<cite>&nbsp;"+item.menuName+"</cite>";
+                        menu += "<a href=\"javascript:\" onclick='getTableDetailList(dbName,null)'>" +
+                            "<i class=\"layui-icon layui-icon-component\"></i><cite>&nbsp;"+item.menuName+"</cite>";
                         if (item.childMenus != null && item.childMenus.length > 0) {
                             menu += "<span class=\"layui-nav-more\"></span></a>"; //添加三角图标
                             $.each(item.childMenus, function(index, secItem){
@@ -139,8 +146,9 @@
             error: function (data) {
                 layer.msg(data.msg);
             }
-        })
-    })
+        });
+        getTableDetailList(dbName, "");
+    });
 </script>
 </body>
 </html>
