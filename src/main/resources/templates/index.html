@@ -33,7 +33,7 @@
                     <div class="form-div">
                         <label class="layui-form-label">数据库</label>
                         <div class="layui-input-block form-select">
-                            <select name="dbValue" id="dbValue" lay-verify="required">
+                            <select name="dbValue" id="dbValue" lay-verify="required" lay-filter="select-dbValue">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -42,7 +42,7 @@
                         <input type="text" class="form-control form-input" id="inputSearch"
                                placeholder="请输入要搜索的表名" autocomplete="off">
 
-                        <button type="button" class="btn btn-default submit-button">查询</button>
+                        <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
                     </div>
                 </form>
                 <!--统计-->
@@ -163,9 +163,36 @@
         })
     }
 
+    function refreshToShow(db_id) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data:{"db_id":db_id},
+            url: '/refreshToShow',
+            success: function (data) {
+                var url = "/show?dbName=" + data.data.name;
+                window.location.href = url;
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+            }
+        })
+    }
+
+    var dbId;
+    function btn_query() {
+        refreshToShow(dbId);
+    }
+
     layui.use(['form', 'layer'], function () {
         var form = layui.form;
+        var layer = layui.layer;
+
         getDataBaseList();
+        form.on('select(select-dbValue)', function(data){
+            // refreshToShow(data.value);
+            dbId = data.value;
+        })
     })
 </script>
 <script>

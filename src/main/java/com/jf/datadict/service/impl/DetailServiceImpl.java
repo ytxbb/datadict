@@ -33,6 +33,18 @@ public class DetailServiceImpl implements DetailService {
     }
 
     @Override
+    public DataBaseName queryOneDBName(String dbId) {
+        DataBaseName dataBaseName;
+        try {
+            dataBaseName = detailMapper.queryDBById(dbId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("根据uid查询数据库列表出错："+e.getMessage());
+        }
+        return dataBaseName;
+    }
+
+    @Override
     public JSONResult queryMenuList(String dbName) {
         if (MyStringUtil.isEmpty(dbName)) {
             return JSONResult.error500("传入参数为空");

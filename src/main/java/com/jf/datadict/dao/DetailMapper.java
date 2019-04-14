@@ -22,6 +22,11 @@ public interface DetailMapper {
     DataBaseName queryAllDataBaseByName(@Param("dbName") String dbName);
 
     /**
+     * 根据数据源名字查询数据库
+     */
+    DataBaseName queryDBById(@Param("uid") String dbId);
+
+    /**
      * 查询菜单列表
      */
     List<DictMenu> queryMenuList(@Param("dbId") Integer dbId);

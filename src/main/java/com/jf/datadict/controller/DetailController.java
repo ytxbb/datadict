@@ -1,5 +1,6 @@
 package com.jf.datadict.controller;
 
+import com.jf.datadict.entity.DataBaseName;
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.service.DetailService;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,14 @@ public class DetailController {
     public String show(HttpSession httpSession, @RequestParam("dbName") String dbName){
         httpSession.setAttribute("dbName", dbName);
         return "show";
+    }
+
+    @ResponseBody
+    @PostMapping("/refreshToShow")
+    public JSONResult refreshToShow(HttpSession httpSession, @RequestParam("db_id") String dbId){
+        DataBaseName res = detailService.queryOneDBName(dbId);
+        httpSession.setAttribute("dbName", res.getName());
+        return JSONResult.ok(res);
     }
 
     @ResponseBody

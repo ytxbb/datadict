@@ -39,6 +39,10 @@
         select uid, db_name from database_name where status = 1 and db_name = #{dbName}
     </select>
 
+    <select id="queryDBById" parameterType="java.lang.String" resultMap="DataBaseResultMap">
+        select uid, db_name from database_name where status = 1 and uid = #{uid}
+    </select>
+
     <select id="queryMenuList" parameterType="java.lang.Integer" resultMap="DictMenuResultMap">
         select r.table_id,p.version,p.name,concat(t.table_desc,'[',t.table_name,']') table_name,r.dt_id parent_uid
         from rel_table_type r
