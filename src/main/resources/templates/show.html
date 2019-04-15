@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>详情展示</title>
+    <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}" />
+    <link rel="stylesheet" th:href="@{/static/mine/css/show.css}"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo"><a href="/" class="a-logo">JF-数据字典</a></div>
+    </div>
+
+    <div class="layui-side layui-bg-black" id="admin-side">
+        <div class="layui-side-scroll" id="nav">
+        </div>
+    </div>
+
+    <div class="layui-body">
+        <!-- 内容主体区域 -->
+        <div class="table-head">
+            <h2 th:text="${session.dbName}+数据字典"></h2>
+        </div>
+        <div class="table-pad">
+            <table class="table table-bordered table-hover" id="list">
+            </table>
+        </div>
+    </div>
+
+    <div class="layui-footer">
+        <p class="footer-p">
+            <span> By JF From 2019-03-19 </span>
+        </p>
+    </div>
+
+</div>
+<script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
+<script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
+<script th:src="@{/static/layui/layui.all.js}"></script>
+<script th:inline="javascript">
+    var dbName = [[${session.dbName}]];
+</script>
+<script>
+    function getTableDetailList(db_name, table_name) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {"db_name":db_name,"table_name":table_name},
+            url: '/queryTableStructure',
+            success: function (data) {
+                if (data.status !== 200) {
+                    layer.msg(data.msg);
+                    return;
+                }
+                var tableShow = "";
+                var tName = "";
+                $(data.data).each(function (i, item) {
+                    if (i === 0) {
+                        tableShow += "<thead><tr style='background-color: #f1ccd3'>" +
+                            "<td colspan='7'><strong>"+item.tableChName+"&nbsp;&nbsp;"+item.tableName+"</strong></td></tr></thead>" +
+                            "<thead><tr style='background-color: #c4e7ec'><th>字段名</th>" +
+                            "<th width='100px'>数据类型</th>" +
+                            "<th width='100px'>长度</th>" +
+                            "<th width='100px'>键值</th>" +
+                            "<th width='100px'>是否可空</th>" +
+                            "<th>默认值</th>" +
+                            "<th>描述</th></tr></thead><tbody>";
+                    }else {
+                        if (tName !== item.tableName) {
+                            tableShow += "<thead><tr style='background-color: #f1ccd3'>" +
+                                "<td colspan='7'><strong>"+item.tableChName+"&nbsp;&nbsp;"+item.tableName+"</strong></td></tr></thead>" +
+                                "<thead><tr style='background-color: #c4e7ec'><th>字段名</th>" +
+                                "<th>数据类型</th><th>长度</th><th>键值</th><th>是否可空</th><th>默认值</th>" +
+                                "<th>描述</th></tr></thead><tbody>";
+                        }
+                    }
+
+                    tableShow += "<tr><td>"+item.field+"</td>"
+                        +"<td>"+item.type+"</ta></td>"
+                        +"<td>"+item.length+"</td>"
+                        +"<td>"+item.key+"</td>"
+                        +"<td>"+item.isNull+"</td>"
+                        +"<td>"+item.defaultValue+"</td>"
+                        +"<td>"+item.comment+"</td>"
+                        +"</tr></tbody>";
+                    tName = item.tableName;
+                });
+                $("#list").html(tableShow);
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+            }
+        })
+    }
+
+    $(function () {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {"dbName":dbName},
+            url: '/queryMenuList',
+            success: function (data) {
+                if (data.status !== 200) {
+                    layer.msg(data.msg);
+                    return;
+                }
+                var menu = "";
+                $.each(data.data, function(index, item){
+                    if (item.parentUid == null && item.menuName != null) {
+                        menu += "<ul class=\"layui-nav layui-nav-tree\" >";
+                        if (index === 0) {
+                            menu += "<li data-name=\"component\" class=\"layui-nav-item layui-nav-itemed\">";
+                        } else {
+                            menu += "<li data-name=\"component\" class=\"layui-nav-item\">";
+                        }
+                        menu += "<a href=\"javascript:\" onclick='getTableDetailList(dbName,null)'>" +
+                            "<i class=\"layui-icon layui-icon-component\"></i><cite>&nbsp;"+item.menuName+"</cite>";
+                        if (item.childMenus != null && item.childMenus.length > 0) {
+                            menu += "<span class=\"layui-nav-more\"></span></a>"; //添加三角图标
+                            $.each(item.childMenus, function(index, secItem){
+                                menu += "<dl class=\"layui-nav-child\"><dd data-name=\"grid\">" +
+                                    "<a href=\"javascript:\"><i class=\"layui-icon layui-icon-snowflake\">" +
+                                    "&nbsp;&nbsp;"+secItem.menuName+"";
+                                if (secItem.childMenus != null && secItem.childMenus.length > 0) {
+                                    menu += "</i><span class=\"layui-nav-more\"></span></a>";
+                                    menu += "<dl class=\"layui-nav-child\">";
+                                    $.each(secItem.childMenus, function(index, thirdItem){
+                                        menu += "<dd data-name=\"list\">" +
+                                            "<a href=\"javascript:\" " +
+                                            "onclick='getTableDetailList(dbName,\""+thirdItem.menuName+"\")'>"+thirdItem.menuName+"</a></dd>";
+                                    });
+                                    menu += "</dl>";
+                                }
+                                menu += "</dd></dl>";
+                            });
+                        }
+                        menu += "</li></ul>";
+                    }
+                });
+                $("#nav").html(menu);
+                var element = layui.element;
+                element.init()//初始化element事件，使菜单展开
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+            }
+        });
+        getTableDetailList(dbName, "");
+    });
+</script>
+</body>
+</html>

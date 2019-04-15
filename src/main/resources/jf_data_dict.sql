@@ -11,7 +11,7 @@
  Target Server Version : 50724
  File Encoding         : 65001
 
- Date: 25/03/2019 00:23:02
+ Date: 01/04/2019 01:00:22
 */
 
 SET NAMES utf8mb4;
@@ -57,10 +57,18 @@ CREATE TABLE `dict_menu`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `dict_table`;
 CREATE TABLE `dict_table`  (
-  `uid` int(11) NOT NULL,
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
   `table_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `version` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`uid`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of dict_table
+-- ----------------------------
+INSERT INTO `dict_table` VALUES (1, 'p_orginfo', '3.04');
+INSERT INTO `dict_table` VALUES (2, 'p_examinfo', '3.04');
+INSERT INTO `dict_table` VALUES (3, 'p_rel_orgarcode', '3.04');
 
 -- ----------------------------
 -- Table structure for dict_table_structure
@@ -86,23 +94,48 @@ CREATE TABLE `dict_table_structure`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `dict_type`;
 CREATE TABLE `dict_type`  (
-  `uid` int(11) NOT NULL,
-  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `version` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
-  `status` int(11) NULL DEFAULT NULL,
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
+  `db_id` int(11) NOT NULL COMMENT '数据源ID',
+  `name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '类型名称',
+  `version` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '版本号',
+  `status` int(11) NULL DEFAULT 1 COMMENT '数据状态',
   PRIMARY KEY (`uid`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 15 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of dict_type
+-- ----------------------------
+INSERT INTO `dict_type` VALUES (1, 1, '码表管理', '3.04', 1);
+INSERT INTO `dict_type` VALUES (2, 1, '用户角色', '3.04', 1);
+INSERT INTO `dict_type` VALUES (3, 1, '考试计划', '3.04', 1);
+INSERT INTO `dict_type` VALUES (4, 1, '组织机构', '3.04', 1);
+INSERT INTO `dict_type` VALUES (5, 1, '场所设备', '3.04', 1);
+INSERT INTO `dict_type` VALUES (6, 1, '后台管理', '3.04', 1);
+INSERT INTO `dict_type` VALUES (7, 1, '统计类', '3.04', 1);
+INSERT INTO `dict_type` VALUES (8, 2, '考试计划', '3.10', 1);
+INSERT INTO `dict_type` VALUES (9, 2, '机构场所设备', '3.10', 1);
+INSERT INTO `dict_type` VALUES (10, 2, '考生信息管理', '3.10', 1);
+INSERT INTO `dict_type` VALUES (11, 2, '巡查人员管理', '3.10', 1);
+INSERT INTO `dict_type` VALUES (12, 2, '考场视频巡查', '3.10', 1);
+INSERT INTO `dict_type` VALUES (13, 2, '码表管理', '3.10', 1);
+INSERT INTO `dict_type` VALUES (14, 2, '统计类', '3.10', 1);
 
 -- ----------------------------
 -- Table structure for rel_table_type
 -- ----------------------------
 DROP TABLE IF EXISTS `rel_table_type`;
 CREATE TABLE `rel_table_type`  (
-  `uid` int(11) NOT NULL,
+  `uid` int(11) NOT NULL AUTO_INCREMENT,
   `table_id` int(11) NULL DEFAULT NULL,
-  `dtid` int(11) NULL DEFAULT NULL,
-  `version` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `dt_id` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`uid`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of rel_table_type
+-- ----------------------------
+INSERT INTO `rel_table_type` VALUES (1, 1, 4);
+INSERT INTO `rel_table_type` VALUES (2, 2, 3);
+INSERT INTO `rel_table_type` VALUES (3, 3, 4);
 
 SET FOREIGN_KEY_CHECKS = 1;

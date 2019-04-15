@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 菜单
@@ -14,12 +15,22 @@ import java.util.Date;
 public class DictMenu {
 
     private Integer uid;
-    private String dbId;
-    private String tableId;
-    private String parentUid;
-    private String sortNo;
     private String version;
-    private Integer status;
-    private Date createTime;
-    private Timestamp updateTime;
+    private String menuName;
+    private Integer parentUid;
+
+    private String typeName;
+    private String tableName;
+    // 子菜单
+    private List<DictMenu> childMenus;
+
+    public DictMenu() {
+    }
+
+    public DictMenu(Integer uid, String version, String menuName, Integer parentUid) {
+        this.uid = uid;
+        this.version = version;
+        this.menuName = menuName;
+        this.parentUid = parentUid;
+    }
 }

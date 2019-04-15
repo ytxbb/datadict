@@ -33,7 +33,7 @@
                     <div class="form-div">
                         <label class="layui-form-label">数据库</label>
                         <div class="layui-input-block form-select">
-                            <select name="dbValue" id="dbValue" lay-verify="required">
+                            <select name="dbValue" id="dbValue" lay-verify="required" lay-filter="select-dbValue">
                                 <option value=""></option>
                             </select>
                         </div>
@@ -42,14 +42,31 @@
                         <input type="text" class="form-control form-input" id="inputSearch"
                                placeholder="请输入要搜索的表名" autocomplete="off">
 
-                        <button type="button" class="btn btn-default submit-button">查询</button>
+                        <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
                     </div>
                 </form>
+                <!--统计-->
+                <div class="left-tab-container">
+                    <table class="table table-bordered table-striped table-hover" id="dbStatistics">
+                        <tr style='background-color: #c4e7ec'>
+                            <th width= "20%">数据源</th>
+                            <th width= "20%">版本</th>
+                            <th width= "40%">分类</th>
+                            <th width= "20%">统计数</th>
+                        </tr>
+                        <tr th:each="ds:${dataStatistics}">
+                            <td th:class="'type_'+${ds.dbName}" th:text="${ds.dbName}"></td>
+                            <td th:text="${ds.version}"></td>
+                            <td th:text="${ds.dtName}"></td>
+                            <td th:text="${ds.tableCount}"></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
             <!--输入IP访问-->
             <div class="layui-tab-item">
                 <div class="right-tab-div">
-                    <form action="/defined/testGo">
+                    <form>
                         <div class="layui-form-item">
                             <label class="right-tab-form-label">IP</label>
                             <div class="layui-input-block">
@@ -85,63 +102,98 @@
         </div>
     </div>
 </div>
-<!--统计-->
-<div class="container">
-    <table class="table table-bordered table-hover">
-        <tr>
-            <th>数据源</th>
-            <th>分类</th>
-            <th>统计数</th>
-        </tr>
-        <tr>
-            <td>JF_01</td>
-            <td>通用码表</td>
-            <td>1</td>
-        </tr>
-        <tr>
-            <td>JF_02</td>
-            <td>通用码表</td>
-            <td>2</td>
-        </tr>
-        <tr th:each="user:${userList}">
-            <td th:text="${user.id}"></td>
-            <td th:text="${user.name}"></td>
-        </tr>
-    </table>
-</div>
 <!--版本号-->
 <div class="footer">
     <p class="footer-p">
         <span> By JF From 2019-03-19 </span>
     </p>
 </div>
+<!--<div class="footer">
+    <div class="footer-left"></div>
+    <div class="footer-middle">
+        <p class="footer-p">
+            <span> By JF From 2019-03-19 </span>
+        </p>
+    </div>
+    <div class="footer-right"></div>
+</div>-->
 
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
 <script th:src="@{/static/vue/vue.min.js}"></script>
+<script th:inline="javascript">
+    function mergeRows(){
+        $('.table').find("td[class^='type_']").each(function (index, element) {
+            var cla = $(element).attr("class");
+            var obj = $('.table').find("."+cla);
+            if (obj.length>=1) {
+                let dbName = $(element).text();
+                obj.eq(0).attr("rowspan",obj.length);
+                obj.eq(0).css("color","#1c93f9")
+                /*obj.eq(0).css("cursor","pointer")
+                obj.eq(0).wrapInner("<span onclick='queryMenuList(\"" +dbName+ "\")'></span>");*/
+                obj.eq(0).wrapInner("<a href='/show?dbName="+dbName+"'></a>");
+                obj.eq(0).removeClass(cla);
+                $('.table').find("."+cla).remove();
+            }
+        })
+    }
+
+    $(document).ready(function(){
+        mergeRows();
+    });
+</script>
 <script>
-    layui.use(['form', 'layer'], function () {
-        var form = layui.form;
-        getDataBaseList();
-    })
     function getDataBaseList(){
         $.ajax({
             type: 'GET',
             dataType: 'json',
             url: '/queryAllDataBase',
             success: function (data) {
-                $.each(data, function (index, item) {
-                    console.log(index);
-                    console.log(item);
-
+                $.each(data.data, function (index, item) {
                     // 下拉菜单里添加元素
                     $('#dbValue').append(new Option(item.name, item.uid));
                 });
                 layui.form.render("select");
+            },
+            error: function (data) {
+                layer.msg(data.msg);
             }
         })
     }
+
+    function refreshToShow(db_id) {
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data:{"db_id":db_id},
+            url: '/refreshToShow',
+            success: function (data) {
+                var url = "/show?dbName=" + data.data.name;
+                window.location.href = url;
+            },
+            error: function (data) {
+                layer.msg(data.msg);
+            }
+        })
+    }
+
+    var dbId;
+    function btn_query() {
+        refreshToShow(dbId);
+    }
+
+    layui.use(['form', 'layer'], function () {
+        var form = layui.form;
+        var layer = layui.layer;
+
+        getDataBaseList();
+        form.on('select(select-dbValue)', function(data){
+            // refreshToShow(data.value);
+            dbId = data.value;
+        })
+    })
 </script>
 <script>
     new Vue({

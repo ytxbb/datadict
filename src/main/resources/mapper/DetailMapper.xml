@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jf.datadict.dao.DetailMapper">
+    <resultMap id="DataBaseResultMap" type="com.jf.datadict.entity.DataBaseName">
+        <id column="uid" jdbcType="INTEGER" property="uid" />
+        <result column="db_name" jdbcType="VARCHAR" property="name" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+    </resultMap>
+    <resultMap id="DictMenuResultMap" type="com.jf.datadict.entity.DictMenu">
+        <id column="table_id" jdbcType="INTEGER" property="uid" />
+        <result column="version" jdbcType="VARCHAR" property="version" />
+        <result column="name" jdbcType="VARCHAR" property="typeName" />
+        <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+        <result column="parent_uid" jdbcType="VARCHAR" property="parentUid" />
+    </resultMap>
+    <resultMap id="DictTableStructureResMap" type="com.jf.datadict.entity.DictTableStructure">
+        <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+        <result column="column_name" jdbcType="VARCHAR" property="field" />
+        <result column="column_type" jdbcType="VARCHAR" property="type" />
+        <result column="is_nullable" jdbcType="VARCHAR" property="isNull" />
+        <result column="column_key" jdbcType="VARCHAR" property="key" />
+        <result column="column_default" jdbcType="VARCHAR" property="defaultValue" />
+        <result column="column_comment" jdbcType="VARCHAR" property="comment" />
+    </resultMap>
+    <resultMap id="DictColumnCountResMap" type="com.jf.datadict.entity.DictTableStructure">
+        <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+        <result column="c" jdbcType="INTEGER" property="size" />
+    </resultMap>
+    <resultMap id="TableCommentResMap" type="com.jf.datadict.entity.DictTableStructure">
+        <result column="table_name" jdbcType="VARCHAR" property="tableName" />
+        <result column="table_comment" jdbcType="INTEGER" property="tableChName" />
+    </resultMap>
+
+    <select id="queryAllDataBase" resultMap="DataBaseResultMap">
+        select uid, db_name from database_name where status = 1
+    </select>
+
+    <select id="queryAllDataBaseByName" parameterType="java.lang.String" resultMap="DataBaseResultMap">
+        select uid, db_name from database_name where status = 1 and db_name = #{dbName}
+    </select>
+
+    <select id="queryDBById" parameterType="java.lang.String" resultMap="DataBaseResultMap">
+        select uid, db_name from database_name where status = 1 and uid = #{uid}
+    </select>
+
+    <select id="queryMenuList" parameterType="java.lang.Integer" resultMap="DictMenuResultMap">
+        select r.table_id,p.version,p.name,concat(t.table_desc,'[',t.table_name,']') table_name,r.dt_id parent_uid
+        from rel_table_type r
+        left join dict_table t on r.table_id = t.uid
+        left join dict_type p on p.uid = r.dt_id
+        where t.version = p.version and p.status = 1
+        and p.db_id = #{dbId}
+        order by p.version,r.dt_id
+    </select>
+
+    <select id="queryTableStructure" parameterType="java.lang.String" resultMap="DictTableStructureResMap">
+        select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment
+        from information_schema.columns
+        where table_schema = #{dataBaseName}
+        <if test="tableName != null and tableName != ''">
+            and table_name = #{tableName}
+        </if>
+    </select>
+
+    <select id="queryTableColumnCount" parameterType="java.lang.String" resultMap="DictColumnCountResMap">
+        select table_name,count(table_name) c
+        from information_schema.columns
+        where table_schema = #{dataBaseName}
+        group by table_name
+    </select>
+
+    <select id="queryTableComment" parameterType="java.lang.String" resultMap="TableCommentResMap">
+        select table_name,table_comment
+        from information_schema.tables
+        where table_schema = #{dataBaseName}
+    </select>
+</mapper>

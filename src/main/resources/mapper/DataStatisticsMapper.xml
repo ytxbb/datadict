@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jf.datadict.dao.DataStatisticsMapper">
+    <resultMap id="BaseResultMap" type="com.jf.datadict.model.IndexTableStatistics">
+        <result column="db_name" jdbcType="VARCHAR" property="dbName" />
+        <result column="version" jdbcType="VARCHAR" property="version" />
+        <result column="name" jdbcType="VARCHAR" property="dtName" />
+        <result column="c" jdbcType="INTEGER" property="tableCount" />
+    </resultMap>
+
+    <select id="queryDataStatistics" resultMap="BaseResultMap">
+        select db.db_name,t.version,t.name,r.c from dict_type t
+        inner join database_name db on t.db_id = db.uid
+        inner join(
+            select r.dt_id,t.version,count(r.table_id) c from rel_table_type r
+            inner join dict_type t on r.dt_id = t.uid
+            where t.`status` = 1
+            GROUP BY r.dt_id
+        ) r on r.dt_id = t.uid
+        where t.status = 1 and db.status = 1
+        order by db.db_name,t.version
+    </select>
+</mapper>

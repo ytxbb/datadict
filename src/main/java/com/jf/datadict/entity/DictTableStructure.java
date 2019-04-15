@@ -10,15 +10,15 @@ import lombok.Setter;
 @Setter
 public class DictTableStructure {
 
-    private Integer uid;
+    private String tableName;
     private String field;
     private String type;
     private String length;
     private String isNull;
-    private String isKey;
+    private String key;
     private String defaultValue;
     private String comment;
-    private String remark;
-    private String version;
-    private Integer status;
+
+    private Integer size;// 字段数
+    private String tableChName;// 汉语表名
 }
