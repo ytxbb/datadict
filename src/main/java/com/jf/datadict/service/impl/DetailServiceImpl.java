@@ -1,5 +1,6 @@
 package com.jf.datadict.service.impl;
 
+import com.jf.datadict.constants.StaticConstants;
 import com.jf.datadict.dao.DetailMapper;
 import com.jf.datadict.entity.DictMenu;
 import com.jf.datadict.entity.DictTableStructure;
@@ -28,7 +29,15 @@ public class DetailServiceImpl implements DetailService {
             e.printStackTrace();
             throw new ServiceException("查询数据库列表出错："+e.getMessage());
         }
-        return JSONResult.ok(dataBaseNames);
+
+        List<String> res = new ArrayList<>();
+        for (String s : dataBaseNames) {
+            if (StaticConstants.mysqlDefaultDBName.contains(s)) {
+                continue;
+            }
+            res.add(s);
+        }
+        return JSONResult.ok(res);
     }
 
     @Override

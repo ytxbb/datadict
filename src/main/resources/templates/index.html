@@ -164,6 +164,10 @@
     }
 
     function refreshToShow(db_name) {
+        if (db_name == undefined || typeof db_name == "undefined") {
+            layer.msg('请必须选择一个库',{time:1000});
+            return;
+        }
         var url = "/show?dbName=" + db_name;
         window.location.href = url;
     }
