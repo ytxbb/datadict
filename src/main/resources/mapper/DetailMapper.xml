@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jf.datadict.dao.DetailMapper">
-    <resultMap id="DataBaseResultMap" type="com.jf.datadict.entity.DataBaseName">
-        <id column="uid" jdbcType="INTEGER" property="uid" />
-        <result column="db_name" jdbcType="VARCHAR" property="name" />
-        <result column="status" jdbcType="INTEGER" property="status" />
-    </resultMap>
     <resultMap id="DictMenuResultMap" type="com.jf.datadict.entity.DictMenu">
         <id column="table_id" jdbcType="INTEGER" property="uid" />
         <result column="version" jdbcType="VARCHAR" property="version" />
@@ -31,25 +26,17 @@
         <result column="table_comment" jdbcType="INTEGER" property="tableChName" />
     </resultMap>
 
-    <select id="queryAllDataBase" resultMap="DataBaseResultMap">
-        select uid, db_name from database_name where status = 1
+    <select id="queryAllDataBase" resultType="java.lang.String">
+        select schema_name db_name from information_schema.schemata
     </select>
 
-    <select id="queryAllDataBaseByName" parameterType="java.lang.String" resultMap="DataBaseResultMap">
-        select uid, db_name from database_name where status = 1 and db_name = #{dbName}
-    </select>
-
-    <select id="queryDBById" parameterType="java.lang.String" resultMap="DataBaseResultMap">
-        select uid, db_name from database_name where status = 1 and uid = #{uid}
-    </select>
-
-    <select id="queryMenuList" parameterType="java.lang.Integer" resultMap="DictMenuResultMap">
+    <select id="queryMenuList" parameterType="java.lang.String" resultMap="DictMenuResultMap">
         select r.table_id,p.version,p.name,concat(t.table_desc,'[',t.table_name,']') table_name,r.dt_id parent_uid
         from rel_table_type r
         left join dict_table t on r.table_id = t.uid
         left join dict_type p on p.uid = r.dt_id
         where t.version = p.version and p.status = 1
-        and p.db_id = #{dbId}
+        and p.db_name = #{dbName}
         order by p.version,r.dt_id
     </select>
 

@@ -1,6 +1,5 @@
 package com.jf.datadict.dao;
 
-import com.jf.datadict.entity.DataBaseName;
 import com.jf.datadict.entity.DictMenu;
 import com.jf.datadict.entity.DictTableStructure;
 import org.apache.ibatis.annotations.Mapper;
@@ -14,22 +13,12 @@ public interface DetailMapper {
     /**
      * 查询所有数据库
      */
-    List<DataBaseName> queryAllDataBase();
-
-    /**
-     * 根据数据源名字查询数据库
-     */
-    DataBaseName queryAllDataBaseByName(@Param("dbName") String dbName);
-
-    /**
-     * 根据数据源名字查询数据库
-     */
-    DataBaseName queryDBById(@Param("uid") String dbId);
+    List<String> queryAllDataBase();
 
     /**
      * 查询菜单列表
      */
-    List<DictMenu> queryMenuList(@Param("dbId") Integer dbId);
+    List<DictMenu> queryMenuList(@Param("dbName") String dbName);
 
     /**
      * 查询表结构

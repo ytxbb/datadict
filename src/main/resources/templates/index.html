@@ -121,7 +121,7 @@
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
-<script th:src="@{/static/vue/vue.min.js}"></script>
+<!--<script th:src="@{/static/vue/vue.min.js}"></script>-->
 <script th:inline="javascript">
     function mergeRows(){
         $('.table').find("td[class^='type_']").each(function (index, element) {
@@ -153,7 +153,7 @@
             success: function (data) {
                 $.each(data.data, function (index, item) {
                     // 下拉菜单里添加元素
-                    $('#dbValue').append(new Option(item.name, item.uid));
+                    $('#dbValue').append(new Option(item, item));
                 });
                 layui.form.render("select");
             },
@@ -163,25 +163,14 @@
         })
     }
 
-    function refreshToShow(db_id) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            data:{"db_id":db_id},
-            url: '/refreshToShow',
-            success: function (data) {
-                var url = "/show?dbName=" + data.data.name;
-                window.location.href = url;
-            },
-            error: function (data) {
-                layer.msg(data.msg);
-            }
-        })
+    function refreshToShow(db_name) {
+        var url = "/show?dbName=" + db_name;
+        window.location.href = url;
     }
 
-    var dbId;
+    var dbName;
     function btn_query() {
-        refreshToShow(dbId);
+        refreshToShow(dbName);
     }
 
     layui.use(['form', 'layer'], function () {
@@ -190,12 +179,11 @@
 
         getDataBaseList();
         form.on('select(select-dbValue)', function(data){
-            // refreshToShow(data.value);
-            dbId = data.value;
+            dbName = data.value;
         })
     })
 </script>
-<script>
+<!--<script>
     new Vue({
         el: '#app',
         data: {
@@ -207,6 +195,6 @@
             }
         }
     })
-</script>
+</script>-->
 </body>
 </html>
