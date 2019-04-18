@@ -41,9 +41,11 @@
 <script th:src="@{/static/layui/layui.all.js}"></script>
 <script th:inline="javascript">
     var dbName = [[${session.dbName}]];
+    var tableName = [[${session.tableName}]];
 </script>
 <script>
     function getTableDetailList(db_name, table_name) {
+        console.log(table_name);
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -137,6 +139,16 @@
                             });
                         }
                         menu += "</li></ul>";
+                    } else {
+                        if (index === 0) {
+                            menu += "<ul class=\"layui-nav layui-nav-tree\" >";
+                        }
+                        menu += "<li data-name=\"component\" class=\"layui-nav-item\">";
+                        menu += "<a href=\"javascript:\" onclick='getTableDetailList(dbName,\""+item.menuName+"\")'>" +
+                            "<i class=\"layui-icon layui-icon-component\"></i>&nbsp;"+item.menuName+"</li>";
+                        if(index === data.data.length -1 ){
+                            menu += "</ul>";
+                        }
                     }
                 });
                 $("#nav").html(menu);
@@ -147,7 +159,7 @@
                 layer.msg(data.msg);
             }
         });
-        getTableDetailList(dbName, "");
+        getTableDetailList(dbName, tableName);
     });
 </script>
 </body>

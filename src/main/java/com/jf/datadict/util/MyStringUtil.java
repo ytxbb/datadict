@@ -13,11 +13,7 @@ public class MyStringUtil {
      * 判断字符串是否为空
      */
     public static boolean isEmpty(final String param) {
-        boolean c = false;
-        if (param == null || param.trim().isEmpty()) {
-            c = true;
-        }
-        return c;
+        return param == null || param.trim().isEmpty();
     }
 
     /**
@@ -58,14 +54,17 @@ public class MyStringUtil {
     }
 
     /**
-     * 校验List是否为空
+     * 校验List不为空
      */
     public static Boolean checkListNotEmpty(List list) {
-        Boolean c = false;
-        if (list != null && !list.isEmpty() && list.get(0) != null) {
-            c = true;
-        }
-        return c;
+        return list != null && !list.isEmpty() && list.get(0) != null;
+    }
+
+    /**
+     * 校验List不为空
+     */
+    public static Boolean checkListIsEmpty(List list) {
+        return !checkListNotEmpty(list);
     }
 
     /**

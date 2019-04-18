@@ -9,15 +9,14 @@
     </resultMap>
 
     <select id="queryDataStatistics" resultMap="BaseResultMap">
-        select db.db_name,t.version,t.name,r.c from dict_type t
-        inner join database_name db on t.db_id = db.uid
+        select t.db_name,t.version,t.name,r.c from dict_type t
         inner join(
             select r.dt_id,t.version,count(r.table_id) c from rel_table_type r
             inner join dict_type t on r.dt_id = t.uid
             where t.`status` = 1
             GROUP BY r.dt_id
         ) r on r.dt_id = t.uid
-        where t.status = 1 and db.status = 1
-        order by db.db_name,t.version
+        where t.status = 1
+        order by t.db_name,t.version
     </select>
 </mapper>

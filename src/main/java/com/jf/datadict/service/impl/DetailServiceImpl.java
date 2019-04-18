@@ -1,7 +1,7 @@
 package com.jf.datadict.service.impl;
 
+import com.jf.datadict.constants.StaticConstants;
 import com.jf.datadict.dao.DetailMapper;
-import com.jf.datadict.entity.DataBaseName;
 import com.jf.datadict.entity.DictMenu;
 import com.jf.datadict.entity.DictTableStructure;
 import com.jf.datadict.exception.ServiceException;
@@ -22,26 +22,22 @@ public class DetailServiceImpl implements DetailService {
 
     @Override
     public JSONResult queryAllDataBase() {
-        List<DataBaseName> dataBaseNames;
+        List<String> dataBaseNames;
         try {
             dataBaseNames = detailMapper.queryAllDataBase();
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException("查询数据库列表出错："+e.getMessage());
         }
-        return JSONResult.ok(dataBaseNames);
-    }
 
-    @Override
-    public DataBaseName queryOneDBName(String dbId) {
-        DataBaseName dataBaseName;
-        try {
-            dataBaseName = detailMapper.queryDBById(dbId);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServiceException("根据uid查询数据库列表出错："+e.getMessage());
+        List<String> res = new ArrayList<>();
+        for (String s : dataBaseNames) {
+            if (StaticConstants.mysqlDefaultDBName.contains(s)) {
+                continue;
+            }
+            res.add(s);
         }
-        return dataBaseName;
+        return JSONResult.ok(res);
     }
 
     @Override
@@ -50,20 +46,34 @@ public class DetailServiceImpl implements DetailService {
             return JSONResult.error500("传入参数为空");
         }
 
-        DataBaseName dataBaseName;
-        try {
-            dataBaseName = detailMapper.queryAllDataBaseByName(dbName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServiceException("根据查询数据库列表时出错："+e.getMessage());
-        }
-
         List<DictMenu> dictMenus;
         try {
-            dictMenus = detailMapper.queryMenuList(dataBaseName.getUid());
+            dictMenus = detailMapper.queryMenuList(dbName);
         } catch (Exception e) {
             e.printStackTrace();
             throw new ServiceException("查询虚拟菜单时出错："+e.getMessage());
+        }
+
+        List<DictMenu> resMenuList = new ArrayList<>();
+        if (MyStringUtil.checkListIsEmpty(dictMenus)) {
+            List<DictTableStructure> dictTableStructures;
+            try {
+                dictTableStructures = detailMapper.queryTableColumnCount(dbName);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ServiceException("查询该库所有表时出错："+e.getMessage());
+            }
+
+            for (DictTableStructure d : dictTableStructures) {
+                DictMenu menu = new DictMenu();
+
+                int parentUid = (int) (Math.random()*(600-100));
+                menu.setParentUid(parentUid);
+                menu.setMenuName(d.getTableName());
+                resMenuList.add(menu);
+            }
+
+            return JSONResult.ok(resMenuList);
         }
 
         Set<String> versionSet = new HashSet<>();
@@ -74,7 +84,6 @@ public class DetailServiceImpl implements DetailService {
         List<String> versionList = new ArrayList<>(versionSet);
 
         // 最后的结果
-        List<DictMenu> resMenuList = new ArrayList<>();
         Map<String, Integer> uidMap = new HashMap<>();
         Map<Integer, List<DictMenu>> thirdChildMenusMap = new HashMap<>();
         // 设置版本作为一级菜单
@@ -136,8 +145,12 @@ public class DetailServiceImpl implements DetailService {
         String realTableName = null;
         String tableChName = null;
         if (MyStringUtil.isNotEmpty(tableName)) {
-            realTableName = tableName.substring(tableName.indexOf("[") + 1, tableName.indexOf("]"));
-            tableChName = tableName.substring(0, tableName.indexOf("[") + 1);
+            if (tableName.indexOf("[")>0) {
+                realTableName = tableName.substring(tableName.indexOf("[") + 1, tableName.indexOf("]"));
+                tableChName = tableName.substring(0, tableName.indexOf("[") + 1);
+            } else {
+                realTableName = tableName;
+            }
         }
 
         // 查询字段个数

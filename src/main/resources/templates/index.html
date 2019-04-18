@@ -121,7 +121,7 @@
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
-<script th:src="@{/static/vue/vue.min.js}"></script>
+<!--<script th:src="@{/static/vue/vue.min.js}"></script>-->
 <script th:inline="javascript">
     function mergeRows(){
         $('.table').find("td[class^='type_']").each(function (index, element) {
@@ -131,9 +131,8 @@
                 let dbName = $(element).text();
                 obj.eq(0).attr("rowspan",obj.length);
                 obj.eq(0).css("color","#1c93f9")
-                /*obj.eq(0).css("cursor","pointer")
-                obj.eq(0).wrapInner("<span onclick='queryMenuList(\"" +dbName+ "\")'></span>");*/
-                obj.eq(0).wrapInner("<a href='/show?dbName="+dbName+"'></a>");
+                obj.eq(0).css("cursor","pointer")
+                obj.eq(0).wrapInner("<span onclick='refreshToShow(\"" +dbName+ "\", null)'></span>");
                 obj.eq(0).removeClass(cla);
                 $('.table').find("."+cla).remove();
             }
@@ -153,7 +152,7 @@
             success: function (data) {
                 $.each(data.data, function (index, item) {
                     // 下拉菜单里添加元素
-                    $('#dbValue').append(new Option(item.name, item.uid));
+                    $('#dbValue').append(new Option(item, item));
                 });
                 layui.form.render("select");
             },
@@ -163,25 +162,24 @@
         })
     }
 
-    function refreshToShow(db_id) {
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            data:{"db_id":db_id},
-            url: '/refreshToShow',
-            success: function (data) {
-                var url = "/show?dbName=" + data.data.name;
-                window.location.href = url;
-            },
-            error: function (data) {
-                layer.msg(data.msg);
-            }
-        })
+    function refreshToShow(db_name, table_name) {
+        if (db_name == undefined || typeof db_name == "undefined") {
+            layer.msg('请必须选择一个数据库',{time:1000});
+            return;
+        }
+        var url = "/show?dbName=" + db_name;
+        // window.location.href = url;
+        if (table_name == undefined || typeof table_name == "undefined") {
+            // url += "&tableName=" + table_name;
+            table_name = "";
+        }
+        new submitForm('/show', { "dbName": db_name, "tableName":table_name }).post();
     }
 
-    var dbId;
+    var dbName;
     function btn_query() {
-        refreshToShow(dbId);
+        let table_name = $('#inputSearch').val();
+        refreshToShow(dbName, table_name);
     }
 
     layui.use(['form', 'layer'], function () {
@@ -190,12 +188,37 @@
 
         getDataBaseList();
         form.on('select(select-dbValue)', function(data){
-            // refreshToShow(data.value);
-            dbId = data.value;
+            dbName = data.value;
         })
     })
 </script>
-<script>
+<script type="text/javascript">
+    /*创造虚拟表单POST提交不留参数于url*/
+    function submitForm(url, data)
+    {
+        var eleForm = document.body.appendChild(document.createElement('form'));
+        eleForm.action = url;
+        for (var property in data)
+        {
+            var hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = property;
+            hiddenInput.value = data[property];
+            eleForm.appendChild(hiddenInput);
+        }
+        this.eleForm = eleForm;
+        if (!submitForm._initialized)
+        {
+            submitForm.prototype.post = function ()
+            {
+                this.eleForm.method = 'post';
+                this.eleForm.submit();
+            };
+            submitForm._initialized = true;
+        }
+    }
+</script>
+<!--<script>
     new Vue({
         el: '#app',
         data: {
@@ -207,6 +230,6 @@
             }
         }
     })
-</script>
+</script>-->
 </body>
 </html>
