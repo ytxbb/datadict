@@ -1,7 +1,5 @@
 package com.jf.datadict.util;
  
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +12,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Properties;
 import java.util.Set;
  
 import com.alibaba.druid.pool.DruidDataSource;
@@ -51,7 +48,7 @@ public class DBUtils {
 	private static String password;
 	/**初始连接数**/
 	@Value("${spring.datasource.initialSize}")
-	private static int initialSize;
+	private static int initialSize = 5;
 	/**最大活动连接数**/
 	@Value("${spring.datasource.maxActive}")
 	private static int maxActive = 20;
@@ -60,7 +57,7 @@ public class DBUtils {
 	private static int minIdle = 5;
 	/**连接耗尽时最大等待获取连接时间**/
 	@Value("${spring.datasource.maxWait}")
-	private static long maxWait;
+	private static long maxWait = 60000;
 	
 	static {
 		init();
@@ -70,8 +67,8 @@ public class DBUtils {
 	 * 获取内存中的表单提交过来的配置内容，将其设置给连接信息
 	 */
 	private static void loadProp() {
-		if (!StaticConstants.databaseInfoMapOfMysql.isEmpty()) {
-			HashMap<String, String> myDBmap = StaticConstants.databaseInfoMapOfMysql;
+		if (!StaticConstants.DB_MYSQL_MAP.isEmpty()) {
+			HashMap<String, String> myDBmap = StaticConstants.DB_MYSQL_MAP;
 
 			// driverClassName = myDBmap.get("driverClassName");
 			url = myDBmap.get("url");

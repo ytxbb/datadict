@@ -9,7 +9,7 @@ import java.util.Set;
  */
 public class StaticConstants {
 
-    public static final Set<String> mysqlDefaultDBName = new HashSet<String>(){{
+    public static final Set<String> MYSQL_DEFAULT_DBNAME = new HashSet<String>(){{
         add("information_schema");
         add("mysql");
         add("performance_schema");
@@ -19,5 +19,5 @@ public class StaticConstants {
     /**
      * 存储mysql表单提交过来的数据库连接信息
      */
-    public static HashMap<String, String> databaseInfoMapOfMysql = new HashMap<>();
+    public static HashMap<String, String> DB_MYSQL_MAP = new HashMap<>();
 }

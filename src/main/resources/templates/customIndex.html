@@ -23,8 +23,7 @@
 <div class="container">
     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
         <ul class="layui-tab-title">
-            <li class="layui-this">默认数据库</li>
-            <li>自定义访问</li>
+            <li class="layui-this">自定义数据库</li>
         </ul>
         <!--搜索-->
         <div class="layui-tab-content">
@@ -45,59 +44,6 @@
                         <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
                     </div>
                 </form>
-                <!--统计-->
-                <div class="left-tab-container">
-                    <table class="table table-bordered table-striped table-hover" id="dbStatistics">
-                        <tr style='background-color: #c4e7ec'>
-                            <th width= "20%">数据源</th>
-                            <th width= "20%">版本</th>
-                            <th width= "40%">分类</th>
-                            <th width= "20%">统计数</th>
-                        </tr>
-                        <tr th:each="ds:${dataStatistics}">
-                            <td th:class="'type_'+${ds.dbName}" th:text="${ds.dbName}"></td>
-                            <td th:text="${ds.version}"></td>
-                            <td th:text="${ds.dtName}"></td>
-                            <td th:text="${ds.tableCount}"></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-            <!--输入IP访问-->
-            <div class="layui-tab-item">
-                <div class="right-tab-div">
-                    <form>
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">IP</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="ip" id="ip" required  lay-verify="required" placeholder="数据库IP"
-                                       autocomplete="off" class="form-control form-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">Port</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="port" id="port" required  lay-verify="required" placeholder="端口号"
-                                       autocomplete="off" class="form-control form-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">UserName</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="userName" id="userName" required  lay-verify="required" placeholder="用户名"
-                                       autocomplete="off" class="form-control form-input">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">Password</label>
-                            <div class="layui-input-block">
-                                <input type="password" name="pwd" id="pwd" required  lay-verify="required" placeholder="密码"
-                                       autocomplete="off" class="form-control form-input">
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-primary" onclick="costom_btn_query()">确定连接</button>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
@@ -121,34 +67,12 @@
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
-<!--<script th:src="@{/static/vue/vue.min.js}"></script>-->
-<script th:inline="javascript">
-    function mergeRows(){
-        $('.table').find("td[class^='type_']").each(function (index, element) {
-            var cla = $(element).attr("class");
-            var obj = $('.table').find("."+cla);
-            if (obj.length>=1) {
-                let dbName = $(element).text();
-                obj.eq(0).attr("rowspan",obj.length);
-                obj.eq(0).css("color","#1c93f9")
-                obj.eq(0).css("cursor","pointer")
-                obj.eq(0).wrapInner("<span onclick='refreshToShow(\"" +dbName+ "\", null)'></span>");
-                obj.eq(0).removeClass(cla);
-                $('.table').find("."+cla).remove();
-            }
-        })
-    }
-
-    $(document).ready(function(){
-        mergeRows();
-    });
-</script>
 <script>
     function getDataBaseList(){
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: '/queryAllDataBase',
+            url: '/queryAllDataBaseOfCustom',
             success: function (data) {
                 $.each(data.data, function (index, item) {
                     // 下拉菜单里添加元素
@@ -191,18 +115,6 @@
             dbName = data.value;
         })
     })
-</script>
-<script>
-    function costom_btn_query() {
-        let ip = $('#ip').val();
-        let port = $('#port').val();
-        let userName = $('#userName').val();
-        let pwd = $('#pwd').val();
-        refreshToCostomShow(ip, port, userName, pwd);
-    }
-    function refreshToCostomShow(ip, port, userName, pwd) {
-        new submitForm('/costomShow', { "ip": ip, "port":port, "userName":userName, "pwd":pwd }).post();
-    }
 </script>
 <script type="text/javascript">
     /*创造虚拟表单POST提交不留参数于url*/

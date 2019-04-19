@@ -32,7 +32,7 @@ public class DetailServiceImpl implements DetailService {
 
         List<String> res = new ArrayList<>();
         for (String s : dataBaseNames) {
-            if (StaticConstants.mysqlDefaultDBName.contains(s)) {
+            if (StaticConstants.MYSQL_DEFAULT_DBNAME.contains(s)) {
                 continue;
             }
             res.add(s);

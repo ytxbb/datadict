@@ -2,6 +2,7 @@ package com.jf.datadict.controller;
 
 import com.jf.datadict.constants.ReturnCode;
 import com.jf.datadict.model.JSONResult;
+import com.jf.datadict.service.CustomService;
 import com.jf.datadict.service.DetailService;
 import com.jf.datadict.service.DataStatisticsService;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,9 @@ public class IndexController {
 
     @Resource
     private DetailService dataBaseService;
+
+    @Resource
+    private CustomService customService;
 
     @Resource
     private DataStatisticsService dataStatisticsService;
@@ -33,6 +37,12 @@ public class IndexController {
     @GetMapping("/queryAllDataBase")
     public JSONResult queryAllDataBase() {
         return dataBaseService.queryAllDataBase();
+    }
+
+    @ResponseBody
+    @GetMapping("/queryAllDataBaseOfCustom")
+    public JSONResult queryAllDataBaseOfCustom() {
+        return customService.queryAllDataBaseOfCustom();
     }
 
     @ResponseBody
