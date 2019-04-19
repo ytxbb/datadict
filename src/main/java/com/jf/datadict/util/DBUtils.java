@@ -48,13 +48,13 @@ public class DBUtils {
 	private static String password;
 	/**初始连接数**/
 	@Value("${spring.datasource.initialSize}")
-	private static int initialSize = 5;
+	private static int initialSize = 8;
 	/**最大活动连接数**/
 	@Value("${spring.datasource.maxActive}")
 	private static int maxActive = 20;
 	/**最小闲置连接数**/
 	@Value("${spring.datasource.minIdle}")
-	private static int minIdle = 5;
+	private static int minIdle = 8;
 	/**连接耗尽时最大等待获取连接时间**/
 	@Value("${spring.datasource.maxWait}")
 	private static long maxWait = 60000;
@@ -93,7 +93,6 @@ public class DBUtils {
 		pool.setMinIdle(minIdle);
 		//设置最大的等待时间(等待获取链接的时间)
 		pool.setMaxWait(maxWait);
-		System.out.println("--init end--");
 	}
 	
 	/**
@@ -323,7 +322,6 @@ public class DBUtils {
 	}
 
 	public static Statement statement() {
-		System.out.println("--statement--");
 		Connection conn = getConn();
 		if (conn == null) {
 			return null;

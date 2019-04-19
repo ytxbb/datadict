@@ -3,6 +3,7 @@ package com.jf.datadict.controller;
 import com.jf.datadict.constants.StaticConstants;
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.model.MySqlVO;
+import com.jf.datadict.service.CustomService;
 import com.jf.datadict.service.DetailService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,22 +29,10 @@ public class DetailController {
     @PostMapping("/costomShow")
     public String costomShow(MySqlVO vo){
         String url = "jdbc:mysql://"+vo.getIp()+":"+vo.getPort()+"/mysql?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false";
-//        StaticConstants.DB_MYSQL_MAP.put("url", "jdbc:mysql://192.168.0.11:3306/jf_vis_db?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false");
         StaticConstants.DB_MYSQL_MAP.put("url", url);
         StaticConstants.DB_MYSQL_MAP.put("username", vo.getUserName());
         StaticConstants.DB_MYSQL_MAP.put("password", vo.getPwd());
-
-        /*try {
-            ResultSet rs = DBUtils.query("select * from p_orginfo");
-            while (rs.next()) {
-                System.out.println(rs.getString(1) +"\t"+rs.getString(2)+"\t"+rs.getString(3)+"\t"+rs.getString(4));
-                System.out.println("------");
-            }
-        } catch (Exception e){
-            e.printStackTrace();
-        }*/
-
-        return "customIndex";
+       return "customIndex";
     }
 
     @ResponseBody

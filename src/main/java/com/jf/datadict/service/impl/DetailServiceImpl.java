@@ -7,10 +7,12 @@ import com.jf.datadict.entity.DictTableStructure;
 import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.service.DetailService;
+import com.jf.datadict.util.DBUtils;
 import com.jf.datadict.util.MyStringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -46,6 +48,27 @@ public class DetailServiceImpl implements DetailService {
             return JSONResult.error500("传入参数为空");
         }
 
+        List<DictMenu> resMenuList = new ArrayList<>();
+        if (!StaticConstants.DB_MYSQL_MAP.isEmpty()) {
+            String sql = "select table_name,count(table_name) c from information_schema.columns where table_schema ='"+dbName+"' group by table_name";
+            try {
+                ResultSet rs = DBUtils.query(sql);
+                while (rs.next()){
+                    DictMenu menu = new DictMenu();
+
+                    int parentUid = (int) (Math.random()*(600-100));
+                    menu.setParentUid(parentUid);
+                    menu.setMenuName(rs.getString(1));
+                    resMenuList.add(menu);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+                throw new ServiceException("查询菜单时出错："+e.getMessage());
+            }
+
+            return JSONResult.ok(resMenuList);
+        }
+
         List<DictMenu> dictMenus;
         try {
             dictMenus = detailMapper.queryMenuList(dbName);
@@ -54,7 +77,6 @@ public class DetailServiceImpl implements DetailService {
             throw new ServiceException("查询虚拟菜单时出错："+e.getMessage());
         }
 
-        List<DictMenu> resMenuList = new ArrayList<>();
         if (MyStringUtil.checkListIsEmpty(dictMenus)) {
             List<DictTableStructure> dictTableStructures;
             try {
@@ -171,6 +193,72 @@ public class DetailServiceImpl implements DetailService {
             return JSONResult.build(100, "该库无数据表");
         }*/
 
+        List<DictTableStructure> dictTableStructures = new ArrayList<>();
+        if (!StaticConstants.DB_MYSQL_MAP.isEmpty()) {
+            String sql = "select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment from information_schema.columns where table_schema = '"+dataBaseName+"'";
+            if (realTableName != null) {
+                sql += "and table_name = '"+realTableName+"'";
+            }
+            try {
+                ResultSet rs = DBUtils.query(sql);
+                while (rs.next()){
+                    String table_name = rs.getString("table_name");
+                    String column_name = rs.getString("column_name");
+                    String column_type = rs.getString("column_type");
+                    String isNull = rs.getString("is_nullable");
+                    String column_key = rs.getString("column_key");
+                    String column_default = rs.getString("column_default");
+                    String column_comment = rs.getString("column_comment");
+                    DictTableStructure ds = new DictTableStructure();
+                    ds.setTableName(table_name);
+                    ds.setField(column_name);
+                    ds.setComment(column_comment);
+
+                    if (tableChName == null) {
+                        ds.setTableChName("");
+                    }
+
+                    if (column_type.indexOf("(")>0 && column_type.indexOf(")")>0) {
+                        String type = column_type.substring(0, column_type.indexOf("("));
+                        String length = column_type.substring(column_type.indexOf("(") + 1, column_type.indexOf(")"));
+                        ds.setType(type);
+                        ds.setLength(length);
+                    }else{
+                        ds.setType(column_type);
+                        ds.setLength("0");
+                    }
+
+                    if (isNull.equals("YES")) {
+                        ds.setIsNull("Y");
+                    } else {
+                        ds.setIsNull("N");
+                    }
+
+                    if (MyStringUtil.isNotEmpty(column_key)) {
+                        if (column_key.equals("PRI")) {
+                            ds.setKey("主键");
+                        }
+                        if (column_key.equals("MUL")) {
+                            ds.setKey("索引");
+                        }
+                    }else{
+                        ds.setKey("");
+                    }
+
+                    if (column_default == null) {
+                        ds.setDefaultValue("");
+                    }
+
+                    dictTableStructures.add(ds);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
+                throw new ServiceException("查询菜单时出错："+e.getMessage());
+            }
+
+            return JSONResult.ok(dictTableStructures);
+        }
+
         // 查询表名注释
         List<DictTableStructure> tableComments;
         try {
@@ -185,7 +273,6 @@ public class DetailServiceImpl implements DetailService {
             commentMap = tableComments.stream().collect(Collectors.toMap(DictTableStructure::getTableName, DictTableStructure::getTableChName));
         }
 
-        List<DictTableStructure> dictTableStructures;
         try {
             dictTableStructures = detailMapper.queryTableStructure(dataBaseName, realTableName);
         } catch (Exception e) {
