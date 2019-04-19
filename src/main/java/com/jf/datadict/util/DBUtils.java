@@ -67,14 +67,10 @@ public class DBUtils {
 	 * 获取内存中的表单提交过来的配置内容，将其设置给连接信息
 	 */
 	private static void loadProp() {
-		if (!StaticConstants.DB_MYSQL_MAP.isEmpty()) {
-			HashMap<String, String> myDBmap = StaticConstants.DB_MYSQL_MAP;
-
-			// driverClassName = myDBmap.get("driverClassName");
-			url = myDBmap.get("url");
-			username = myDBmap.get("username");
-			password = myDBmap.get("password");
-		}
+        url = StaticConstants.DB_MYSQL_MAP.get("url");
+        username = StaticConstants.DB_MYSQL_MAP.get("username");
+        password = StaticConstants.DB_MYSQL_MAP.get("password");
+        StaticConstants.DB_MYSQL_MAP.put("back_url", url);
 	}
 	
 	private static void init() {

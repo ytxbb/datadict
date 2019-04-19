@@ -20,31 +20,31 @@ public class DetailController {
     private DetailService detailService;
 
     @PostMapping("/show")
-    public String show(HttpSession httpSession, @RequestParam("dbName") String dbName, @RequestParam("tableName") String tableName){
+    public String show(HttpSession httpSession, @RequestParam("dbName") String dbName, @RequestParam("tableName") String tableName) {
         httpSession.setAttribute("dbName", dbName);
         httpSession.setAttribute("tableName", tableName);
         return "show";
     }
 
     @PostMapping("/costomShow")
-    public String costomShow(MySqlVO vo){
-        String url = "jdbc:mysql://"+vo.getIp()+":"+vo.getPort()+"/mysql?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false";
+    public String costomShow(MySqlVO vo) {
+        String url = "jdbc:mysql://" + vo.getIp() + ":" + vo.getPort() + "/mysql?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false";
         StaticConstants.DB_MYSQL_MAP.put("url", url);
         StaticConstants.DB_MYSQL_MAP.put("username", vo.getUserName());
         StaticConstants.DB_MYSQL_MAP.put("password", vo.getPwd());
-       return "customIndex";
+        return "customIndex";
     }
 
     @ResponseBody
     @PostMapping("/queryMenuList")
-    public JSONResult queryMenuList(String dbName){
+    public JSONResult queryMenuList(String dbName) {
         return detailService.queryMenuList(dbName);
     }
 
     @ResponseBody
     @PostMapping("/queryTableStructure")
     public JSONResult queryTableStructure(@RequestParam("db_name") String dataBaseName,
-                                          @RequestParam("table_name") String tableName){
+                                          @RequestParam("table_name") String tableName) {
         return detailService.queryTableStructure(dataBaseName, tableName);
     }
 }
