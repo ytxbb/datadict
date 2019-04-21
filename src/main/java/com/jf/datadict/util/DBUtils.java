@@ -59,6 +59,10 @@ public class DBUtils {
 	/**连接耗尽时最大等待获取连接时间**/
 	@Value("${spring.datasource.maxWait}")
 	private static long maxWait = 60000;
+	/**配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒*/
+	private static long timeBetweenEvictionRunsMillis = 60000;
+	/**配置一个连接在池中最小生存的时间，单位是毫秒*/
+	private static long minEvictableIdleTimeMillis = 10000;
 	
 	static {
 		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -91,6 +95,12 @@ public class DBUtils {
 		pool.setMinIdle(minIdle);
 		//设置最大的等待时间(等待获取链接的时间)
 		pool.setMaxWait(maxWait);
+		pool.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
+		pool.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
+		// 标记是否删除泄露的连接,如果他们超过了removeAbandonedTimout的限制
+		pool.setRemoveAbandoned(true);
+		// 设置120秒为超时时间，超时强制回收。感觉小场景可以这么用，但实际并不建议。
+		pool.setRemoveAbandonedTimeout(120);
 	}
 	
 	/**
@@ -101,11 +111,18 @@ public class DBUtils {
 		try {
 			if (session.getAttribute("back_url") == null || !session.getAttribute("back_url").equals(url)) {
 				init();
-				System.out.println("进来了.................");
+				// System.out.println("进来了.................");
+			}
+			// 此处使用不好的解决方式。可能会比较耗费性能吧，不是很懂毕竟能力有限，不知道要如何设置。。。暂且就写成再次强制初始化吧
+			System.out.println("连接数："+pool.getActiveCount());
+			if (pool.getActiveCount() == maxActive-1) {
+				pool.close();
+				System.out.println("关闭了");
 			}
 			//如果连接池为空或者被异常关闭,则重新初始化一个
 			if(pool == null || pool.isClosed()) {
 				init();
+				System.out.println("初始化");
 			}
 			return pool.getConnection();
 		} catch (SQLException e) {
