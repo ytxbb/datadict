@@ -3,12 +3,15 @@ package com.jf.datadict.controller;
 import com.jf.datadict.constants.ReturnCode;
 import com.jf.datadict.constants.StaticConstants;
 import com.jf.datadict.model.JSONResult;
+import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
 import com.jf.datadict.service.DetailService;
 import com.jf.datadict.service.DataStatisticsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -31,7 +34,6 @@ public class IndexController {
         if (res.getStatus().equals(ReturnCode.Code_200)) {
             model.addAttribute("dataStatistics", res.getData());
         }
-        System.out.println(StaticConstants.DB_MYSQL_MAP.toString());
         return "index";
     }
 
@@ -51,5 +53,11 @@ public class IndexController {
     @GetMapping("/queryDataStatistics")
     public JSONResult queryDataStatistics() {
         return dataStatisticsService.queryDataStatistics();
+    }
+
+    @ResponseBody
+    @PostMapping("/validauteMySql")
+    public JSONResult validauteMySqlConnection(@RequestBody MySqlVO vo) {
+        return customService.validauteMySqlConnection(vo);
     }
 }

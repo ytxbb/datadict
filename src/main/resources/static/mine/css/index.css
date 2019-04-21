@@ -94,6 +94,10 @@ a:visited {
     text-align: right;
 }
 
+.right-tab-div .right-tab-btn-div {
+    padding-left: 130px;
+}
+
 /* 按钮美化 */
 .submit-button {
     width: 80px;

@@ -1,9 +1,9 @@
 package com.jf.datadict.service.impl;
 
 import com.jf.datadict.entity.DictMenu;
-import com.jf.datadict.entity.DictTableStructure;
 import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.JSONResult;
+import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
 import com.jf.datadict.util.DBUtils;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,15 @@ public class customServiceImpl implements CustomService {
             e.printStackTrace();
         }
         return JSONResult.ok(dataBaseNames);
+    }
+
+    @Override
+    public JSONResult validauteMySqlConnection(MySqlVO vo) {
+        Boolean resConnection = DBUtils.validauteMySqlConnection(vo);
+        if (!resConnection) {
+            return JSONResult.error500("数据库尝试连接失败！");
+        }
+        return JSONResult.ok(true);
     }
 
     @Override

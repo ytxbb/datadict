@@ -110,11 +110,15 @@
         var form = layui.form;
         var layer = layui.layer;
 
-        getDataBaseList();
+        // getDataBaseList();
         form.on('select(select-dbValue)', function(data){
             dbName = data.value;
         })
     })
+
+    $(document).ready(function(){
+        getDataBaseList();
+    });
 </script>
 <script type="text/javascript">
     /*创造虚拟表单POST提交不留参数于url*/

@@ -1,6 +1,7 @@
 package com.jf.datadict.controller;
 
 import com.jf.datadict.constants.StaticConstants;
+import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
@@ -19,6 +20,9 @@ public class DetailController {
     @Resource
     private DetailService detailService;
 
+    @Resource
+    private CustomService customService;
+
     @PostMapping("/show")
     public String show(HttpSession httpSession, @RequestParam("dbName") String dbName, @RequestParam("tableName") String tableName) {
         httpSession.setAttribute("dbName", dbName);
@@ -27,11 +31,12 @@ public class DetailController {
     }
 
     @PostMapping("/costomShow")
-    public String costomShow(MySqlVO vo) {
+    public String costomShow(HttpSession httpSession, MySqlVO vo) {
         String url = "jdbc:mysql://" + vo.getIp() + ":" + vo.getPort() + "/mysql?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false";
         StaticConstants.DB_MYSQL_MAP.put("url", url);
         StaticConstants.DB_MYSQL_MAP.put("username", vo.getUserName());
         StaticConstants.DB_MYSQL_MAP.put("password", vo.getPwd());
+        httpSession.setAttribute("back_url", url);
         return "customIndex";
     }
 
