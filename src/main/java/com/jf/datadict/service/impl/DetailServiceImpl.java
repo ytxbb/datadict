@@ -195,7 +195,8 @@ public class DetailServiceImpl implements DetailService {
 
         List<DictTableStructure> dictTableStructures = new ArrayList<>();
         if (!StaticConstants.DB_MYSQL_MAP.isEmpty()) {
-            String sql = "select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment from information_schema.columns where table_schema = '"+dataBaseName+"'";
+            String sql = "select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment from information_schema.columns " +
+                    "where table_schema = '"+dataBaseName+"'";
             if (realTableName != null) {
                 sql += "and table_name = '"+realTableName+"'";
             }
