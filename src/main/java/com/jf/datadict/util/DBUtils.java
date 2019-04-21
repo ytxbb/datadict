@@ -96,6 +96,7 @@ public class DBUtils {
 		//设置最大的等待时间(等待获取链接的时间)
 		pool.setMaxWait(maxWait);
 		pool.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
+		pool.setTestOnBorrow(false);
 		pool.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
 		// 标记是否删除泄露的连接,如果他们超过了removeAbandonedTimout的限制
 		pool.setRemoveAbandoned(true);
