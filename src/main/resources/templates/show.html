@@ -18,10 +18,11 @@
         </div>
     </div>
 
-    <div class="layui-body">
+    <div class="layui-body" id="printContent">
         <!-- 内容主体区域 -->
         <div class="table-head">
             <h2 th:text="${session.dbName}+数据字典"></h2>
+            <button onclick="printContent()">点击打印</button>
         </div>
         <div class="table-pad">
             <table class="table table-bordered table-hover" id="list">
@@ -44,6 +45,11 @@
     var tableName = [[${session.tableName}]];
 </script>
 <script>
+    function printContent() {
+        var mycontent=document.getElementById("printContent").innerHTML;
+        // mycontent = mycontent.replace((/</g),"&lt").replace((/>/g),"&gt");
+        console.log(mycontent);
+    }
     function getTableDetailList(db_name, table_name) {
         console.log(table_name);
         $.ajax({
