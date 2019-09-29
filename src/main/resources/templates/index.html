@@ -6,6 +6,7 @@
     <title>主页</title>
     <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}"/>
+    <link rel="stylesheet" th:href="@{/static/step-lay/step.css}">
     <link rel="stylesheet" th:href="@{/static/mine/css/index.css}"/>
 </head>
 <body>
@@ -21,12 +22,12 @@
 </div>
 <!--选择数据库-->
 <div class="container">
-    <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+    <!--<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
         <ul class="layui-tab-title">
             <li class="layui-this">默认数据库</li>
             <li>自定义访问</li>
         </ul>
-        <!--搜索-->
+        &lt;!&ndash;搜索&ndash;&gt;
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
                 <form class="layui-form" action="/">
@@ -45,8 +46,8 @@
                         <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
                     </div>
                 </form>
-                <!--统计-->
-                <!--<div class="left-tab-container">
+                &lt;!&ndash;统计&ndash;&gt;
+                &lt;!&ndash;<div class="left-tab-container">
                     <table class="table table-bordered table-striped table-hover" id="dbStatistics">
                         <tr style='background-color: #c4e7ec'>
                             <th width= "20%">数据源</th>
@@ -61,9 +62,9 @@
                             <td th:text="${ds.tableCount}"></td>
                         </tr>
                     </table>
-                </div>-->
+                </div>&ndash;&gt;
             </div>
-            <!--输入IP访问-->
+            &lt;!&ndash;输入IP访问&ndash;&gt;
             <div class="layui-tab-item">
                 <div class="right-tab-div">
                     <form action="/costomShow" method="post">
@@ -110,6 +111,139 @@
                 </div>
             </div>
         </div>
+    </div>-->
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding-top: 10px;">
+            <div class="layui-carousel" id="stepForm" lay-filter="stepForm" style="margin: 0 auto;">
+                <div carousel-item>
+                    <!--<div>
+                        <form class="layui-form" style="margin: 0 auto;max-width: 460px;padding-top: 40px;">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">游戏ID:</label>
+                                <div class="layui-input-block">
+                                    <input type="text" placeholder="请填写入款人游戏ID" class="layui-input" lay-verify="number" required />
+
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">入款金额:</label>
+                                <div class="layui-input-block">
+                                    <input type="number" placeholder="请填写入款金额" value="" class="layui-input" lay-verify="number" required>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">入款类型:</label>
+                                <div class="layui-input-block">
+                                    <select lay-verify="required">
+                                        <option value="1" selected>保险箱</option>
+                                        <option value="2">现金</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">入款方式:</label>
+                                <div class="layui-input-block">
+                                    <select lay-verify="required">
+                                        <option value="1" selected>人工入款</option>
+                                        <option value="2">修正</option>
+                                        <option value="3">活动</option>
+                                        <option value="4">佣金</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">备注说明:</label>
+                                <div class="layui-input-block">
+                                    <textarea placeholder="入款备注" value="" class="layui-textarea"></textarea>
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="formStep">
+                                        &emsp;下一步&emsp;
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>-->
+                    <div class="right-tab-div">
+                        <form action="/costomShow" method="post">
+                            <div class="layui-form-item">
+                                <label class="right-tab-form-label">DBSupport</label>
+                                <select class="form-control form-input" required  lay-verify="required" >
+                                    <option id="mysql">MySql</option>
+                                    <option id="mongodb">MongoDB（暂不支持）</option>
+                                </select>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="right-tab-form-label">IP</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="ip" id="ip" required  lay-verify="required" placeholder="数据库IP"
+                                           autocomplete="off" class="form-control form-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="right-tab-form-label">Port</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="port" id="port" required  lay-verify="required" placeholder="端口号"
+                                           autocomplete="off" class="form-control form-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="right-tab-form-label">UserName</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="userName" id="userName" required  lay-verify="required" placeholder="用户名"
+                                           autocomplete="off" class="form-control form-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="right-tab-form-label">Password</label>
+                                <div class="layui-input-block">
+                                    <input type="password" name="pwd" id="pwd" required  lay-verify="required" placeholder="密码"
+                                           autocomplete="off" class="form-control form-input">
+                                </div>
+                            </div>
+                            <div class="right-tab-btn-div">
+                                <button type="button" class="btn btn-primary" id="test_btn" onclick="costom_btn_query()">测试连接</button>
+                                <button type="submit" class="btn btn-success" id="submit_btn">确定连接</button>
+                                <button lay-submit lay-filter="formStep" class="btn btn-success">确定连接下一步</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <form class="layui-form" style="margin: 0 auto;max-width: 460px;padding-top: 40px;">
+                            <label class="layui-form-label">数据库</label>
+                            <div class="layui-input-block form-select">
+                                <select name="dbValue" id="dbValue" lay-verify="required" lay-filter="select-dbValue">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+
+                            <label class="layui-form-label">表名</label>
+                            <input type="text" class="form-control form-input" id="inputSearch"
+                                   placeholder="请输入要搜索的表名" autocomplete="off">
+                            <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
+                            <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
+                            <button type="button" class="btn btn-default submit-button" lay-submit lay-filter="formStep2">查询下一步</button>
+                        </form>
+                    </div>
+                    <div>
+                        <div style="text-align: center;margin-top: 90px;">
+                            <i class="layui-icon layui-circle"
+                               style="color: white;font-size:30px;font-weight:bold;background: #52C41A;padding: 20px;line-height: 80px;">&#xe605;</i>
+                            <div style="font-size: 24px;color: #333;font-weight: 500;margin-top: 30px;">
+                                入款成功
+                            </div>
+                            <div style="font-size: 14px;color: #666;margin-top: 20px;">预计两小时到账</div>
+                        </div>
+                        <div style="text-align: center;margin-top: 50px;">
+                            <button class="layui-btn next">再入一笔</button>
+                            <button class="layui-btn layui-btn-primary">查看账单</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!--版本号-->
@@ -121,8 +255,51 @@
 
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
-<script th:src="@{/static/layui/layui.all.js}"></script>
-<!--<script th:src="@{/static/vue/vue.min.js}"></script>-->
+<script th:src="@{/static/layui/layui.js}"></script>
+<script th:src="@{/static/step-lay/step.js}"></script>
+<script th:inline="javascript">
+    layui.config({
+        base:'/static/step-lay/'
+    }).use([ 'form', 'step'], function () {
+        var $ = layui.$
+            , form = layui.form
+            , step = layui.step;
+
+        step.render({
+            elem: '#stepForm',
+            filter: 'stepForm',
+            width: '100%', //设置容器宽度
+            stepWidth: '100%',
+            height: '500px',
+            stepItems: [{
+                title: '自定义访问'
+            }, {
+                title: '确认数据连接'
+            }, {
+                title: '完成'
+            }]
+        });
+
+
+        form.on('submit(formStep)', function (data) {
+            step.next('#stepForm');
+            return false;
+        });
+
+        form.on('submit(formStep2)', function (data) {
+            step.next('#stepForm');
+            return false;
+        });
+
+        $('.pre').click(function () {
+            step.pre('#stepForm');
+        });
+
+        $('.next').click(function () {
+            step.next('#stepForm');
+        });
+    })
+</script>
 <script th:inline="javascript">
     function mergeRows(){
         $('.table').find("td[class^='type_']").each(function (index, element) {
