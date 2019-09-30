@@ -109,8 +109,11 @@ a:visited {
 }
 
 .alert{
+    width: 40%;
+    margin-left: 28%;
     padding: 10px;
 }
+
 .alert-dismissable, .alert-dismissible {
     padding-right: 35px;
 }

@@ -38,6 +38,10 @@
                         <option value=""></option>
                     </select>
                 </div>
+                <label class="layui-form-label">表名</label>
+                <input type="text" class="form-control form-input" id="inputSearch"
+                       placeholder="请输入要搜索的表名" autocomplete="off">
+                <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
                 -->
                 <div class="right-tab-div">
                     <form action="/costomShow" method="post">
@@ -129,12 +133,10 @@
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <strong>Warning!</strong> 您将在该连接上新建一个datadict的数据库！
                                     </div>
-                                    <label class="layui-form-label">表名</label>
-                                    <input type="text" class="form-control form-input" id="inputSearch"
-                                           placeholder="请输入要搜索的表名" autocomplete="off">
-                                    <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
-                                    <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
-                                    <button type="button" class="btn btn-default submit-button" lay-submit lay-filter="formStep2">下一步</button>
+                                    <div style="text-align: center;margin-top: 90px;">
+                                        <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
+                                        <button type="button" class="btn btn-default submit-button" lay-submit lay-filter="formStep2">下一步</button>
+                                    </div>
                                 </div>
                                 <div>
                                     <div style="text-align: center;margin-top: 90px;">
