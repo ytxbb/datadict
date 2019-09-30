@@ -6,7 +6,6 @@
     <title>主页</title>
     <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}"/>
-    <link rel="stylesheet" th:href="@{/static/step-lay/step.css}">
     <link rel="stylesheet" th:href="@{/static/mine/css/index.css}"/>
 </head>
 <body>
@@ -24,13 +23,48 @@
 <div class="container">
     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
         <ul class="layui-tab-title">
-            <li class="layui-this">自定义访问</li>
-            <li>个性化设置</li>
+            <li class="layui-this">默认数据库</li>
+            <li>自定义访问</li>
         </ul>
         <!--搜索-->
         <div class="layui-tab-content">
-            <!--输入IP访问-->
             <div class="layui-tab-item layui-show">
+                <form class="layui-form" action="/">
+                    <div class="form-div">
+                        <label class="layui-form-label">数据库</label>
+                        <div class="layui-input-block form-select">
+                            <select name="dbValue" id="dbValue" lay-verify="required" lay-filter="select-dbValue">
+                                <option value=""></option>
+                            </select>
+                        </div>
+
+                        <label class="layui-form-label">表名</label>
+                        <input type="text" class="form-control form-input" id="inputSearch"
+                               placeholder="请输入要搜索的表名" autocomplete="off">
+
+                        <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
+                    </div>
+                </form>
+                <!--统计-->
+                <div class="left-tab-container">
+                    <table class="table table-bordered table-striped table-hover" id="dbStatistics">
+                        <tr style='background-color: #c4e7ec'>
+                            <th width= "20%">数据源</th>
+                            <th width= "20%">版本</th>
+                            <th width= "40%">分类</th>
+                            <th width= "20%">统计数</th>
+                        </tr>
+                        <tr th:each="ds:${dataStatistics}">
+                            <td th:class="'type_'+${ds.dbName}" th:text="${ds.dbName}"></td>
+                            <td th:text="${ds.version}"></td>
+                            <td th:text="${ds.dtName}"></td>
+                            <td th:text="${ds.tableCount}"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!--输入IP访问-->
+            <div class="layui-tab-item">
                 <div class="right-tab-div">
                     <form action="/costomShow" method="post">
                         <div class="layui-form-item">
@@ -75,51 +109,6 @@
                     </form>
                 </div>
             </div>
-            <div class="layui-tab-item">
-                <div class="layui-card">
-                    <div class="layui-card-body" style="padding-top: 10px;">
-                        <div class="layui-carousel" id="stepForm" lay-filter="stepForm" style="margin: 0 auto;">
-                            <div carousel-item>
-                                <div>
-                                    <h2>第一步</h2>
-                                    <button lay-submit lay-filter="formStep" class="btn btn-success">下一步</button>
-                                </div>
-                                <div>
-                                    <form class="layui-form" style="margin: 0 auto;max-width: 460px;padding-top: 40px;">
-                                        <label class="layui-form-label">数据库</label>
-                                        <div class="layui-input-block form-select">
-                                            <select name="dbValue" id="dbValue" lay-verify="required" lay-filter="select-dbValue">
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
-
-                                        <label class="layui-form-label">表名</label>
-                                        <input type="text" class="form-control form-input" id="inputSearch"
-                                               placeholder="请输入要搜索的表名" autocomplete="off">
-                                        <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
-                                        <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
-                                        <button type="button" class="btn btn-default submit-button" lay-submit lay-filter="formStep2">查询下一步</button>
-                                    </form>
-                                </div>
-                                <div>
-                                    <div style="text-align: center;margin-top: 90px;">
-                                        <i class="layui-icon layui-circle"
-                                           style="color: white;font-size:30px;font-weight:bold;background: #52C41A;padding: 20px;line-height: 80px;">&#xe605;</i>
-                                        <div style="font-size: 24px;color: #333;font-weight: 500;margin-top: 30px;">
-                                            入款成功
-                                        </div>
-                                        <div style="font-size: 14px;color: #666;margin-top: 20px;">预计两小时到账</div>
-                                    </div>
-                                    <div style="text-align: center;margin-top: 50px;">
-                                        <button class="layui-btn next">再入一笔</button>
-                                        <button class="layui-btn layui-btn-primary">查看账单</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -129,62 +118,20 @@
         <span> By JF From 2019-03-19 </span>
     </p>
 </div>
+<!--<div class="footer">
+    <div class="footer-left"></div>
+    <div class="footer-middle">
+        <p class="footer-p">
+            <span> By JF From 2019-03-19 </span>
+        </p>
+    </div>
+    <div class="footer-right"></div>
+</div>-->
 
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
-<script th:src="@{/static/layui/layui.js}"></script>
-<!--<script th:src="@{/static/step-lay/step.js}"></script>-->
-<script th:inline="javascript">
-    layui.use('element', function(){
-        var element = layui.element;
-
-        //一些事件监听
-        element.on('tab(demo)', function(data){
-            console.log(data);
-        });
-    });
-    layui.config({
-        base:'/static/step-lay/'
-    }).use([ 'form', 'step'], function () {
-        var $ = layui.$
-            , form = layui.form
-            , step = layui.step;
-
-        step.render({
-            elem: '#stepForm',
-            filter: 'stepForm',
-            width: '100%', //设置容器宽度
-            stepWidth: '100%',
-            height: '500px',
-            stepItems: [{
-                title: '自定义访问'
-            }, {
-                title: '确认数据连接'
-            }, {
-                title: '完成'
-            }]
-        });
-
-
-        form.on('submit(formStep)', function (data) {
-            step.next('#stepForm');
-            return false;
-        });
-
-        form.on('submit(formStep2)', function (data) {
-            step.next('#stepForm');
-            return false;
-        });
-
-        $('.pre').click(function () {
-            step.pre('#stepForm');
-        });
-
-        $('.next').click(function () {
-            step.next('#stepForm');
-        });
-    })
-</script>
+<script th:src="@{/static/layui/layui.all.js}"></script>
+<!--<script th:src="@{/static/vue/vue.min.js}"></script>-->
 <script th:inline="javascript">
     function mergeRows(){
         $('.table').find("td[class^='type_']").each(function (index, element) {
@@ -345,5 +292,18 @@
         }
     }
 </script>
+<!--<script>
+    new Vue({
+        el: '#app',
+        data: {
+            visible: true
+        },
+        methods: {
+            show: function () {
+                this.visible = true;
+            }
+        }
+    })
+</script>-->
 </body>
 </html>
