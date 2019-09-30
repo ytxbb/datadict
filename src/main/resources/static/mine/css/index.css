@@ -85,6 +85,11 @@ a:visited {
     margin-top: 50px;
 }
 
+.personal-right-tab-div {
+    margin-left: 30%;
+    margin-top: 20px;
+}
+
 .right-tab-form-label {
     float: left;
     display: block;
@@ -97,6 +102,17 @@ a:visited {
 
 .right-tab-div .right-tab-btn-div {
     padding-left: 130px;
+}
+
+.personal-right-tab-div .right-tab-btn-div {
+    padding-left: 130px;
+}
+
+.alert{
+    padding: 10px;
+}
+.alert-dismissable, .alert-dismissible {
+    padding-right: 35px;
 }
 
 /* 按钮美化 */

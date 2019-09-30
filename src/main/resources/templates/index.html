@@ -31,6 +31,14 @@
         <div class="layui-tab-content">
             <!--输入IP访问-->
             <div class="layui-tab-item layui-show">
+                <!--
+                <label class="layui-form-label">数据库</label>
+                <div class="layui-input-block form-select">
+                    <select name="dbValue" id="dbValue" lay-verify="required" lay-filter="select-dbValue">
+                        <option value=""></option>
+                    </select>
+                </div>
+                -->
                 <div class="right-tab-div">
                     <form action="/costomShow" method="post">
                         <div class="layui-form-item">
@@ -80,26 +88,53 @@
                     <div class="layui-card-body" style="padding-top: 10px;">
                         <div class="layui-carousel" id="stepForm" lay-filter="stepForm" style="margin: 0 auto;">
                             <div carousel-item>
-                                <div>
-                                    <h2>第一步</h2>
-                                    <button lay-submit lay-filter="formStep" class="btn btn-success">下一步</button>
+                                <div class="personal-right-tab-div">
+                                    <form action="#" method="post">
+                                        <div class="layui-form-item">
+                                            <label class="right-tab-form-label">IP</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="personal-ip" id="personal-ip" required  lay-verify="required" placeholder="MySQL-数据库IP"
+                                                       autocomplete="off" class="form-control form-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="right-tab-form-label">Port</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="personal-port" id="personal-port" required  lay-verify="required" placeholder="MySQL-端口号"
+                                                       autocomplete="off" class="form-control form-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="right-tab-form-label">UserName</label>
+                                            <div class="layui-input-block">
+                                                <input type="text" name="personal-userName" id="personal-userName" required  lay-verify="required" placeholder="用户名"
+                                                       autocomplete="off" class="form-control form-input">
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <label class="right-tab-form-label">Password</label>
+                                            <div class="layui-input-block">
+                                                <input type="password" name="personal-pwd" id="personal-pwd" required  lay-verify="required" placeholder="密码"
+                                                       autocomplete="off" class="form-control form-input">
+                                            </div>
+                                        </div>
+                                        <div class="right-tab-btn-div">
+                                            <button type="button" class="btn btn-primary" id="personal-test_btn">测试连接</button>
+                                            <button type="submit" lay-submit lay-filter="formStep" class="btn btn-success" id="personal-submit_btn">确定连接</button>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div>
-                                    <form class="layui-form" style="margin: 0 auto;max-width: 460px;padding-top: 40px;">
-                                        <label class="layui-form-label">数据库</label>
-                                        <div class="layui-input-block form-select">
-                                            <select name="dbValue" id="dbValue" lay-verify="required" lay-filter="select-dbValue">
-                                                <option value=""></option>
-                                            </select>
-                                        </div>
-
-                                        <label class="layui-form-label">表名</label>
-                                        <input type="text" class="form-control form-input" id="inputSearch"
-                                               placeholder="请输入要搜索的表名" autocomplete="off">
-                                        <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
-                                        <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
-                                        <button type="button" class="btn btn-default submit-button" lay-submit lay-filter="formStep2">查询下一步</button>
-                                    </form>
+                                    <div class="alert alert-warning alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <strong>Warning!</strong> 您将在该连接上新建一个datadict的数据库！
+                                    </div>
+                                    <label class="layui-form-label">表名</label>
+                                    <input type="text" class="form-control form-input" id="inputSearch"
+                                           placeholder="请输入要搜索的表名" autocomplete="off">
+                                    <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
+                                    <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
+                                    <button type="button" class="btn btn-default submit-button" lay-submit lay-filter="formStep2">下一步</button>
                                 </div>
                                 <div>
                                     <div style="text-align: center;margin-top: 90px;">
@@ -157,9 +192,9 @@
             stepWidth: '100%',
             height: '500px',
             stepItems: [{
-                title: '自定义访问'
+                title: '连接数据库'
             }, {
-                title: '确认数据连接'
+                title: '初始化数据库'
             }, {
                 title: '完成'
             }]
