@@ -273,13 +273,12 @@
     }
 
     $(document).ready(function(){
-        // $('#submit_btn').attr("style","display:none;");
         $('#submit_btn').hide();
         mergeRows();
     });
 </script>
 <script>
-    function getDataBaseList(){
+    /*function getDataBaseList(){
         $.ajax({
             type: 'GET',
             dataType: 'json',
@@ -295,7 +294,7 @@
                 layer.msg(data.msg);
             }
         })
-    }
+    }*/
 
     function refreshToShow(db_name, table_name) {
         if (dbName == "" || db_name == undefined || typeof db_name == "undefined") {
@@ -321,7 +320,7 @@
         var form = layui.form;
         var layer = layui.layer;
 
-        getDataBaseList();
+        // getDataBaseList();
         form.on('select(select-dbValue)', function(data){
             dbName = data.value;
         })

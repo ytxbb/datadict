@@ -30,10 +30,10 @@ public class IndexController {
 
     @GetMapping("/")
     public String index(Model model){
-        JSONResult res = dataStatisticsService.queryDataStatistics();
+        /*JSONResult res = dataStatisticsService.queryDataStatistics();
         if (res.getStatus().equals(ReturnCode.Code_200)) {
             model.addAttribute("dataStatistics", res.getData());
-        }
+        }*/
         return "index";
     }
 
