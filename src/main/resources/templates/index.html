@@ -44,40 +44,57 @@
                 <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
                 -->
                 <div class="right-tab-div">
-                    <form action="/costomShow" method="post">
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">DBSupport</label>
-                            <select class="form-control form-input" required  lay-verify="required" >
-                                <option id="mysql">MySql</option>
-                                <option id="mongodb">MongoDB（暂不支持）</option>
-                            </select>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">IP</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="ip" id="ip" required  lay-verify="required" placeholder="数据库IP"
-                                       autocomplete="off" class="form-control form-input">
+                    <form class="form-horizontal" action="/costomShow" method="post">
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputDB">DBSupport</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@</span>
+                                    <select class="form-control form-select" required  lay-verify="required" >
+                                        <option id="mysql">MySql</option>
+                                        <option id="mongodb">MongoDB（暂不支持）</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">Port</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="port" id="port" required  lay-verify="required" placeholder="端口号"
-                                       autocomplete="off" class="form-control form-input">
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputIp">IP</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-link" aria-hidden="true"></span>
+                                    <input type="text" class="form-control top-1" name="inputIp" id="inputIp"
+                                           placeholder="数据库IP" required  lay-verify="required" autocomplete="off" >
+                                </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">UserName</label>
-                            <div class="layui-input-block">
-                                <input type="text" name="userName" id="userName" required  lay-verify="required" placeholder="用户名"
-                                       autocomplete="off" class="form-control form-input">
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputPort">Port</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                                    <input type="text" class="form-control top-1" name="inputPort" id="inputPort"
+                                           placeholder="端口号" required  lay-verify="required" autocomplete="off" >
+                                </div>
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="right-tab-form-label">Password</label>
-                            <div class="layui-input-block">
-                                <input type="password" name="pwd" id="pwd" required  lay-verify="required" placeholder="密码"
-                                       autocomplete="off" class="form-control form-input">
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputUserName">UserName</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-user" aria-hidden="true"></span>
+                                    <input type="text" class="form-control top-1" name="inputUserName" id="inputUserName"
+                                           placeholder="用户名" required  lay-verify="required" autocomplete="off" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputPassword">Password</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-lock" aria-hidden="true"></span>
+                                    <input type="text" class="form-control top-1" name="inputPassword" id="inputPassword"
+                                           placeholder="密码" required  lay-verify="required" autocomplete="off" >
+                                </div>
                             </div>
                         </div>
                         <div class="right-tab-btn-div">
@@ -95,28 +112,28 @@
                                 <div class="personal-right-tab-div">
                                     <form action="#" method="post">
                                         <div class="layui-form-item">
-                                            <label class="right-tab-form-label">IP</label>
+                                            <label class="tabform-label">IP</label>
                                             <div class="layui-input-block">
                                                 <input type="text" name="personal-ip" id="personal-ip" required  lay-verify="required" placeholder="MySQL-数据库IP"
                                                        autocomplete="off" class="form-control form-input">
                                             </div>
                                         </div>
                                         <div class="layui-form-item">
-                                            <label class="right-tab-form-label">Port</label>
+                                            <label class="tabform-label">Port</label>
                                             <div class="layui-input-block">
                                                 <input type="text" name="personal-port" id="personal-port" required  lay-verify="required" placeholder="MySQL-端口号"
                                                        autocomplete="off" class="form-control form-input">
                                             </div>
                                         </div>
                                         <div class="layui-form-item">
-                                            <label class="right-tab-form-label">UserName</label>
+                                            <label class="tabform-label">UserName</label>
                                             <div class="layui-input-block">
                                                 <input type="text" name="personal-userName" id="personal-userName" required  lay-verify="required" placeholder="用户名"
                                                        autocomplete="off" class="form-control form-input">
                                             </div>
                                         </div>
                                         <div class="layui-form-item">
-                                            <label class="right-tab-form-label">Password</label>
+                                            <label class="tabform-label">Password</label>
                                             <div class="layui-input-block">
                                                 <input type="password" name="personal-pwd" id="personal-pwd" required  lay-verify="required" placeholder="密码"
                                                        autocomplete="off" class="form-control form-input">
@@ -133,23 +150,39 @@
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         <strong>Warning!</strong> 您将在该连接上新建一个datadict的数据库！
                                     </div>
-                                    <div style="text-align: center;margin-top: 90px;">
-                                        <button type="button" class="layui-btn layui-btn-primary pre">上一步</button>
-                                        <button type="button" class="btn btn-default submit-button" lay-submit lay-filter="formStep2">下一步</button>
+                                    <div class="init-database-content">
+                                        <div class="desc-content">
+                                            <h3>之后您将能够实现以下功能：</h3>
+                                            <br/>
+                                            <p>
+                                                <span class="layui-badge">1</span>
+                                                对现存数据表进行分类和菜单化管理
+                                            </p>
+                                            <p>
+                                                <span class="layui-badge">2</span>
+                                                实现表结构的版本管理
+                                            </p>
+                                        </div>
+                                        <div class="btn-center">
+                                            <button type="button" class="btn btn-default previous-button left pre">上一步</button>
+                                            <button type="button" class="btn btn-default submit-button right" lay-submit lay-filter="formStep2">确定生成</button>
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <div style="text-align: center;margin-top: 90px;">
-                                        <i class="layui-icon layui-circle"
-                                           style="color: white;font-size:30px;font-weight:bold;background: #52C41A;padding: 20px;line-height: 80px;">&#xe605;</i>
-                                        <div style="font-size: 24px;color: #333;font-weight: 500;margin-top: 30px;">
-                                            入款成功
+                                    <div style="margin-right: 7%;">
+                                        <div style="text-align: center;margin-top: 90px;">
+                                            <i class="layui-icon layui-circle"
+                                               style="color: white;font-size:30px;font-weight:bold;background: #43a6cc;padding: 20px;line-height: 80px;">&#xe605;</i>
+                                            <div style="font-size: 24px;color: #333;font-weight: 500;margin-top: 30px;">
+                                                初始化完成
+                                            </div>
+                                            <div style="font-size: 14px;color: #666;margin-top: 20px;">开始您的个性化之旅吧！</div>
                                         </div>
-                                        <div style="font-size: 14px;color: #666;margin-top: 20px;">预计两小时到账</div>
-                                    </div>
-                                    <div style="text-align: center;margin-top: 50px;">
-                                        <button class="layui-btn next">再入一笔</button>
-                                        <button class="layui-btn layui-btn-primary">查看账单</button>
+                                        <div style="text-align: center;margin-top: 50px;">
+                                            <button type="button" class="btn btn-success">返回主页</button>
+                                            <button type="button" class="btn btn-default submit-button">开始设置</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -162,15 +195,15 @@
 </div>
 <!--版本号-->
 <div class="footer">
-    <p class="footer-p">
+    <p>
         <span> By JF From 2019-03-19 </span>
+        <span><a href="http://glyphicons.com/">友情链接glyphicon</a></span>
     </p>
 </div>
 
 <script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
 <script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
 <script th:src="@{/static/layui/layui.js}"></script>
-<!--<script th:src="@{/static/step-lay/step.js}"></script>-->
 <script th:inline="javascript">
     layui.use('element', function(){
         var element = layui.element;
@@ -240,7 +273,8 @@
     }
 
     $(document).ready(function(){
-        $('#submit_btn').attr("style","display:none;");
+        // $('#submit_btn').attr("style","display:none;");
+        $('#submit_btn').hide();
         mergeRows();
     });
 </script>
@@ -295,10 +329,10 @@
 </script>
 <script>
     function costom_btn_query() {
-        let ip = $('#ip').val();
-        let port = $('#port').val();
-        let userName = $('#userName').val();
-        let pwd = $('#pwd').val();
+        let ip = $('#inputIp').val();
+        let port = $('#inputPort').val();
+        let userName = $('#inputUserName').val();
+        let pwd = $('#inputPassword').val();
         // 验证信息
         if (ip == "" || ip == undefined || typeof ip == "undefined") {
             layer.msg('请输入IP',{time:1000});
@@ -346,7 +380,8 @@
                     return;
                 }
                 layer.msg("connection is ok!", {time:2000, icon:6});
-                $('#submit_btn').attr("style","display:block;");
+                // $('#submit_btn').attr("style","display:block;");
+                $('#submit_btn').show();
                 $('#test_btn').attr("style","display:none;");
             },
             error: function (data) {

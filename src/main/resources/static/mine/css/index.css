@@ -14,6 +14,25 @@ a:visited {
     text-decoration: none;
 }
 
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+
+.ml-6{
+    margin-left: 6%;
+}
+
+.top-1{
+    top: 1px;
+}
+
+.width-233{
+    width: 233px;
+}
+
 .show-grid [class^=col-] {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -27,41 +46,12 @@ a:visited {
     width: auto;
 }
 
-/*搜索*/
-.layui-form-label {
-    float: left;
-    display: block;
-    padding: 9px 15px 9px 0;
-    width: 60px;
-    font-weight: 400;
-    line-height: 20px;
-    text-align: right;
-}
-
-.layui-input-block {
-    margin-left: 0;
-    min-height: 36px;
-}
-
-.layui-form-select .layui-input {
-    padding-right: 30px;
-    cursor: pointer;
-    height: 34px;
-    border-radius: 5px;
-    border: 1px solid #bfbaba;
-}
-
 .layui-tab-content {
-    padding: 10px 0 0 0;
-}
-
-.form-div {
-    width: 100%;
-    display: block;
+    height: 600px;
 }
 
 .form-select {
-    width: 200px;
+    width: 233px;
     float: left;
 }
 
@@ -70,19 +60,13 @@ a:visited {
     float: left;
 }
 
-.left-tab-container {
-    padding-right: 0;
-    padding-left: 0;
-    margin-right: auto;
-    margin-left: auto;
-    width: 100%;
-    height: 548px;
-    overflow-y: auto;
+.right-tab-div {
+    margin: 50px auto;
+    width: 420px;
 }
 
-.right-tab-div {
-    margin-left: 30%;
-    margin-top: 50px;
+.right-tab-div .right-tab-btn-div {
+    padding-left: 130px;
 }
 
 .personal-right-tab-div {
@@ -90,27 +74,32 @@ a:visited {
     margin-top: 20px;
 }
 
-.right-tab-form-label {
+.personal-right-tab-div .right-tab-btn-div {
+    padding-left: 130px;
+}
+
+.tabform-label {
     float: left;
     display: block;
     padding: 9px 15px 9px 0;
     width: 90px;
     font-weight: 400;
-    line-height: 20px;
+    line-height: 15px;
     text-align: right;
 }
 
-.right-tab-div .right-tab-btn-div {
-    padding-left: 130px;
+.init-database-content{
+    width: 40%;
+    margin-left: 27%;
 }
 
-.personal-right-tab-div .right-tab-btn-div {
-    padding-left: 130px;
+.desc-content{
+    margin-bottom: 40px;
 }
 
 .alert{
     width: 40%;
-    margin-left: 28%;
+    margin-left: 27%;
     padding: 10px;
 }
 
@@ -119,42 +108,45 @@ a:visited {
 }
 
 /* 按钮美化 */
+.previous-button {
+    width: 80px;
+    height: 33px;
+    border-width: 0;
+    border-radius: 3px;
+    background: #1c443c40;
+    cursor: pointer;
+    outline: none;
+    color: white;
+    font-size: 14px;
+}
 .submit-button {
     width: 80px;
     height: 33px;
     border-width: 0;
     border-radius: 3px;
-    background: #1c93f9;
+    background: #3084ec;
     cursor: pointer;
     outline: none;
     color: white;
     font-size: 14px;
-    float: right;
 }
 
 /* 鼠标移入按钮范围时改变颜色 */
+.previous-button:hover {
+    background: #1c443c40;
+}
 .submit-button:hover {
-    background: #1c93f9;
+    background: #3084ec;
+}
+
+.btn-center {
+    margin-right: auto;
+    margin-left: auto;
+    width: 270px;
 }
 
 /*底部*/
 .footer {
-    position: absolute;
-    bottom: 0;
-    margin: auto 0;
-    width: 60%;
-    height: 40px;
-    left: 20%;
-    text-align: center;
-    vertical-align: middle;
-    border-top: 1px solid #cccccc;
-}
-
-.footer-p {
-    margin-top: 10px;
-}
-
-/*.footer {
     bottom: 0;
     margin: auto 0;
     width: 100%;
@@ -163,20 +155,15 @@ a:visited {
     vertical-align: middle;
 }
 
-.footer .footer-middle {
-    width: 60%;
-    float: left;
-    border-top: 1px solid #cccccc;
+/*  覆盖bootstrap样式 */
+.btn-primary {
+    color: #fff;
+    background-color: #3084ec;
+    border-color: #3084ec;
 }
-
-.footer .footer-left {
-    width: 20%;
-    float: left;
-    height: 40px;
+label {
+    font-weight: 400;
 }
-
-.footer .footer-right {
-    width: 20%;
-    float: left;
-    height: 40px;
-}*/
+.input-group .form-control{
+    width: 233px;
+}
