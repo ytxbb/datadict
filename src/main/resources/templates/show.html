@@ -169,10 +169,10 @@
 </script>
 <script>
     $(document).keydown(function(event){
-        if(event.ctrlKey && event.keyCode === 116)
+        if ((event.ctrlKey && event.keyCode === 82) ||
+            event.keyCode === 116) {
             window.location.href = "/show?db=" + dbName;
-        if(event.keyCode === 116)
-            window.location.href = "/show?db=" + dbName;
+        }
     });
 </script>
 </body>
