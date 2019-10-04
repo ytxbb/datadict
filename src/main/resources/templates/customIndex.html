@@ -29,7 +29,7 @@
         <!--搜索-->
         <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
-                <form class="layui-form" action="/">
+                <form class="layui-form">
                     <div class="form-div">
                         <label class="layui-form-label">数据库</label>
                         <div class="layui-input-block form-select">
@@ -84,13 +84,12 @@
             layer.msg('请必须选择一个数据库',{time:1000});
             return;
         }
-        var url = "/show?dbName=" + db_name;
-        // window.location.href = url;
-        if (table_name == undefined || typeof table_name == "undefined") {
-            // url += "&tableName=" + table_name;
-            table_name = "";
+        let url = "/show?db=" + db_name;
+        if (table_name != undefined && table_name != "" && typeof table_name != "undefined") {
+            url += "&t=" + table_name;
         }
-        new submitForm('/show', { "dbName": db_name, "tableName":table_name }).post();
+        window.location.href = url;
+        // new submitForm('/show', { "dbName": db_name, "tableName":table_name }).post();
     }
 
     var dbName;
@@ -100,8 +99,8 @@
     }
 
     layui.use(['form', 'layer'], function () {
-        var form = layui.form;
-        var layer = layui.layer;
+        let form = layui.form;
+        let layer = layui.layer;
 
         // getDataBaseList();
         form.on('select(select-dbValue)', function(data){

@@ -21,7 +21,7 @@
     <div class="layui-body" id="printContent">
         <!-- 内容主体区域 -->
         <div class="table-head">
-            <h2 th:text="${session.dbName}+数据字典"></h2>
+            <h2 th:text="${session.dbName}+' - '+数据字典"></h2>
             <button onclick="printContent()">点击打印</button>
         </div>
         <div class="table-pad">
@@ -51,7 +51,6 @@
     }
 
     function getTableDetailList(db_name, table_name) {
-        console.log(table_name);
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -166,6 +165,14 @@
             }
         });
         getTableDetailList(dbName, tableName);
+    });
+</script>
+<script>
+    $(document).keydown(function(event){
+        if(event.ctrlKey && event.keyCode === 116)
+            window.location.href = "/show?db=" + dbName;
+        if(event.keyCode === 116)
+            window.location.href = "/show?db=" + dbName;
     });
 </script>
 </body>

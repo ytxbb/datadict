@@ -8,6 +8,7 @@ import com.jf.datadict.service.DataStatisticsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
@@ -26,23 +27,31 @@ public class IndexController {
         return "index";
     }
 
-    @PostMapping("/show")
-    public String show(HttpSession httpSession, @RequestParam("dbName") String dbName, @RequestParam("tableName") String tableName) {
-        httpSession.setAttribute("dbName", dbName);
-        httpSession.setAttribute("tableName", tableName);
-        return "show";
+    @RequestMapping("/show")
+    public ModelAndView show(HttpSession httpSession, ModelAndView mv, @RequestParam("db") String dbName,
+                             @RequestParam(value = "t", required = false) String tableName) {
+        if (httpSession.getAttribute("url") == null) {
+            mv.setViewName("redirect:/");
+        } else {
+            httpSession.setAttribute("dbName", dbName);
+            httpSession.setAttribute("tableName", tableName);
+            mv.setViewName("show");
+        }
+        return mv;
     }
 
-    @PostMapping("/costomShow")
-    public String costomShow(HttpSession httpSession, MySqlVO vo) {
+    @RequestMapping("/costomShow")
+    public ModelAndView costomShow(HttpSession httpSession, ModelAndView mv, MySqlVO vo) {
         String url = StaticMySqlQuery.getMysqlUrl(vo);
         if (url == null) {
-            return "index";
+            mv.setViewName("redirect:/");
+        } else {
+            httpSession.setAttribute("url", url);
+            httpSession.setAttribute("username", vo.getUserName());
+            httpSession.setAttribute("password", vo.getPassword());
+            mv.setViewName("customIndex");
         }
-        httpSession.setAttribute("url", url);
-        httpSession.setAttribute("username", vo.getUserName());
-        httpSession.setAttribute("password", vo.getPassword());
-        return "customIndex";
+        return mv;
     }
 
     @ResponseBody
