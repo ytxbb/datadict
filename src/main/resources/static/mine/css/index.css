@@ -25,6 +25,10 @@ a:visited {
     margin-left: 6%;
 }
 
+.ml-14{
+    margin-left: 14%;
+}
+
 .top-1{
     top: 1px;
 }
@@ -62,7 +66,7 @@ a:visited {
 
 .right-tab-div {
     margin: 50px auto;
-    width: 420px;
+    width: 480px;
 }
 
 .right-tab-div .right-tab-btn-div {
@@ -143,16 +147,6 @@ a:visited {
     margin-right: auto;
     margin-left: auto;
     width: 270px;
-}
-
-/*底部*/
-.footer {
-    bottom: 0;
-    margin: auto 0;
-    width: 100%;
-    height: 40px;
-    text-align: center;
-    vertical-align: middle;
 }
 
 /*  覆盖bootstrap样式 */

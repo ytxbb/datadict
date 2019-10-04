@@ -12,5 +12,5 @@ public class MySqlVO {
     private String ip;
     private String port;
     private String userName;
-    private String pwd;
+    private String password;
 }

@@ -12,6 +12,7 @@ import com.jf.datadict.util.MyStringUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpSession;
 import java.sql.ResultSet;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -43,16 +44,16 @@ public class DetailServiceImpl implements DetailService {
     }
 
     @Override
-    public JSONResult queryMenuList(String dbName) {
+    public JSONResult queryMenuList(HttpSession session, String dbName) {
         if (MyStringUtil.isEmpty(dbName)) {
             return JSONResult.error500("传入参数为空");
         }
 
         List<DictMenu> resMenuList = new ArrayList<>();
-        if (!StaticConstants.DB_MYSQL_MAP.isEmpty()) {
+        if (session.getAttribute("url") != null) {
             String sql = "select table_name,count(table_name) c from information_schema.columns where table_schema ='"+dbName+"' group by table_name";
             try {
-                ResultSet rs = DBUtils.query(sql);
+                ResultSet rs = DBUtils.query(session, sql);
                 while (rs.next()){
                     DictMenu menu = new DictMenu();
 
@@ -159,7 +160,7 @@ public class DetailServiceImpl implements DetailService {
     }
 
     @Override
-    public JSONResult queryTableStructure(String dataBaseName,String tableName) {
+    public JSONResult queryTableStructure(HttpSession session, String dataBaseName,String tableName) {
         if (MyStringUtil.isEmpty(dataBaseName)) {
             throw new ServiceException("数据库名不可为空");
         }
@@ -194,14 +195,14 @@ public class DetailServiceImpl implements DetailService {
         }*/
 
         List<DictTableStructure> dictTableStructures = new ArrayList<>();
-        if (!StaticConstants.DB_MYSQL_MAP.isEmpty()) {
+        if (session.getAttribute("url") != null) {
             String sql = "select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment from information_schema.columns " +
                     "where table_schema = '"+dataBaseName+"'";
             if (realTableName != null) {
                 sql += "and table_name = '"+realTableName+"'";
             }
             try {
-                ResultSet rs = DBUtils.query(sql);
+                ResultSet rs = DBUtils.query(session, sql);
                 while (rs.next()){
                     String table_name = rs.getString("table_name");
                     String column_name = rs.getString("column_name");

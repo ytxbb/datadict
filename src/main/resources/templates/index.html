@@ -8,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}"/>
     <link rel="stylesheet" th:href="@{/static/step-lay/step.css}">
     <link rel="stylesheet" th:href="@{/static/mine/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{/static/mine/css/footer.css}"/>
 </head>
 <body>
 <!--顶部空白-->
@@ -31,18 +32,6 @@
         <div class="layui-tab-content">
             <!--输入IP访问-->
             <div class="layui-tab-item layui-show">
-                <!--
-                <label class="layui-form-label">数据库</label>
-                <div class="layui-input-block form-select">
-                    <select name="dbValue" id="dbValue" lay-verify="required" lay-filter="select-dbValue">
-                        <option value=""></option>
-                    </select>
-                </div>
-                <label class="layui-form-label">表名</label>
-                <input type="text" class="form-control form-input" id="inputSearch"
-                       placeholder="请输入要搜索的表名" autocomplete="off">
-                <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
-                -->
                 <div class="right-tab-div">
                     <form class="form-horizontal" action="/costomShow" method="post">
                         <div class="form-group has-feedback">
@@ -62,7 +51,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <span class="input-group-addon glyphicon glyphicon-link" aria-hidden="true"></span>
-                                    <input type="text" class="form-control top-1" name="inputIp" id="inputIp"
+                                    <input type="text" class="form-control top-1" name="ip" id="inputIp"
                                            placeholder="数据库IP" required  lay-verify="required" autocomplete="off" >
                                 </div>
                             </div>
@@ -72,7 +61,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <span class="input-group-addon glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-                                    <input type="text" class="form-control top-1" name="inputPort" id="inputPort"
+                                    <input type="text" class="form-control top-1" name="port" id="inputPort"
                                            placeholder="端口号" required  lay-verify="required" autocomplete="off" >
                                 </div>
                             </div>
@@ -82,7 +71,7 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <span class="input-group-addon glyphicon glyphicon-user" aria-hidden="true"></span>
-                                    <input type="text" class="form-control top-1" name="inputUserName" id="inputUserName"
+                                    <input type="text" class="form-control top-1" name="userName" id="inputUserName"
                                            placeholder="用户名" required  lay-verify="required" autocomplete="off" >
                                 </div>
                             </div>
@@ -92,14 +81,14 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <span class="input-group-addon glyphicon glyphicon-lock" aria-hidden="true"></span>
-                                    <input type="text" class="form-control top-1" name="inputPassword" id="inputPassword"
+                                    <input type="password" class="form-control top-1" name="password" id="inputPassword"
                                            placeholder="密码" required  lay-verify="required" autocomplete="off" >
                                 </div>
                             </div>
                         </div>
                         <div class="right-tab-btn-div">
-                            <button type="button" class="btn btn-primary" id="test_btn" onclick="costom_btn_query()">测试连接</button>
-                            <button type="submit" class="btn btn-success" id="submit_btn">确定连接</button>
+                            <button type="button" class="btn btn-primary ml-14" id="test_btn" onclick="costom_btn_query()">测试连接</button>
+                            <button type="submit" class="btn btn-success ml-14" id="submit_btn">确定连接</button>
                         </div>
                     </form>
                 </div>
@@ -201,8 +190,8 @@
     </p>
 </div>
 
-<script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
-<script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
+<script th:src="@{/static/mine/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/static/layui/layui.js}"></script>
 <script th:inline="javascript">
     layui.use('element', function(){
@@ -278,24 +267,6 @@
     });
 </script>
 <script>
-    /*function getDataBaseList(){
-        $.ajax({
-            type: 'GET',
-            dataType: 'json',
-            url: '/queryAllDataBase',
-            success: function (data) {
-                $.each(data.data, function (index, item) {
-                    // 下拉菜单里添加元素
-                    $('#dbValue').append(new Option(item, item));
-                });
-                layui.form.render("select");
-            },
-            error: function (data) {
-                layer.msg(data.msg);
-            }
-        })
-    }*/
-
     function refreshToShow(db_name, table_name) {
         if (dbName == "" || db_name == undefined || typeof db_name == "undefined") {
             layer.msg('请必须选择一个数据库',{time:1000});
@@ -357,7 +328,7 @@
             layer.msg('请输入Pwd',{time:1000});
             return;
         }
-        let voInfo = { "ip": ip, "port":port, "userName":userName, "pwd":pwd };
+        let voInfo = { "ip": ip, "port":port, "userName":userName, "password":pwd };
         validauteMySql(voInfo);
     }
     function validauteMySql(voInfo) {
@@ -370,7 +341,7 @@
             data: JSON.stringify(voInfo),
             beforeSend: function (XMLHttpRequest) {
                 //注意，layer.msg默认3秒自动关闭，如果数据加载耗时比较长，需要设置time
-                loadingFlag= layer.msg('正在连接，请稍候……', { icon: 16, shade: 0.2,shadeClose:false,time:60000 });
+                loadingFlag= layer.msg('正在连接，请稍候……', { icon: 16, shade: 0.2,shadeClose:false,time:15000 });
             },
             success: function (data) {
                 layer.close(loadingFlag);
@@ -379,9 +350,9 @@
                     return;
                 }
                 layer.msg("connection is ok!", {time:2000, icon:6});
-                // $('#submit_btn').attr("style","display:block;");
                 $('#submit_btn').show();
-                $('#test_btn').attr("style","display:none;");
+                // $('#test_btn').attr("style","display:none;");
+                $('#test_btn').hide();
             },
             error: function (data) {
                 layer.close(loadingFlag);

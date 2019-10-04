@@ -1,0 +1,61 @@
+html, body, div, ul, li, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, form, input, textarea, th, td, select {
+    margin: 0;
+    padding: 0;
+}
+
+.left{
+    float: left;
+}
+.right{
+    float: right;
+}
+
+.width-233{
+    width: 233px;
+}
+
+.empty-header {
+    height: 30px;
+    width: auto;
+}
+
+.layui-tab-content {
+    height: 600px;
+}
+
+.form-select {
+    width: 233px;
+    float: left;
+}
+
+.form-input {
+    width: 233px;
+    float: left;
+}
+
+/* 按钮美化 */
+.submit-button {
+    width: 80px;
+    height: 33px;
+    border-width: 0;
+    border-radius: 3px;
+    background: #3084ec;
+    cursor: pointer;
+    outline: none;
+    color: white;
+    font-size: 14px;
+}
+
+/* 鼠标移入按钮范围时改变颜色 */
+.submit-button:hover {
+    background: #3084ec;
+}
+
+/*覆盖layui*/
+.layui-input-block {
+   margin-left: 0;
+}
+
+.layui-unselect {
+   height:34px;
+}

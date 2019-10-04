@@ -1,5 +1,6 @@
 package com.jf.datadict.service.impl;
 
+import com.jf.datadict.constants.StaticMySqlQuery;
 import com.jf.datadict.entity.DictMenu;
 import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.JSONResult;
@@ -8,6 +9,7 @@ import com.jf.datadict.service.CustomService;
 import com.jf.datadict.util.DBUtils;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,10 +18,10 @@ import java.util.List;
 public class customServiceImpl implements CustomService {
 
     @Override
-    public JSONResult queryAllDataBaseOfCustom() {
+    public JSONResult queryAllDBOfCustom(HttpSession session) {
         List<String> dataBaseNames = new ArrayList<>();
         try {
-            ResultSet rs = DBUtils.query("select schema_name db_name from information_schema.schemata");
+            ResultSet rs = DBUtils.query(session, StaticMySqlQuery.dbListQuery);
             while (rs.next()){
                 dataBaseNames.add(rs.getString(1));
 
@@ -40,12 +42,12 @@ public class customServiceImpl implements CustomService {
     }
 
     @Override
-    public JSONResult queryMenuList(String dbName) {
+    public JSONResult queryMenuList(HttpSession session, String dbName) {
         List<DictMenu> resMenuList = new ArrayList<>();
 
-        String sql = "select table_name,count(table_name) c from information_schema.columns where table_schema ="+dbName+" group by table_name";
+        String sql = StaticMySqlQuery.getTablesQuery(dbName);
         try {
-            ResultSet rs = DBUtils.query(sql);
+            ResultSet rs = DBUtils.query(session, sql);
             while (rs.next()){
                 DictMenu menu = new DictMenu();
 

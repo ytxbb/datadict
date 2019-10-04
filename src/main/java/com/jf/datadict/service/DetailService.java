@@ -2,6 +2,8 @@ package com.jf.datadict.service;
 
 import com.jf.datadict.model.JSONResult;
 
+import javax.servlet.http.HttpSession;
+
 public interface DetailService {
 
     /**
@@ -12,10 +14,10 @@ public interface DetailService {
     /**
      * 根据名称查询数据源
      */
-    JSONResult queryMenuList(String dbName);
+    JSONResult queryMenuList(HttpSession session, String dbName);
 
     /**
      * 查询表结构
      */
-    JSONResult queryTableStructure(String dataBaseName,String tableName);
+    JSONResult queryTableStructure(HttpSession session, String dataBaseName,String tableName);
 }

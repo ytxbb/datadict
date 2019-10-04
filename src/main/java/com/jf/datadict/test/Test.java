@@ -4,8 +4,6 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.MySqlVO;
-import com.jf.datadict.util.DBUtils;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -21,7 +19,7 @@ public class Test {
         vo.setIp("1270.123.3.3");
         vo.setPort("3306");
         vo.setUserName("root");
-        vo.setPwd("tantan");
+        vo.setPassword("tantan");
         Boolean aBoolean = validauteMySqlConnection(vo);
         System.out.println("是否连接成功"+aBoolean);
     }
@@ -30,7 +28,7 @@ public class Test {
         try {
             Class.forName(driverClassName);
             String url = "jdbc:mysql://" + vo.getIp() + ":" + vo.getPort() + "/mysql?useSSL=false";
-            Connection conn= DriverManager.getConnection(url,vo.getUserName(),vo.getPwd());
+            Connection conn= DriverManager.getConnection(url,vo.getUserName(),vo.getPassword());
             System.out.println(conn);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

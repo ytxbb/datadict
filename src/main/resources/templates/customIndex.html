@@ -6,7 +6,8 @@
     <title>主页</title>
     <link rel="stylesheet" th:href="@{/static/bootstrap/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/static/layui/css/layui.css}"/>
-    <link rel="stylesheet" th:href="@{/static/mine/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{/static/mine/css/custom.css}"/>
+    <link rel="stylesheet" th:href="@{/static/mine/css/footer.css}"/>
 </head>
 <body>
 <!--顶部空白-->
@@ -23,7 +24,7 @@
 <div class="container">
     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
         <ul class="layui-tab-title">
-            <li class="layui-this">自定义数据库</li>
+            <li class="layui-this">数据库选择</li>
         </ul>
         <!--搜索-->
         <div class="layui-tab-content">
@@ -41,7 +42,7 @@
                         <input type="text" class="form-control form-input" id="inputSearch"
                                placeholder="请输入要搜索的表名" autocomplete="off">
 
-                        <button type="button" class="btn btn-default submit-button" onclick="btn_query()">查询</button>
+                        <button type="button" class="btn btn-default submit-button right" onclick="btn_query()">查询</button>
                     </div>
                 </form>
             </div>
@@ -50,29 +51,21 @@
 </div>
 <!--版本号-->
 <div class="footer">
-    <p class="footer-p">
+    <p>
         <span> By JF From 2019-03-19 </span>
+        <span><a href="http://glyphicons.com/">友情链接glyphicon</a></span>
     </p>
 </div>
-<!--<div class="footer">
-    <div class="footer-left"></div>
-    <div class="footer-middle">
-        <p class="footer-p">
-            <span> By JF From 2019-03-19 </span>
-        </p>
-    </div>
-    <div class="footer-right"></div>
-</div>-->
 
-<script th:src="@{/static/mine/jquery-3.3.1.js}"></script>
-<script th:src="@{/static/bootstrap/js/bootstrap.js}"></script>
+<script th:src="@{/static/mine/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/static/bootstrap/js/bootstrap.min.js}"></script>
 <script th:src="@{/static/layui/layui.all.js}"></script>
 <script>
     function getDataBaseList(){
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: '/queryAllDataBaseOfCustom',
+            url: '/queryAllDBOfCustom',
             success: function (data) {
                 $.each(data.data, function (index, item) {
                     // 下拉菜单里添加元素
