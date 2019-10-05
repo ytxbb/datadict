@@ -78,3 +78,12 @@ a:hover {
 .layui-input {
     height: 34px;
 }
+
+.layui-form-select .layui-input{
+    border: none;
+    border-bottom: 1px solid #999;
+}
+
+.layui-anim-upbit{
+    text-align: left;
+}

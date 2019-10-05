@@ -24,10 +24,7 @@
             <h2 th:text="${session.dbName}+' - '+数据字典"></h2>
             <div class="operate">
                 <form class="layui-form" action="">
-                    <button type="button" class="btn btn-default left">返回</button>
-                    <button type="button" class="btn btn-default ml-10 right" onclick="printContent()">打印</button>
-                    <button type="button" class="btn btn-default cyan-button ml-10 right" onclick="btn_query()">查询</button>
-                    <div class="layui-input-inline right">
+                    <div class="layui-input-inline left">
                         <select name="modules" id="inputSearch" autocomplete="off" lay-search="">
                             <option value="">请输入要搜索的表名</option>
                             <option value="1">layer</option>
@@ -52,6 +49,9 @@
                             <option value="20">radio</option>
                         </select>
                     </div>
+                    <button type="button" class="btn btn-default cyan-button ml-10 left" onclick="btn_query()">查询</button>
+                    <button type="button" class="btn btn-default ml-10 left">返回</button>
+                    <button type="button" class="btn btn-default cyan-button ml-10 right" onclick="printContent()">打印</button>
                 </form>
             </div>
         </div>
