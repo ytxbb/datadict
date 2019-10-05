@@ -22,7 +22,38 @@
         <!-- 内容主体区域 -->
         <div class="table-head">
             <h2 th:text="${session.dbName}+' - '+数据字典"></h2>
-            <button onclick="printContent()">点击打印</button>
+            <div class="operate">
+                <form class="layui-form" action="">
+                    <button type="button" class="btn btn-default left">返回</button>
+                    <button type="button" class="btn btn-default ml-10 right" onclick="printContent()">打印</button>
+                    <button type="button" class="btn btn-default cyan-button ml-10 right" onclick="btn_query()">查询</button>
+                    <div class="layui-input-inline right">
+                        <select name="modules" id="inputSearch" autocomplete="off" lay-search="">
+                            <option value="">请输入要搜索的表名</option>
+                            <option value="1">layer</option>
+                            <option value="2">form</option>
+                            <option value="3">layim</option>
+                            <option value="4">element</option>
+                            <option value="5">laytpl</option>
+                            <option value="6">upload</option>
+                            <option value="7">laydate</option>
+                            <option value="8">laypage</option>
+                            <option value="9">flow</option>
+                            <option value="10">util</option>
+                            <option value="11">code</option>
+                            <option value="12">tree</option>
+                            <option value="13">layedit</option>
+                            <option value="14">nav</option>
+                            <option value="15">tab</option>
+                            <option value="16">table</option>
+                            <option value="17">select</option>
+                            <option value="18">checkbox</option>
+                            <option value="19">switch</option>
+                            <option value="20">radio</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="table-pad">
             <table class="table table-bordered table-hover" id="list">

@@ -1,30 +1,17 @@
 .layui-header {
     width: 200px;
 }
+
 .layui-layout-admin .layui-body {
     top: 0;
 }
+
 .layui-bg-black {
-    background-color: #23262e!important;
+    background-color: #23262e !important;
 }
+
 .layui-nav {
     background-color: #23262e;
-}
-.footer-p {
-    padding-left: 500px;
-}
-
-.table-head{
-    padding-top: 2%;
-    width: 90%;
-    padding-left: 10%;
-    text-align: center;
-}
-
-.table-pad{
-    padding-top: 3%;
-    width: 90%;
-    padding-left: 10%;
 }
 
 a:hover {
@@ -32,6 +19,62 @@ a:hover {
     text-decoration: none;
 }
 
-.a-logo{
+.a-logo {
     color: #009688;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+
+.footer-p {
+    margin: 0 auto;
+    width: 330px;
+}
+
+/*主体部分-头部*/
+.table-head {
+    padding-top: 2%;
+    width: 90%;
+    padding-left: 10%;
+    text-align: center;
+}
+
+.operate {
+    margin-top: 20px;
+    height: 25px;
+}
+
+.form-input {
+    width: 233px;
+    float: left;
+}
+
+.cyan-button {
+    background: #aee1f1;
+}
+
+/* 鼠标移入按钮范围时改变颜色 */
+.cyan-button:hover {
+    background: #aee1f1;
+}
+
+/*主体内容-body*/
+.table-pad {
+    padding-top: 2%;
+    width: 90%;
+    padding-left: 10%;
+}
+
+/*覆盖原layui*/
+.layui-input {
+    height: 34px;
 }
