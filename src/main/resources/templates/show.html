@@ -27,30 +27,10 @@
                     <div class="layui-input-inline left">
                         <select name="modules" id="inputSearch" autocomplete="off" lay-search="">
                             <option value="">请输入要搜索的表名</option>
-                            <option value="1">layer</option>
-                            <option value="2">form</option>
-                            <option value="3">layim</option>
-                            <option value="4">element</option>
-                            <option value="5">laytpl</option>
-                            <option value="6">upload</option>
-                            <option value="7">laydate</option>
-                            <option value="8">laypage</option>
-                            <option value="9">flow</option>
-                            <option value="10">util</option>
-                            <option value="11">code</option>
-                            <option value="12">tree</option>
-                            <option value="13">layedit</option>
-                            <option value="14">nav</option>
-                            <option value="15">tab</option>
-                            <option value="16">table</option>
-                            <option value="17">select</option>
-                            <option value="18">checkbox</option>
-                            <option value="19">switch</option>
-                            <option value="20">radio</option>
                         </select>
                     </div>
-                    <button type="button" class="btn btn-default cyan-button ml-10 left" onclick="btn_query()">查询</button>
-                    <button type="button" class="btn btn-default ml-10 left">返回</button>
+                    <button type="button" class="btn btn-default cyan-button ml-10 left" onclick="inputSearchQuery()">查询</button>
+                    <button type="button" class="btn btn-default ml-10 left" onclick="returnCostomShow()">返回</button>
                     <button type="button" class="btn btn-default cyan-button ml-10 right" onclick="printContent()">打印</button>
                 </form>
             </div>
@@ -63,7 +43,7 @@
 
     <div class="layui-footer">
         <p class="footer-p">
-            <span> By JF From 2019-03-19 </span>
+            <span> By LJX From 2019-03-19 </span>
             <span><a href="http://glyphicons.com/">友情链接glyphicon</a></span>
         </p>
     </div>
@@ -76,11 +56,6 @@
     var tableName = [[${session.tableName}]];
 </script>
 <script>
-    function printContent() {
-        var mycontent = document.getElementById("printContent").innerHTML;
-        console.log(mycontent);
-    }
-
     function getTableDetailList(db_name, table_name) {
         $.ajax({
             type: 'POST',
@@ -133,7 +108,7 @@
         })
     }
 
-    $(function () {
+    function getShowContent() {
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -190,13 +165,39 @@
                 $("#nav").html(menu);
                 var element = layui.element;
                 element.init()//初始化element事件，使菜单展开
+
+                // 下拉框中列表展示
+                $.each(data.data, function (index, item) {
+                    // 下拉菜单里添加元素
+                    $('#inputSearch').append(new Option(item.menuName, item.menuName));
+                });
+                layui.form.render("select");
             },
             error: function (data) {
                 layer.msg(data.msg);
             }
         });
+    }
+
+    $(function () {
+        getShowContent();
         getTableDetailList(dbName, tableName);
     });
+</script>
+<script>
+    function inputSearchQuery() {
+        var t = $("#inputSearch").val();
+        getTableDetailList(dbName, t);
+    }
+
+    function returnCostomShow() {
+        window.location.href = "/costomShow";
+    }
+
+    function printContent() {
+        var mycontent = document.getElementById("printContent").innerHTML;
+        console.log(mycontent);
+    }
 </script>
 <script>
     $(document).keydown(function(event){

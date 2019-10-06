@@ -5,6 +5,7 @@ import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
 import com.jf.datadict.service.DataStatisticsService;
+import com.jf.datadict.util.MyStringUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -41,13 +42,19 @@ public class IndexController {
 
     @RequestMapping("/costomShow")
     public ModelAndView costomShow(HttpSession httpSession, ModelAndView mv, MySqlVO vo) {
-        String url = StaticMySqlQuery.getMysqlUrl(vo);
-        if (url == null) {
+        if (httpSession.getAttribute("url") != null) {
+            mv.setViewName("customIndex");
+            return mv;
+        }
+        if (MyStringUtil.isEmpty(vo.getIp())) {
             mv.setViewName("redirect:/");
         } else {
-            httpSession.setAttribute("url", url);
-            httpSession.setAttribute("username", vo.getUserName());
-            httpSession.setAttribute("password", vo.getPassword());
+            if (httpSession.getAttribute("url") == null) {
+                String url = StaticMySqlQuery.getMysqlUrl(vo);
+                httpSession.setAttribute("url", url);
+                httpSession.setAttribute("username", vo.getUserName());
+                httpSession.setAttribute("password", vo.getPassword());
+            }
             mv.setViewName("customIndex");
         }
         return mv;

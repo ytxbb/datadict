@@ -185,7 +185,7 @@
 <!--版本号-->
 <div class="footer">
     <p>
-        <span> By JF From 2019-03-19 </span>
+        <span> By LJX From 2019-03-19 </span>
         <span><a href="http://glyphicons.com/">友情链接glyphicon</a></span>
     </p>
 </div>
@@ -360,6 +360,14 @@
             }
         })
     }
+</script>
+<script>
+    // 控制直接回车键跳过测试连接步骤
+    $(document).keydown(function(event){
+        if (event.keyCode == 13) {
+            return false;
+        }
+    });
 </script>
 <script type="text/javascript">
     /*创造虚拟表单POST提交不留参数于url*/
