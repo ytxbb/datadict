@@ -36,7 +36,7 @@ public class WordKit extends WordConfig {
         }
     };
 
-    public void writeTableToWord(List<MySqlTable> tableList) throws Exception {
+    public void writeTableToWord(List<MySqlTable> tableList, String savePath) throws Exception {
         XWPFDocument document = new XWPFDocument();
         // 设置封面
         setWordFirstPage(document);
@@ -52,7 +52,7 @@ public class WordKit extends WordConfig {
             createSimpleTableNormal(document, mysqlTable, isSetedTitle);
             isSetedTitle = true;
         }
-        saveDocument(document, EXPORT_FILE_PATH);
+        saveDocument(document, savePath);
     }
 
     // 往word插入一张表格
@@ -273,13 +273,13 @@ public class WordKit extends WordConfig {
 
                 switch (j) {
                     case 0:
-                        setCellText(firstCell, (i+1)+"", ROW_COLOR, ROWCEL_MENU_INDEX_WIDTH);
+                        setCellTextOfMenu(firstCell, (i+1)+"", ROW_COLOR, ROWCEL_MENU_INDEX_WIDTH);
                         break;
                     case 1:
-                        setCellText(firstCell, tNameList.get(i), ROW_COLOR, ROWCEL_MENU_NAME_WIDTH);
+                        setCellTextOfMenu(firstCell, tNameList.get(i), ROW_COLOR, ROWCEL_MENU_NAME_WIDTH);
                         break;
                     default:
-                        setCellText(firstCell, mtsMap.get(tNameList.get(i)), ROW_COLOR, ROWCEL_MENU_CHNAME_WIDTH);
+                        setCellTextOfMenu(firstCell, mtsMap.get(tNameList.get(i)), ROW_COLOR, ROWCEL_MENU_CHNAME_WIDTH);
                         break;
                 }
             }
@@ -297,6 +297,18 @@ public class WordKit extends WordConfig {
             cell.setColor(bgcolor);
 
         XWPFParagraph p = getXWPFParagraph(ROW_ALIGNMENT, ROW_FONT_BOLD,
+                ROW_FONT_FAMILY, ROW_FONT_SIZE, ROW_FONT_COLOR, value);
+        cell.setParagraph(p);
+    }
+
+    // 表目录中添加单个列的内容
+    private void setCellTextOfMenu(XWPFTableCell cell, String value, String bgcolor,
+                             int width) {
+        CTTc cttc = cell.getCTTc();
+        CTTcPr cellPr = cttc.addNewTcPr();
+        cellPr.addNewTcW().setW(BigInteger.valueOf(width));
+
+        XWPFParagraph p = getXWPFParagraph(ROW_ALIGNMENT, ROW_FONT_BOLD_OF_MENU,
                 ROW_FONT_FAMILY, ROW_FONT_SIZE, ROW_FONT_COLOR, value);
         cell.setParagraph(p);
     }

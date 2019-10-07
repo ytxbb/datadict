@@ -8,9 +8,9 @@ public abstract class WordConfig {
 	protected final String TITLE_LEVEL_THREE = "标题 3";
 
 	//表目录宽度
-	protected final int ROWCEL_MENU_INDEX_WIDTH = 1800;// 序号的宽度
+	protected final int ROWCEL_MENU_INDEX_WIDTH = 1000;// 序号的宽度
 	protected final int ROWCEL_MENU_NAME_WIDTH = 3000;// 表名的宽度
-	protected final int ROWCEL_MENU_CHNAME_WIDTH = 4000;// 表名说明的宽度
+	protected final int ROWCEL_MENU_CHNAME_WIDTH = 4800;// 表名说明的宽度
 	//注释那一列的宽度
 	protected final int ROW_CEL_WIDTH_REMARK = 2000;// 注释那一列的宽度
 	
@@ -33,6 +33,7 @@ public abstract class WordConfig {
 	protected final int ROW_FONT_SIZE = 9;// 单元格中文字大小
 	protected final String ROW_FONT_FAMILY = "微软雅黑";// 单元格中文字字体
 	protected final boolean ROW_FONT_BOLD = true;// 单元格中文字是否加粗
+	protected final boolean ROW_FONT_BOLD_OF_MENU = false;// 表目录中的单元格中文字是否加粗
 	protected final String ROW_FONT_COLOR = "000000";// 单元格中文字颜色
 	protected final ParagraphAlignment ROW_ALIGNMENT = ParagraphAlignment.LEFT;// 设置表格文字对齐方式
 
@@ -46,7 +47,5 @@ public abstract class WordConfig {
 
 	// 表格主体相关设置
 	protected final String TABLE_WIDTH = "8800";// 表格宽度
-
-	protected final String EXPORT_FILE_PATH = "C:/Users/xyt/Desktop/数据字典.doc";// 导出文件的存放地址
 
 }

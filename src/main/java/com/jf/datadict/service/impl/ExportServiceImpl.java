@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class ExportServiceImpl implements ExportService {
@@ -67,13 +65,21 @@ public class ExportServiceImpl implements ExportService {
             tMap.put(dts.getTableName(), m);
         }
 
+        // 获取当前pc端访问的用户名
+        String currentUser = System.getProperty("user.name");
+        // 获取当前日期
+        SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
+        String currentDate = sf.format(new Date());
+        // 导出文件的存放地址
+        String fileName = "数据字典_"+dataBaseName+"_"+currentDate+".doc";
+        String exportPath = "C:/Users/"+currentUser+"/Desktop/"+fileName;
         WordKit wordKit = new WordKit();
         try {
-            wordKit.writeTableToWord(tableList);
+            wordKit.writeTableToWord(tableList, exportPath);
         } catch (Exception e) {
             e.printStackTrace();
             return JSONResult.error500("导出失败");
         }
-        return JSONResult.ok(null);
+        return JSONResult.ok(fileName);
     }
 }

@@ -37,6 +37,28 @@
             <table class="table table-bordered table-hover" id="list">
             </table>
         </div>
+        <!-- 模态框（Modal） -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <!--<div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            模态框（Modal）标题
+                        </h4>
+                    </div>-->
+                    <div class="modal-body" id="export_modal_body">
+                        导出路径
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">好的
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal -->
+        </div>
     </div>
 
     <div class="layui-footer">
@@ -55,12 +77,17 @@
 </script>
 <script>
     function getTableDetailList(db_name, table_name) {
+        var loadingDetailFlag;
         $.ajax({
             type: 'POST',
             dataType: 'json',
             data: {"db_name": db_name, "table_name": table_name},
             url: '/queryTableStructure',
+            beforeSend: function () {
+                loadingDetailFlag= layer.msg('元数据加载中...', { icon: 16, shade: 0.2,shadeClose:false,time:15000 });
+            },
             success: function (data) {
+                layer.close(loadingDetailFlag);
                 if (data.status !== 200) {
                     layer.msg(data.msg);
                     return;
@@ -101,18 +128,25 @@
                 $("#list").html(tableShow);
             },
             error: function (data) {
+                layer.close(loadingDetailFlag);
                 layer.msg(data.msg);
             }
         })
     }
 
+    /*菜单内容*/
     function getShowContent() {
+        var loadingMenuFlag;
         $.ajax({
             type: 'POST',
             dataType: 'json',
             data: {"dbName": dbName},
             url: '/queryMenuList',
+            beforeSend: function () {
+                loadingMenuFlag= layer.msg('加载中...', { icon: 16, shade: 0.2,shadeClose:false,time:15000 });
+            },
             success: function (data) {
+                layer.close(loadingMenuFlag);
                 if (data.status !== 200) {
                     layer.msg(data.msg);
                     return;
@@ -172,6 +206,7 @@
                 layui.form.render("select");
             },
             error: function (data) {
+                layer.close(loadingMenuFlag);
                 layer.msg(data.msg);
             }
         });
@@ -193,22 +228,32 @@
     }
 
     function exportWord() {
+        var loadingExportFlag;
         $.ajax({
             type: 'POST',
             dataType: 'json',
             data: {"db_name": dbName, "table_name": tableName},
             url: '/exportWord',
+            beforeSend: function () {
+                loadingExportFlag= layer.msg('导出中...', { icon: 16, shade: 0.2,shadeClose:false,time:15000 });
+            },
             success: function (data) {
+                layer.close(loadingExportFlag);
                 if (data.status !== 200) {
                     layer.msg(data.msg+"，文件正在被占用会造成错误！", {time:1500});
                     return;
                 }
-                layer.msg('导出完成！', {time:1500});
+                exportSuccessTipShow(data.data);
             },
             error: function (data) {
+                layer.close(loadingExportFlag);
                 layer.msg(data.msg, {time:2000});
             }
         })
+    }
+    function exportSuccessTipShow(exportFileName) {
+        $('#export_modal_body').html('导出成功！保存在您的桌面 '+exportFileName);
+        $('#myModal').modal('show');
     }
 </script>
 <script>
