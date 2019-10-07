@@ -2,6 +2,7 @@ package com.jf.datadict.controller;
 
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.service.DetailService;
+import com.jf.datadict.service.ExportService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,9 @@ public class DetailController {
 
     @Resource
     private DetailService detailService;
+
+    @Resource
+    private ExportService exportService;
 
     @ResponseBody
     @PostMapping("/queryMenuList")
@@ -35,6 +39,6 @@ public class DetailController {
     public JSONResult exportWord(@RequestParam("db_name") String dataBaseName,
                                           @RequestParam("table_name") String tableName,
                                           HttpSession httpSession) {
-        return detailService.queryTableStructure(httpSession, dataBaseName, tableName);
+        return exportService.Mysql2Word(httpSession, dataBaseName, tableName);
     }
 }

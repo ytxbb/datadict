@@ -198,8 +198,6 @@ public class DetailServiceImpl implements DetailService {
                 e.printStackTrace();
                 throw new ServiceException("查询菜单时出错："+e.getMessage());
             }
-            String listTxt = JSONArray.toJSONString(dictTableStructures);
-            System.out.println(listTxt);
             return JSONResult.ok(dictTableStructures);
         }
 
