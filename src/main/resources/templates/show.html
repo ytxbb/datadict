@@ -29,7 +29,7 @@
                     </div>
                     <button type="button" class="btn btn-default cyan-button ml-10 left" onclick="inputSearchQuery()">查询</button>
                     <button type="button" class="btn btn-default ml-10 left" onclick="returnCostomShow()">返回</button>
-                    <button type="button" class="btn btn-default cyan-button ml-10 right" onclick="printContent()">打印</button>
+                    <button type="button" class="btn btn-default cyan-button ml-10 right" onclick="exportWord()">导出</button>
                 </form>
             </div>
         </div>
@@ -70,7 +70,7 @@
                 $(data.data).each(function (i, item) {
                     if (i === 0) {
                         tableShow += "<thead><tr style='background-color: #f1ccd3'>" +
-                            "<td colspan='7'><strong>" + item.tableName + "&nbsp;&nbsp;" + item.tableChName + "</strong></td></tr></thead>" +
+                            "<td colspan='7'><strong>" + item.tableName + "&nbsp;&nbsp;[" + item.tableChName + "]</strong></td></tr></thead>" +
                             "<thead><tr style='background-color: #c4e7ec'><th>字段名</th>" +
                             "<th width='100px'>数据类型</th>" +
                             "<th width='100px'>长度</th>" +
@@ -81,7 +81,7 @@
                     } else {
                         if (tName !== item.tableName) {
                             tableShow += "<thead><tr style='background-color: #f1ccd3'>" +
-                                "<td colspan='7'><strong>" + item.tableName + "&nbsp;&nbsp;" + item.tableChName + "</strong></td></tr></thead>" +
+                                "<td colspan='7'><strong>" + item.tableName + "&nbsp;&nbsp;[" + item.tableChName + "]</strong></td></tr></thead>" +
                                 "<thead><tr style='background-color: #c4e7ec'><th>字段名</th>" +
                                 "<th>数据类型</th><th>长度</th><th>键值</th><th>是否可空</th><th>默认值</th>" +
                                 "<th>描述</th></tr></thead><tbody>";
@@ -192,9 +192,8 @@
         window.location.href = "/costomShow";
     }
 
-    function printContent() {
-        var mycontent = document.getElementById("printContent").innerHTML;
-        console.log(mycontent);
+    function exportWord() {
+
     }
 </script>
 <script>

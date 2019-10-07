@@ -29,4 +29,12 @@ public class DetailController {
                                           HttpSession httpSession) {
         return detailService.queryTableStructure(httpSession, dataBaseName, tableName);
     }
+
+    @ResponseBody
+    @PostMapping("/exportWord")
+    public JSONResult exportWord(@RequestParam("db_name") String dataBaseName,
+                                          @RequestParam("table_name") String tableName,
+                                          HttpSession httpSession) {
+        return detailService.queryTableStructure(httpSession, dataBaseName, tableName);
+    }
 }

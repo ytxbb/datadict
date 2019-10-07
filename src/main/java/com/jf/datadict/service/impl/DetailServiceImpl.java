@@ -1,8 +1,8 @@
 package com.jf.datadict.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.jf.datadict.constants.StaticConstants;
+import com.jf.datadict.constants.StaticMySqlQuery;
 import com.jf.datadict.dao.DetailMapper;
 import com.jf.datadict.entity.DictMenu;
 import com.jf.datadict.entity.DictTableStructure;
@@ -53,13 +53,13 @@ public class DetailServiceImpl implements DetailService {
 
         List<DictMenu> resMenuList = new ArrayList<>();
         if (session.getAttribute("url") != null) {
-            String sql = "select table_name,count(table_name) c from information_schema.columns where table_schema ='"+dbName+"' group by table_name";
+            String sql = StaticMySqlQuery.getTablesQuery(dbName);
             try {
                 ResultSet rs = DBUtils.query(session, sql);
                 while (rs.next()){
                     DictMenu menu = new DictMenu();
 
-                    int parentUid = (int) (Math.random()*(600-100));
+                    int parentUid = (int) (Math.random()*(1000-100));
                     menu.setParentUid(parentUid);
                     menu.setMenuName(rs.getString(1));
                     resMenuList.add(menu);
@@ -72,92 +72,8 @@ public class DetailServiceImpl implements DetailService {
             return JSONResult.ok(resMenuList);
         }
 
-        List<DictMenu> dictMenus;
-        try {
-            dictMenus = detailMapper.queryMenuList(dbName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServiceException("查询虚拟菜单时出错："+e.getMessage());
-        }
-
-        if (MyStringUtil.checkListIsEmpty(dictMenus)) {
-            List<DictTableStructure> dictTableStructures;
-            try {
-                dictTableStructures = detailMapper.queryTableColumnCount(dbName);
-            } catch (Exception e) {
-                e.printStackTrace();
-                throw new ServiceException("查询该库所有表时出错："+e.getMessage());
-            }
-
-            for (DictTableStructure d : dictTableStructures) {
-                DictMenu menu = new DictMenu();
-
-                int parentUid = (int) (Math.random()*(600-100));
-                menu.setParentUid(parentUid);
-                menu.setMenuName(d.getTableName());
-                resMenuList.add(menu);
-            }
-
-            return JSONResult.ok(resMenuList);
-        }
-
-        Set<String> versionSet = new HashSet<>();
-        for (DictMenu menu : dictMenus) {
-            versionSet.add(menu.getVersion());
-        }
-        // 所有版本List
-        List<String> versionList = new ArrayList<>(versionSet);
-
-        // 最后的结果
-        Map<String, Integer> uidMap = new HashMap<>();
-        Map<Integer, List<DictMenu>> thirdChildMenusMap = new HashMap<>();
-        // 设置版本作为一级菜单
-        for (String v : versionList) {
-            int uid = (int) (Math.random()*(10999-1000));
-            checkUidOnly(uidMap, v, uid);
-
-            List<DictMenu> tempMenuListOfVersion = new ArrayList<>();
-            for (DictMenu menu : dictMenus) {
-                if (menu.getVersion().equals(v)) {
-                    tempMenuListOfVersion.add(menu);
-                }
-            }
-
-            // 设置三级菜单(即表名)
-            for (DictMenu d : tempMenuListOfVersion) {
-                DictMenu thirdDictMenu = new DictMenu(d.getUid(), d.getVersion(), d.getTableName(), d.getParentUid());
-
-                if (thirdChildMenusMap.containsKey(d.getParentUid())) {
-                    thirdChildMenusMap.get(d.getParentUid()).add(thirdDictMenu);
-                }else {
-                    List<DictMenu> thirdChildMenus = new ArrayList<>();
-                    thirdChildMenus.add(thirdDictMenu);
-                    thirdChildMenusMap.put(d.getParentUid(), thirdChildMenus);
-                }
-            }
-
-            List<DictMenu> secondChildMenus = new ArrayList<>();
-            Set<Integer> secondUidSet = new HashSet<>();
-            // 给二级菜单(即分类类目)赋值父ID为生成的uid
-            Iterator<Map.Entry<Integer, List<DictMenu>>> iterator = thirdChildMenusMap.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Integer, List<DictMenu>> entry = iterator.next();
-                for (DictMenu sec : tempMenuListOfVersion) {
-                    Integer secUid = sec.getParentUid();
-                    if (entry.getKey().equals(secUid) && !secondUidSet.contains(secUid)) {
-                        secondUidSet.add(secUid);
-                        DictMenu secDictMenu = new DictMenu(secUid, sec.getVersion(), sec.getTypeName(), uid);
-                        secDictMenu.setChildMenus(entry.getValue());
-                        secondChildMenus.add(secDictMenu);
-                    }
-                }
-            }
-
-            DictMenu firstDictMenu = new DictMenu(uid, v, v, null);
-            firstDictMenu.setChildMenus(secondChildMenus);
-            resMenuList.add(firstDictMenu);
-        }
-
+        // 自定义配置时候的菜单显示
+        resMenuList = getDefineMenu(dbName);
         return JSONResult.ok(resMenuList);
     }
 
@@ -182,7 +98,7 @@ public class DetailServiceImpl implements DetailService {
         if (session.getAttribute("url") != null) {
             // 查询字段个数
             Map<String, Integer> ccMap = new HashMap<>();
-            String sqlForCount = "select table_name t,count(table_name) c from information_schema.columns where table_schema = '"+dataBaseName+"' group by t";
+            String sqlForCount = StaticMySqlQuery.countField(dataBaseName);
             try{
                 ResultSet rs = DBUtils.query(session, sqlForCount);
                 while (rs.next()) {
@@ -201,7 +117,7 @@ public class DetailServiceImpl implements DetailService {
 
             // 查询表名注释
             Map<String, String> commentMap = new HashMap<>();
-            String sqlForComment = "select table_name tn,table_comment tc from information_schema.tables where table_schema = '"+dataBaseName+"'";
+            String sqlForComment = StaticMySqlQuery.getTableComment(dataBaseName);
             try{
                 ResultSet rs = DBUtils.query(session, sqlForComment);
                 while (rs.next()) {
@@ -215,11 +131,7 @@ public class DetailServiceImpl implements DetailService {
             }
 
             // 查询表字段
-            String sql = "select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment from information_schema.columns " +
-                    "where table_schema = '"+dataBaseName+"'";
-            if (realTableName != null) {
-                sql += "and table_name = '"+realTableName+"'";
-            }
+            String sql = StaticMySqlQuery.getTableFieldDetail(dataBaseName, realTableName);
             try {
                 ResultSet rs = DBUtils.query(session, sql);
                 while (rs.next()){
@@ -291,6 +203,7 @@ public class DetailServiceImpl implements DetailService {
             return JSONResult.ok(dictTableStructures);
         }
 
+        /*-------------------------------------自定义配置时候可能会用到----------------------------------------------------*/
         // 查询字段个数
         List<DictTableStructure> columnCountRes;
         try {
@@ -408,5 +321,99 @@ public class DetailServiceImpl implements DetailService {
             return null;
         }
         return childList;
+    }
+
+    /**
+     * 自定义配置时候的三级菜单显示
+     * @param dbName
+     * @return
+     */
+    private List<DictMenu> getDefineMenu(String dbName) {
+        List<DictMenu> resMenuList = new ArrayList<>();
+        List<DictMenu> dictMenus;
+        try {
+            dictMenus = detailMapper.queryMenuList(dbName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("查询虚拟菜单时出错："+e.getMessage());
+        }
+
+        if (MyStringUtil.checkListIsEmpty(dictMenus)) {
+            List<DictTableStructure> dictTableStructures;
+            try {
+                dictTableStructures = detailMapper.queryTableColumnCount(dbName);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ServiceException("查询该库所有表时出错："+e.getMessage());
+            }
+
+            for (DictTableStructure d : dictTableStructures) {
+                DictMenu menu = new DictMenu();
+
+                int parentUid = (int) (Math.random()*(600-100));
+                menu.setParentUid(parentUid);
+                menu.setMenuName(d.getTableName());
+                resMenuList.add(menu);
+            }
+            return resMenuList;
+        }
+
+        Set<String> versionSet = new HashSet<>();
+        for (DictMenu menu : dictMenus) {
+            versionSet.add(menu.getVersion());
+        }
+        // 所有版本List
+        List<String> versionList = new ArrayList<>(versionSet);
+
+        // 最后的结果
+        Map<String, Integer> uidMap = new HashMap<>();
+        Map<Integer, List<DictMenu>> thirdChildMenusMap = new HashMap<>();
+        // 设置版本作为一级菜单
+        for (String v : versionList) {
+            int uid = (int) (Math.random()*(10999-1000));
+            checkUidOnly(uidMap, v, uid);
+
+            List<DictMenu> tempMenuListOfVersion = new ArrayList<>();
+            for (DictMenu menu : dictMenus) {
+                if (menu.getVersion().equals(v)) {
+                    tempMenuListOfVersion.add(menu);
+                }
+            }
+
+            // 设置三级菜单(即表名)
+            for (DictMenu d : tempMenuListOfVersion) {
+                DictMenu thirdDictMenu = new DictMenu(d.getUid(), d.getVersion(), d.getTableName(), d.getParentUid());
+
+                if (thirdChildMenusMap.containsKey(d.getParentUid())) {
+                    thirdChildMenusMap.get(d.getParentUid()).add(thirdDictMenu);
+                }else {
+                    List<DictMenu> thirdChildMenus = new ArrayList<>();
+                    thirdChildMenus.add(thirdDictMenu);
+                    thirdChildMenusMap.put(d.getParentUid(), thirdChildMenus);
+                }
+            }
+
+            List<DictMenu> secondChildMenus = new ArrayList<>();
+            Set<Integer> secondUidSet = new HashSet<>();
+            // 给二级菜单(即分类类目)赋值父ID为生成的uid
+            Iterator<Map.Entry<Integer, List<DictMenu>>> iterator = thirdChildMenusMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Integer, List<DictMenu>> entry = iterator.next();
+                for (DictMenu sec : tempMenuListOfVersion) {
+                    Integer secUid = sec.getParentUid();
+                    if (entry.getKey().equals(secUid) && !secondUidSet.contains(secUid)) {
+                        secondUidSet.add(secUid);
+                        DictMenu secDictMenu = new DictMenu(secUid, sec.getVersion(), sec.getTypeName(), uid);
+                        secDictMenu.setChildMenus(entry.getValue());
+                        secondChildMenus.add(secDictMenu);
+                    }
+                }
+            }
+
+            DictMenu firstDictMenu = new DictMenu(uid, v, v, null);
+            firstDictMenu.setChildMenus(secondChildMenus);
+            resMenuList.add(firstDictMenu);
+        }
+        return resMenuList;
     }
 }
