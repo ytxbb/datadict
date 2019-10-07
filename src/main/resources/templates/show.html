@@ -12,12 +12,10 @@
     <div class="layui-header">
         <div class="layui-logo"><a href="/" class="a-logo">YTBB-数据字典</a></div>
     </div>
-
     <div class="layui-side layui-bg-black" id="admin-side">
         <div class="layui-side-scroll" id="nav">
         </div>
     </div>
-
     <div class="layui-body" id="printContent">
         <!-- 内容主体区域 -->
         <div class="table-head">
@@ -72,7 +70,7 @@
                 $(data.data).each(function (i, item) {
                     if (i === 0) {
                         tableShow += "<thead><tr style='background-color: #f1ccd3'>" +
-                            "<td colspan='7'><strong>" + item.tableChName + "&nbsp;&nbsp;" + item.tableName + "</strong></td></tr></thead>" +
+                            "<td colspan='7'><strong>" + item.tableName + "&nbsp;&nbsp;" + item.tableChName + "</strong></td></tr></thead>" +
                             "<thead><tr style='background-color: #c4e7ec'><th>字段名</th>" +
                             "<th width='100px'>数据类型</th>" +
                             "<th width='100px'>长度</th>" +
@@ -83,7 +81,7 @@
                     } else {
                         if (tName !== item.tableName) {
                             tableShow += "<thead><tr style='background-color: #f1ccd3'>" +
-                                "<td colspan='7'><strong>" + item.tableChName + "&nbsp;&nbsp;" + item.tableName + "</strong></td></tr></thead>" +
+                                "<td colspan='7'><strong>" + item.tableName + "&nbsp;&nbsp;" + item.tableChName + "</strong></td></tr></thead>" +
                                 "<thead><tr style='background-color: #c4e7ec'><th>字段名</th>" +
                                 "<th>数据类型</th><th>长度</th><th>键值</th><th>是否可空</th><th>默认值</th>" +
                                 "<th>描述</th></tr></thead><tbody>";

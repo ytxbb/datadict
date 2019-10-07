@@ -1,5 +1,7 @@
 package com.jf.datadict.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.jf.datadict.constants.StaticConstants;
 import com.jf.datadict.dao.DetailMapper;
 import com.jf.datadict.entity.DictMenu;
@@ -176,26 +178,43 @@ public class DetailServiceImpl implements DetailService {
             }
         }
 
-        // 查询字段个数
-        /*List<DictTableStructure> columnCountRes;
-        try {
-            columnCountRes = detailMapper.queryTableColumnCount(dataBaseName);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new ServiceException("查询表字段个数出错："+e.getMessage());
-        }
-
-        Map<String, Integer> ccMap = new HashMap<>();
-        if (MyStringUtil.checkListNotEmpty(columnCountRes)) {
-            ccMap = columnCountRes.stream().collect(Collectors.toMap(DictTableStructure::getTableName, DictTableStructure::getSize));
-        }
-
-        if (ccMap.isEmpty()) {
-            return JSONResult.build(100, "该库无数据表");
-        }*/
-
         List<DictTableStructure> dictTableStructures = new ArrayList<>();
         if (session.getAttribute("url") != null) {
+            // 查询字段个数
+            Map<String, Integer> ccMap = new HashMap<>();
+            String sqlForCount = "select table_name t,count(table_name) c from information_schema.columns where table_schema = '"+dataBaseName+"' group by t";
+            try{
+                ResultSet rs = DBUtils.query(session, sqlForCount);
+                while (rs.next()) {
+                    String t = rs.getString("t");
+                    int c = rs.getInt("c");
+                    ccMap.put(t, c);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ServiceException("查询表字段个数出错："+e.getMessage());
+            }
+
+            if (ccMap.isEmpty()) {
+                return JSONResult.build(100, "该库无数据表");
+            }
+
+            // 查询表名注释
+            Map<String, String> commentMap = new HashMap<>();
+            String sqlForComment = "select table_name tn,table_comment tc from information_schema.tables where table_schema = '"+dataBaseName+"'";
+            try{
+                ResultSet rs = DBUtils.query(session, sqlForComment);
+                while (rs.next()) {
+                    String t = rs.getString("tn");
+                    String c = rs.getString("tc");
+                    commentMap.put(t, c);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new ServiceException("查询表名注释出错："+e.getMessage());
+            }
+
+            // 查询表字段
             String sql = "select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment from information_schema.columns " +
                     "where table_schema = '"+dataBaseName+"'";
             if (realTableName != null) {
@@ -251,14 +270,43 @@ public class DetailServiceImpl implements DetailService {
                         ds.setDefaultValue("");
                     }
 
+                    if (tableChName == null) {
+                        ds.setTableChName(commentMap.get(ds.getTableName()));
+                    } else {
+                        ds.setTableChName(tableChName);
+                    }
+
+                    if (ccMap.containsKey(ds.getTableName())) {
+                        ds.setFieldCount(ccMap.get(ds.getTableName()));
+                    }
+
                     dictTableStructures.add(ds);
                 }
             } catch (Exception e){
                 e.printStackTrace();
                 throw new ServiceException("查询菜单时出错："+e.getMessage());
             }
-
+            String listTxt = JSONArray.toJSONString(dictTableStructures);
+            System.out.println(listTxt);
             return JSONResult.ok(dictTableStructures);
+        }
+
+        // 查询字段个数
+        List<DictTableStructure> columnCountRes;
+        try {
+            columnCountRes = detailMapper.queryTableColumnCount(dataBaseName);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ServiceException("查询表字段个数出错："+e.getMessage());
+        }
+
+        Map<String, Integer> ccMap = new HashMap<>();
+        if (MyStringUtil.checkListNotEmpty(columnCountRes)) {
+            ccMap = columnCountRes.stream().collect(Collectors.toMap(DictTableStructure::getTableName, DictTableStructure::getFieldCount));
+        }
+
+        if (ccMap.isEmpty()) {
+            return JSONResult.build(100, "该库无数据表");
         }
 
         // 查询表名注释
@@ -315,9 +363,9 @@ public class DetailServiceImpl implements DetailService {
                 } else {
                     ds.setTableChName(tableChName);
                 }
-                /*if (ccMap.containsKey(ds.getTableName())) {
-                    ds.setSize(ccMap.get(ds.getTableName()));
-                }*/
+                if (ccMap.containsKey(ds.getTableName())) {
+                    ds.setFieldCount(ccMap.get(ds.getTableName()));
+                }
             }
             return JSONResult.ok(dictTableStructures);
         }
