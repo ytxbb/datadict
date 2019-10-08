@@ -12,7 +12,7 @@
     <artifactId>datadict</artifactId>
     <version>1.0</version>
     <name>datadict</name>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <description>在线数据字典</description>
 
     <properties>
@@ -21,8 +21,10 @@
         <java.version>1.8</java.version>
         <fastjson>1.2.49</fastjson>
         <druid.version>1.1.10</druid.version>
-        <hutool-all.version>4.1.12</hutool-all.version>
         <lombok.version>1.16.20</lombok.version>
+        <mysql-connector>5.1.46</mysql-connector>
+        <poi-ooxml>3.17</poi-ooxml>
+        <!--<hutool-all.version>4.1.12</hutool-all.version>-->
     </properties>
 
     <dependencies>
@@ -37,24 +39,30 @@
             </exclusions>
         </dependency>
 
-        <!-- 引入log4j2依赖 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-log4j2</artifactId>
-        </dependency>
-
-        <!-- 排除内置tomcat容器，导出成war包可以让外部容器运行spring-boot项目-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <!-- provided表明该包只在编译和测试的时候用 -->
-            <!--<scope>provided</scope>-->
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>2.1.0.RELEASE</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <!-- 引入log4j2依赖 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
 
         <!-- Spring Boot Mybatis 依赖 -->
@@ -75,7 +83,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.46</version>
+            <version>${mysql-connector}</version>
         </dependency>
 
         <!-- 连接池 -->
@@ -113,11 +121,11 @@
         </dependency>
 
         <!-- 通用工具类 -->
-        <dependency>
+        <!--<dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
             <version>${hutool-all.version}</version>
-        </dependency>
+        </dependency>-->
 
         <!-- commons-lang3 -->
         <dependency>
@@ -126,6 +134,21 @@
             <version>3.8.1</version>
         </dependency>
 
+        <!-- poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi-ooxml}</version>
+        </dependency>
+
+        <!-- pagehelper -->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper-spring-boot-starter</artifactId>
+            <version>1.2.7</version>
+        </dependency>
+
+        <!-- pdf -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itextpdf</artifactId>
@@ -150,29 +173,17 @@
             <version>9.0.3</version>
         </dependency>
 
-        <!-- poi -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>3.17</version>
-        </dependency>
-
-        <!-- pagehelper -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.7</version>
-        </dependency>
-
         <!-- 热部署 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>datadict</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
@@ -188,7 +199,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.1.0.RELEASE</version>
             </plugin>
         </plugins>
     </build>
