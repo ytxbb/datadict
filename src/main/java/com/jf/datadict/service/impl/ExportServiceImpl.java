@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -44,7 +45,7 @@ public class ExportServiceImpl implements ExportService {
                 if (MyStringUtil.isEmpty(dts.getTableChName())) {
                     m.setTitle(dts.getTableName());
                 } else {
-                    m.setTitle(dts.getTableChName()+dts.getTableName());
+                    m.setTitle(dts.getTableChName()+" "+dts.getTableName());
                 }
                 m.setTableName(dts.getTableName());
                 m.setTableChName(dts.getTableChName());
@@ -78,6 +79,9 @@ public class ExportServiceImpl implements ExportService {
             wordKit.writeTableToWord(tableList, exportPath);
         } catch (Exception e) {
             e.printStackTrace();
+            if (e instanceof FileNotFoundException) {
+                return JSONResult.error500("文件路径未找到！"+e.getMessage());
+            }
             return JSONResult.error500("导出失败");
         }
         return JSONResult.ok(fileName);

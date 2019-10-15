@@ -32,7 +32,7 @@ public abstract class WordConfig {
 	protected final int ROW_CEL_WIDTH = 900;// 表格内容行中单元格的宽度
 	protected final int ROW_FONT_SIZE = 9;// 单元格中文字大小
 	protected final String ROW_FONT_FAMILY = "微软雅黑";// 单元格中文字字体
-	protected final boolean ROW_FONT_BOLD = true;// 单元格中文字是否加粗
+	protected final boolean ROW_FONT_BOLD = false;// 单元格中文字是否加粗
 	protected final boolean ROW_FONT_BOLD_OF_MENU = false;// 表目录中的单元格中文字是否加粗
 	protected final String ROW_FONT_COLOR = "000000";// 单元格中文字颜色
 	protected final ParagraphAlignment ROW_ALIGNMENT = ParagraphAlignment.LEFT;// 设置表格文字对齐方式
