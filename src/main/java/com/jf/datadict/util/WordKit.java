@@ -6,6 +6,7 @@ import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.*;
 
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -36,7 +37,7 @@ public class WordKit extends WordConfig {
         }
     };
 
-    public void writeTableToWord(List<MySqlTable> tableList, String savePath) throws Exception {
+    public void writeTableToWord(List<MySqlTable> tableList, OutputStream out) throws Exception {
         XWPFDocument document = new XWPFDocument();
         // 设置封面
         setWordFirstPage(document);
@@ -52,14 +53,14 @@ public class WordKit extends WordConfig {
             createSimpleTableNormal(document, mysqlTable, isSetedTitle);
             isSetedTitle = true;
         }
-        saveDocument(document, savePath);
+        saveDocument(document, out);
     }
 
     // 往word插入一张表格
     private void createSimpleTableNormal(XWPFDocument document, MySqlTable mysqlTable, boolean isSetedTitle) {
         if (!isSetedTitle) {
             // 设置一级标题
-            setTableTitle(document, TITLE_LEVEL_ONE, 1, mysqlTable.getDbName());
+            setTableTitle(document, TITLE_LEVEL_ONE, 1, "第一章 "+ mysqlTable.getDbName());
         }
         // 设置标题
         setTableTitle(document, TITLE_LEVEL_TWO, 2, mysqlTable.getTitle());
@@ -356,6 +357,10 @@ public class WordKit extends WordConfig {
         document.write(fos);
         fos.close();
         document.close();
+    }
+
+    private void saveDocument(XWPFDocument document, OutputStream out) throws Exception {
+        document.write(out);
     }
 
     /**

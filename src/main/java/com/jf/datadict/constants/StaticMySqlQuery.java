@@ -22,7 +22,7 @@ public class StaticMySqlQuery {
     public static String getTableFieldDetail(String dbName, String realTableName) {
         String sql = "select table_name,column_name,column_type,is_nullable,column_key,column_default,column_comment from information_schema.columns " +
                 "where table_schema = '"+dbName+"'";
-        if (realTableName != null) {
+        if (realTableName != null && !"null".equals(realTableName)) {
             sql += "and table_name = '"+realTableName+"'";
         }
         return sql;

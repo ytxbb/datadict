@@ -215,6 +215,11 @@
     $(function () {
         getShowContent();
         getTableDetailList(dbName, tableName);
+        if (window.performance.navigation.type == 1) {
+            console.log("页面被刷新");
+        }else{
+            console.log("首次被加载")
+        }
     });
 </script>
 <script>
@@ -228,32 +233,8 @@
     }
 
     function exportWord() {
-        var loadingExportFlag;
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            data: {"db_name": dbName, "table_name": tableName},
-            url: '/exportWord',
-            beforeSend: function () {
-                loadingExportFlag= layer.msg('导出中...', { icon: 16, shade: 0.2,shadeClose:false,time:15000 });
-            },
-            success: function (data) {
-                layer.close(loadingExportFlag);
-                if (data.status !== 200) {
-                    layer.msg(data.msg+"，文件正在被占用会造成错误！", {time:1500});
-                    return;
-                }
-                exportSuccessTipShow(data.data);
-            },
-            error: function (data) {
-                layer.close(loadingExportFlag);
-                layer.msg(data.msg, {time:2000});
-            }
-        })
-    }
-    function exportSuccessTipShow(exportFileName) {
-        $('#export_modal_body').html('导出成功！保存在您的桌面 '+exportFileName);
-        $('#myModal').modal('show');
+        layer.msg('导出中...', { icon: 16, shade: 0.2,shadeClose:false,time:1500 });
+        window.location.href="/exportWord3?db="+dbName+"&t="+tableName;
     }
 </script>
 <script>

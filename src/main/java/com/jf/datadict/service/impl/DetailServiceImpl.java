@@ -1,6 +1,5 @@
 package com.jf.datadict.service.impl;
 
-import com.alibaba.fastjson.JSONArray;
 import com.jf.datadict.constants.StaticConstants;
 import com.jf.datadict.constants.StaticMySqlQuery;
 import com.jf.datadict.dao.DetailMapper;

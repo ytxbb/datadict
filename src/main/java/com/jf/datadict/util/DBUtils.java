@@ -1,15 +1,11 @@
 package com.jf.datadict.util;
 
 import com.alibaba.druid.pool.DruidDataSource;
-import com.jf.datadict.constants.StaticConstants;
 import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.MySqlVO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.*;
 

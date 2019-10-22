@@ -5,16 +5,16 @@ import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.model.MySqlTable;
 import com.jf.datadict.service.DetailService;
 import com.jf.datadict.service.ExportService;
-import com.jf.datadict.util.WordKit;
 import com.jf.datadict.util.MyStringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.io.FileNotFoundException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class ExportServiceImpl implements ExportService {
@@ -23,9 +23,9 @@ public class ExportServiceImpl implements ExportService {
     private DetailService detailService;
 
     @Override
-    public JSONResult Mysql2Word(HttpSession session, String dataBaseName, String tableName) {
+    public List<MySqlTable> Mysql2Word(HttpSession session, String dataBaseName, String tableName) {
         if (MyStringUtil.isEmpty(dataBaseName)) {
-            return JSONResult.build(100, "dbName不可为空");
+            return null;
         }
         JSONResult rs = detailService.queryTableStructure(session, dataBaseName, tableName);
         List<DictTableStructure> dtsList = (List<DictTableStructure>) rs.getData();
@@ -41,7 +41,7 @@ public class ExportServiceImpl implements ExportService {
                 fieldList = m.getFieldList();
             } else {
                 m = new MySqlTable();
-                m.setDbName("第一章 "+ StringUtils.upperCase(dataBaseName));
+                m.setDbName(StringUtils.upperCase(dataBaseName));
                 if (MyStringUtil.isEmpty(dts.getTableChName())) {
                     m.setTitle(dts.getTableName());
                 } else {
@@ -65,8 +65,8 @@ public class ExportServiceImpl implements ExportService {
             m.setFieldList(fieldList);
             tMap.put(dts.getTableName(), m);
         }
-
-        // 获取当前pc端访问的用户名
+        return tableList;
+        /*// 获取当前pc端访问的用户名
         String currentUser = System.getProperty("user.name");
         // 获取当前日期
         SimpleDateFormat sf = new SimpleDateFormat("yyyyMMdd");
@@ -84,6 +84,6 @@ public class ExportServiceImpl implements ExportService {
             }
             return JSONResult.error500("导出失败");
         }
-        return JSONResult.ok(fileName);
+        return JSONResult.ok(fileName);*/
     }
 }
