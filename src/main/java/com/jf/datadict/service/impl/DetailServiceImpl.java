@@ -8,7 +8,7 @@ import com.jf.datadict.entity.DictTableStructure;
 import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.service.DetailService;
-import com.jf.datadict.util.DBUtils;
+import com.jf.datadict.util.DBUtil;
 import com.jf.datadict.util.MyStringUtil;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +54,7 @@ public class DetailServiceImpl implements DetailService {
         if (session.getAttribute("url") != null) {
             String sql = StaticMySqlQuery.getTablesQuery(dbName);
             try {
-                ResultSet rs = DBUtils.query(session, sql);
+                ResultSet rs = DBUtil.query(session, sql);
                 while (rs.next()){
                     DictMenu menu = new DictMenu();
 
@@ -99,7 +99,7 @@ public class DetailServiceImpl implements DetailService {
             Map<String, Integer> ccMap = new HashMap<>();
             String sqlForCount = StaticMySqlQuery.countField(dataBaseName);
             try{
-                ResultSet rs = DBUtils.query(session, sqlForCount);
+                ResultSet rs = DBUtil.query(session, sqlForCount);
                 while (rs.next()) {
                     String t = rs.getString("t");
                     int c = rs.getInt("c");
@@ -118,7 +118,7 @@ public class DetailServiceImpl implements DetailService {
             Map<String, String> commentMap = new HashMap<>();
             String sqlForComment = StaticMySqlQuery.getTableComment(dataBaseName);
             try{
-                ResultSet rs = DBUtils.query(session, sqlForComment);
+                ResultSet rs = DBUtil.query(session, sqlForComment);
                 while (rs.next()) {
                     String t = rs.getString("tn");
                     String c = rs.getString("tc");
@@ -132,7 +132,7 @@ public class DetailServiceImpl implements DetailService {
             // 查询表字段
             String sql = StaticMySqlQuery.getTableFieldDetail(dataBaseName, realTableName);
             try {
-                ResultSet rs = DBUtils.query(session, sql);
+                ResultSet rs = DBUtil.query(session, sql);
                 while (rs.next()){
                     String table_name = rs.getString("table_name");
                     String column_name = rs.getString("column_name");

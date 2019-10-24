@@ -43,6 +43,7 @@
                                placeholder="请输入要搜索的表名" autocomplete="off">
 
                         <button type="button" class="btn btn-default submit-button right" onclick="btn_query()">查询</button>
+                        <button type="button" class="btn btn-default default-btn right" onclick="returnIndex()">返回</button>
                     </div>
                 </form>
             </div>
@@ -77,6 +78,10 @@
                 layer.msg(data.msg);
             }
         })
+    }
+
+    function returnIndex() {
+        window.location.href = '/';
     }
 
     function refreshToShow(db_name, table_name) {
@@ -138,18 +143,5 @@
         }
     }
 </script>
-<!--<script>
-    new Vue({
-        el: '#app',
-        data: {
-            visible: true
-        },
-        methods: {
-            show: function () {
-                this.visible = true;
-            }
-        }
-    })
-</script>-->
 </body>
 </html>

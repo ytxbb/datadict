@@ -25,12 +25,13 @@
 <div class="container">
     <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
         <ul class="layui-tab-title">
-            <li class="layui-this">自定义访问</li>
+            <li class="layui-this">MySQL</li>
+            <li>MongoDB</li>
             <li>个性化设置(不做了)</li>
         </ul>
         <!--搜索-->
         <div class="layui-tab-content">
-            <!--输入IP访问-->
+            <!--mysql 输入IP访问-->
             <div class="layui-tab-item layui-show">
                 <div class="right-tab-div">
                     <form class="form-horizontal" action="/costomShow" method="post">
@@ -39,9 +40,8 @@
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <span class="input-group-addon">@</span>
-                                    <select class="form-control form-select" required  lay-verify="required" >
+                                    <select class="form-control form-select" required  lay-verify="required" disabled="disabled">
                                         <option id="mysql">MySql</option>
-                                        <option id="mongodb">MongoDB（即将支持）</option>
                                     </select>
                                 </div>
                             </div>
@@ -87,8 +87,70 @@
                             </div>
                         </div>
                         <div class="right-tab-btn-div">
-                            <button type="button" class="btn btn-primary ml-14" id="test_btn" onclick="costom_btn_query()">测试连接</button>
-                            <button type="submit" class="btn btn-success ml-14" id="submit_btn">确定连接</button>
+                            <button type="button" class="btn btn-primary ml-14" id="test_btn" onclick="costom_btn_mysql_query()">测试连接</button>
+                            <button type="submit" class="btn btn-success submit_btn ml-14">确定连接</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--mongodb IP访问-->
+            <div class="layui-tab-item">
+                <div class="right-tab-div">
+                    <form class="form-horizontal" action="/costomShow" method="post">
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputDB">DBSupport</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@</span>
+                                    <select class="form-control form-select" required  lay-verify="required" disabled="disabled">
+                                        <option id="mongodb">MongoDB</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputMongoIp">IP</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-link" aria-hidden="true"></span>
+                                    <input type="text" class="form-control top-1" name="mongodbIp" id="inputMongoIp"
+                                           placeholder="数据库IP" required  lay-verify="required" autocomplete="off" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputMongoPort">Port</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+                                    <input type="text" class="form-control top-1" name="mongodbPort" id="inputMongoPort"
+                                           placeholder="端口号" required  lay-verify="required" autocomplete="off" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputMongoUserName">UserName</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-user" aria-hidden="true"></span>
+                                    <input type="text" class="form-control top-1" name="mongodbUserName" id="inputMongoUserName"
+                                           placeholder="用户名" required  lay-verify="required" autocomplete="off" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group has-feedback">
+                            <label class="control-label col-sm-3" for="inputMongoPassword">Password</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <span class="input-group-addon glyphicon glyphicon-lock" aria-hidden="true"></span>
+                                    <input type="password" class="form-control top-1" name="mongodbPassword" id="inputMongoPassword"
+                                           placeholder="密码" required  lay-verify="required" autocomplete="off" >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="right-tab-btn-div">
+                            <button type="button" class="btn btn-primary ml-14" id="test_btn" onclick="costom_btn_mongodb_query()">测试连接</button>
+                            <button type="submit" class="btn btn-success submit_btn ml-14">确定连接</button>
                         </div>
                     </form>
                 </div>
@@ -262,7 +324,7 @@
     }
 
     $(document).ready(function(){
-        $('#submit_btn').hide();
+        $('.submit_btn').hide();
         mergeRows();
     });
 </script>
@@ -298,7 +360,8 @@
     })
 </script>
 <script>
-    function costom_btn_query() {
+    /*测试连接mysql*/
+    function costom_btn_mysql_query() {
         let ip = $('#inputIp').val();
         let port = $('#inputPort').val();
         let userName = $('#inputUserName').val();
@@ -308,12 +371,14 @@
             layer.msg('请输入IP',{time:1000});
             return;
         } else {
-            // 判断ip地址的合法性
-            var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-            var reg = ip.match(exp);
-            if(reg==null) {
-                layer.msg("输入IP地址不合法！", {time: 1000});
-                return;
+            if (ip != 'localhost') {
+                // 判断ip地址的合法性
+                var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+                var reg = ip.match(exp);
+                if(reg==null) {
+                    layer.msg("输入IP地址不合法！", {time: 1000});
+                    return;
+                }
             }
         }
         if (port == "" || port == undefined || typeof port == "undefined") {
@@ -336,7 +401,7 @@
         $.ajax({
             type: 'Post',
             dataType: 'json',
-            url: '/validauteMySql',
+            url: '/validateMySql',
             contentType:"application/json",
             data: JSON.stringify(voInfo),
             beforeSend: function (XMLHttpRequest) {
@@ -350,8 +415,63 @@
                     return;
                 }
                 layer.msg("connection is ok!", {time:2000, icon:6});
-                $('#submit_btn').show();
+                $('.submit_btn').show();
                 // $('#test_btn').attr("style","display:none;");
+                $('#test_btn').hide();
+            },
+            error: function (data) {
+                layer.close(loadingFlag);
+                layer.msg(data.msg);
+            }
+        })
+    }
+    /*测试连接mongodb*/
+    function costom_btn_mongodb_query() {
+        let ip = $('#inputMongoIp').val();
+        let port = $('#inputMongoPort').val();
+        let userName = $('#inputMongoUserName').val();
+        let pwd = $('#inputMongoPassword').val();
+        // 验证信息
+        if (ip == "" || ip == undefined || typeof ip == "undefined") {
+            layer.msg('请输入IP',{time:1000});
+            return;
+        } else {
+            if (ip != 'localhost') {
+                // 判断ip地址的合法性
+                var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+                var reg = ip.match(exp);
+                if(reg==null) {
+                    layer.msg("输入IP地址不合法！", {time: 1000});
+                    return;
+                }
+            }
+        }
+        if (port == "" || port == undefined || typeof port == "undefined") {
+            layer.msg('请输入Port',{time:1000});
+            return;
+        }
+        let voInfo = { "mongodbIp": ip, "mongodbPort":port, "mongodbUserName":userName, "mongodbPassword":pwd };
+        validauteMongoDB(voInfo);
+    }
+    function validauteMongoDB(voInfo) {
+        var loadingFlag;
+        $.ajax({
+            type: 'Post',
+            dataType: 'json',
+            url: '/validateMongodb',
+            contentType:"application/json",
+            data: JSON.stringify(voInfo),
+            beforeSend: function (XMLHttpRequest) {
+                loadingFlag= layer.msg('正在连接，请稍候……', { icon: 16, shade: 0.2,shadeClose:false,time:10000 });
+            },
+            success: function (data) {
+                layer.close(loadingFlag);
+                if (data.status !== 200) {
+                    layer.msg(data.msg, {time:2000, icon:5});
+                    return;
+                }
+                layer.msg("connection is ok!", {time:2000, icon:6});
+                $('.submit_btn').show();
                 $('#test_btn').hide();
             },
             error: function (data) {

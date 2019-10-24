@@ -6,7 +6,7 @@ import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.JSONResult;
 import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
-import com.jf.datadict.util.DBUtils;
+import com.jf.datadict.util.DBUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -21,7 +21,7 @@ public class customServiceImpl implements CustomService {
     public JSONResult queryAllDBOfCustom(HttpSession session) {
         List<String> dataBaseNames = new ArrayList<>();
         try {
-            ResultSet rs = DBUtils.query(session, StaticMySqlQuery.dbListQuery);
+            ResultSet rs = DBUtil.query(session, StaticMySqlQuery.dbListQuery);
             while (rs.next()){
                 dataBaseNames.add(rs.getString(1));
 
@@ -34,7 +34,7 @@ public class customServiceImpl implements CustomService {
 
     @Override
     public JSONResult validauteMySqlConnection(MySqlVO vo) {
-        Boolean resConnection = DBUtils.validauteMySqlConnection(vo);
+        Boolean resConnection = DBUtil.validauteMySqlConnection(vo);
         if (!resConnection) {
             return JSONResult.error500("数据库尝试连接失败！");
         }
@@ -47,7 +47,7 @@ public class customServiceImpl implements CustomService {
 
         String sql = StaticMySqlQuery.getTablesQuery(dbName);
         try {
-            ResultSet rs = DBUtils.query(session, sql);
+            ResultSet rs = DBUtil.query(session, sql);
             while (rs.next()){
                 DictMenu menu = new DictMenu();
 

@@ -18,8 +18,12 @@ public class JSONResult {
         this.data = data;
     }
 
+    public static JSONResult ok() {
+    	return new JSONResult(ReturnCode.Code_200, "OK", null);
+    }
+
     public static JSONResult ok(Object data) {
-    	return new JSONResult(ReturnCode.Code_200, "OK", data);
+        return new JSONResult(ReturnCode.Code_200, "OK", data);
     }
 
     public static JSONResult error500(String msg) {

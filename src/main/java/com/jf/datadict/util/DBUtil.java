@@ -21,7 +21,7 @@ import java.sql.*;
  * https://blog.csdn.net/LxxImagine/article/details/81604408
  */
 @PropertySource("classpath:application-dev.properties")
-public class DBUtils {
+public class DBUtil {
 
 	/**初始连接数**/
 	@Value("${spring.datasource.initialSize}")
