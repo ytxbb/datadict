@@ -32,7 +32,7 @@ public class MongoDBUtil {
     private static int serverSelectionTimeout;
 
     private static MongoClientOptions options;
-    {
+    private static void init() {
         // 参数依次是：链接池数量 最大等待时间 scoket超时时间 设置连接池最长生命时间 连接超时时间
         MongoClientOptions.Builder build = new MongoClientOptions.Builder();
         build.connectionsPerHost(maxConnect);
@@ -84,29 +84,30 @@ public class MongoDBUtil {
      * @param dbvo
      * @return
      */
-    public static JSONResult validateMongoDBConnect(MongoDBVO dbvo) {
+    public static Boolean validateMongoDBConnect(MongoDBVO dbvo) {
+        init();
         MongoClient client;
         // ServerAddress()两个参数分别为 服务器地址 和 端口
         ServerAddress serverAddress = new ServerAddress(dbvo.getMongodbIp(), dbvo.getMongodbPort());
 
-        // 验证用户名和密码是否都非空
-        if (!MyStringUtil.isAllEmpty(dbvo.getMongodbuserName(), dbvo.getMongodbPassword())) {
-            // 三个参数分别为 用户名 数据库名称 密码
-            MongoCredential credential = MongoCredential.createScramSha1Credential(
-                    dbvo.getMongodbuserName(), "admin", dbvo.getMongodbPassword().toCharArray());
-            // 通过连接认证获取MongoDB连接
-            client = new MongoClient(serverAddress, credential, options);
-        } else {
-            client = new MongoClient(serverAddress, options);
-        }
-
         try {
+            // 验证用户名和密码是否都非空
+            if (!MyStringUtil.isHasEmpty(dbvo.getMongodbuserName(), dbvo.getMongodbPassword())) {
+                // 三个参数分别为 用户名 数据库名称 密码
+                MongoCredential credential = MongoCredential.createScramSha1Credential(
+                        dbvo.getMongodbuserName(), "admin", dbvo.getMongodbPassword().toCharArray());
+                // 通过连接认证获取MongoDB连接
+                client = new MongoClient(serverAddress, credential, options);
+            } else {
+                client = new MongoClient(serverAddress, options);
+            }
+
             client.getDatabase("admin");
         } catch (Exception e) {
             e.printStackTrace();
-            return JSONResult.error500("MongoDB数据库连接失败");
+            return false;
         }
-        return JSONResult.ok();
+        return true;
     }
 
     public static void main(String[] args) {

@@ -8,6 +8,7 @@ import com.jf.datadict.model.MongoDBVO;
 import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
 import com.jf.datadict.util.DBUtil;
+import com.jf.datadict.util.MongoDBUtil;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -37,14 +38,18 @@ public class customServiceImpl implements CustomService {
     public JSONResult validateMySqlConnection(MySqlVO vo) {
         Boolean resConnection = DBUtil.validauteMySqlConnection(vo);
         if (!resConnection) {
-            return JSONResult.error500("数据库尝试连接失败！");
+            return JSONResult.error500("Mysql数据库尝试连接失败！");
         }
         return JSONResult.ok(true);
     }
 
     @Override
     public JSONResult validateMongoDBConnection(MongoDBVO vo) {
-        return null;
+        Boolean resConnection = MongoDBUtil.validateMongoDBConnect(vo);
+        if (!resConnection) {
+            return JSONResult.error500("Mongodb数据库尝试连接失败！");
+        }
+        return JSONResult.ok(true);
     }
 
     @Override

@@ -21,6 +21,7 @@ public class AuthorizationFilter implements Filter {
         if (!req.getRequestURI().startsWith("/static") && !req.getRequestURI().startsWith("/favicon.ico")
                 && !req.getServletPath().equals("/costomShow")
                 && !req.getServletPath().equals("/validateMySql")
+                && !req.getServletPath().equals("/validateMongodb")
                 && !req.getServletPath().equals("/")) {
             if (req.getSession().getAttribute("url")==null) {
                 rsp.sendRedirect((req.getContextPath()+"/"));

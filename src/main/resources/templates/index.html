@@ -462,7 +462,7 @@
             contentType:"application/json",
             data: JSON.stringify(voInfo),
             beforeSend: function (XMLHttpRequest) {
-                loadingFlag= layer.msg('正在连接，请稍候……', { icon: 16, shade: 0.2,shadeClose:false,time:10000 });
+                loadingFlag= layer.msg('正在连接，请稍候……', { icon: 16, shade: 0.2,shadeClose:false,time:15000 });
             },
             success: function (data) {
                 layer.close(loadingFlag);
@@ -476,7 +476,11 @@
             },
             error: function (data) {
                 layer.close(loadingFlag);
-                layer.msg(data.msg);
+                if (data.msg) {
+                    layer.msg(data.msg);
+                } else {
+                    layer.msg('访问无权限，返回首页！');
+                }
             }
         })
     }
