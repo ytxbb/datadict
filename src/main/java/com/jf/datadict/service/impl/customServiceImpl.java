@@ -4,6 +4,7 @@ import com.jf.datadict.constants.StaticMySqlQuery;
 import com.jf.datadict.entity.DictMenu;
 import com.jf.datadict.exception.ServiceException;
 import com.jf.datadict.model.JSONResult;
+import com.jf.datadict.model.MongoDBVO;
 import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
 import com.jf.datadict.util.DBUtil;
@@ -33,12 +34,17 @@ public class customServiceImpl implements CustomService {
     }
 
     @Override
-    public JSONResult validauteMySqlConnection(MySqlVO vo) {
+    public JSONResult validateMySqlConnection(MySqlVO vo) {
         Boolean resConnection = DBUtil.validauteMySqlConnection(vo);
         if (!resConnection) {
             return JSONResult.error500("数据库尝试连接失败！");
         }
         return JSONResult.ok(true);
+    }
+
+    @Override
+    public JSONResult validateMongoDBConnection(MongoDBVO vo) {
+        return null;
     }
 
     @Override

@@ -100,32 +100,8 @@ public class DetailController {
             bos.close();
             servletOut.flush();
             servletOut.close();
-
-            /*//把创建好的word写入到输出流
-            FileInputStream inputStream = new FileInputStream(exportPath);
-            byte[] buffer = new byte[inputStream.available()];
-
-            inputStream.read(buffer);
-            output = response.getOutputStream();
-            output.write(buffer);
-            //随手关门
-            output.close();
-            inputStream.close();*/
         }catch (IOException e){
             e.printStackTrace();
-        }
-    }
-
-    //发送响应流方法
-    private void setResponseHeader(HttpServletResponse response, String fileName) {
-        try {
-            fileName = new String(fileName.getBytes(), StandardCharsets.UTF_8);
-            response.setContentType("application/octet-stream;charset=UTF-8");
-            response.setHeader("Content-Disposition", "attachment;filename="+ fileName);
-            response.addHeader("Pargam", "no-cache");
-            response.addHeader("Cache-Control", "no-cache");
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 }

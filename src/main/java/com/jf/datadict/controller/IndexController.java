@@ -2,6 +2,7 @@ package com.jf.datadict.controller;
 
 import com.jf.datadict.constants.StaticMySqlQuery;
 import com.jf.datadict.model.JSONResult;
+import com.jf.datadict.model.MongoDBVO;
 import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
 import com.jf.datadict.service.DataStatisticsService;
@@ -61,9 +62,15 @@ public class IndexController {
     }
 
     @ResponseBody
-    @PostMapping("/validauteMySql")
-    public JSONResult validauteMySqlConnection(@RequestBody MySqlVO vo) {
-        return customService.validauteMySqlConnection(vo);
+    @PostMapping("/validateMySql")
+    public JSONResult validateMySqlConnection(@RequestBody MySqlVO vo) {
+        return customService.validateMySqlConnection(vo);
+    }
+
+    @ResponseBody
+    @PostMapping("/validateMongodb")
+    public JSONResult validauteMongodb(@RequestBody MongoDBVO vo) {
+        return customService.validateMongoDBConnection(vo);
     }
 
     @ResponseBody
