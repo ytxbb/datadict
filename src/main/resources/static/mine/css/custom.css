@@ -51,6 +51,11 @@ html, body, div, ul, li, h1, h2, h3, h4, h5, h6, p, dl, dt, dd, ol, form, input,
     background: #3084ec;
 }
 
+.default-btn {
+    margin-right: 15px;
+    width: 80px;
+}
+
 /*覆盖layui*/
 .layui-input-block {
    margin-left: 0;
