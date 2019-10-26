@@ -1,9 +1,8 @@
 package com.jf.datadict.controller;
 
 import com.jf.datadict.constants.StaticMySqlQuery;
+import com.jf.datadict.model.DataBaseVO;
 import com.jf.datadict.model.JSONResult;
-import com.jf.datadict.model.MongoDBVO;
-import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
 import com.jf.datadict.service.DataStatisticsService;
 import com.jf.datadict.util.MyStringUtil;
@@ -42,11 +41,12 @@ public class IndexController {
     }
 
     @RequestMapping("/costomShow")
-    public ModelAndView costomShow(HttpSession httpSession, ModelAndView mv, MySqlVO vo) {
+    public ModelAndView costomShow(HttpSession httpSession, ModelAndView mv, DataBaseVO vo) {
         if (httpSession.getAttribute("url") != null) {
             mv.setViewName("customIndex");
             return mv;
         }
+
         if (MyStringUtil.isEmpty(vo.getIp())) {
             mv.setViewName("redirect:/");
         } else {
@@ -58,18 +58,19 @@ public class IndexController {
             }
             mv.setViewName("customIndex");
         }
+
         return mv;
     }
 
     @ResponseBody
     @PostMapping("/validateMySql")
-    public JSONResult validateMySqlConnection(@RequestBody MySqlVO vo) {
+    public JSONResult validateMySqlConnection(@RequestBody DataBaseVO vo) {
         return customService.validateMySqlConnection(vo);
     }
 
     @ResponseBody
     @PostMapping("/validateMongodb")
-    public JSONResult validauteMongodb(@RequestBody MongoDBVO vo) {
+    public JSONResult validauteMongodb(@RequestBody DataBaseVO vo) {
         return customService.validateMongoDBConnection(vo);
     }
 

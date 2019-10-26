@@ -2,7 +2,7 @@ package com.jf.datadict.util;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.jf.datadict.exception.ServiceException;
-import com.jf.datadict.model.MySqlVO;
+import com.jf.datadict.model.DataBaseVO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
@@ -418,7 +418,7 @@ public class DBUtil {
 		}
 	}
 
-	public static Boolean validauteMySqlConnection(MySqlVO vo){
+	public static Boolean validauteMySqlConnection(DataBaseVO vo){
 		String driverClassName = "com.mysql.jdbc.Driver";
 		try {
 			Class.forName(driverClassName);

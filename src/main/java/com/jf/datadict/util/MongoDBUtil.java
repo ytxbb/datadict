@@ -1,7 +1,6 @@
 package com.jf.datadict.util;
 
-import com.jf.datadict.model.JSONResult;
-import com.jf.datadict.model.MongoDBVO;
+import com.jf.datadict.model.DataBaseVO;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
@@ -17,22 +16,21 @@ import javax.servlet.http.HttpSession;
 public class MongoDBUtil {
 
     @Value("${mongodb.maxConnect}")
-    private static int maxConnect;
+    private static int maxConnect = 50;
 
     @Value("${mongodb.maxWaitThread}")
-    private static int maxWaitThread;
+    private static int maxWaitThread = 50;
 
     @Value("${mongodb.maxTimeOut}")
-    private static int maxTimeOut;
+    private static int maxTimeOut = 30000;
 
     @Value("${mongodb.maxWaitTime}")
-    private static int maxWaitTime;
+    private static int maxWaitTime = 30000;
 
     @Value("${mongodb.serverSelectionTimeout}")
-    private static int serverSelectionTimeout;
+    private static int serverSelectionTimeout = 10000;
 
-    private static MongoClientOptions options;
-    private static void init() {
+    private static MongoClientOptions init() {
         // 参数依次是：链接池数量 最大等待时间 scoket超时时间 设置连接池最长生命时间 连接超时时间
         MongoClientOptions.Builder build = new MongoClientOptions.Builder();
         build.connectionsPerHost(maxConnect);
@@ -40,13 +38,14 @@ public class MongoDBUtil {
         build.connectTimeout(maxTimeOut);// 每次请求耗时超时
         build.maxWaitTime(maxWaitTime);
         build.serverSelectionTimeout(serverSelectionTimeout);// 客户端访问服务端时的连接超时设置时间
-        options = build.build();
+        return build.build();
     }
 
     /**
      * 初始化连接池，设置参数。
      */
     private static MongoClient init(HttpSession session) {
+        MongoClientOptions options = init();
         String mongoIp = (String)session.getAttribute("mongoIp");
         Integer mongoPort = (Integer)session.getAttribute("mongoPort");
         String mongoUserName = (String)session.getAttribute("mongoUserName");
@@ -84,18 +83,18 @@ public class MongoDBUtil {
      * @param dbvo
      * @return
      */
-    public static Boolean validateMongoDBConnect(MongoDBVO dbvo) {
-        init();
+    public static Boolean validateMongoDBConnect(DataBaseVO dbvo) {
+        MongoClientOptions options = init();
         MongoClient client;
         // ServerAddress()两个参数分别为 服务器地址 和 端口
-        ServerAddress serverAddress = new ServerAddress(dbvo.getMongodbIp(), dbvo.getMongodbPort());
+        ServerAddress serverAddress = new ServerAddress(dbvo.getIp(), dbvo.getPort());
 
         try {
             // 验证用户名和密码是否都非空
-            if (!MyStringUtil.isHasEmpty(dbvo.getMongodbuserName(), dbvo.getMongodbPassword())) {
+            if (!MyStringUtil.isAllEmpty(dbvo.getUserName(), dbvo.getPassword())) {
                 // 三个参数分别为 用户名 数据库名称 密码
                 MongoCredential credential = MongoCredential.createScramSha1Credential(
-                        dbvo.getMongodbuserName(), "admin", dbvo.getMongodbPassword().toCharArray());
+                        dbvo.getUserName(), "admin", dbvo.getPassword().toCharArray());
                 // 通过连接认证获取MongoDB连接
                 client = new MongoClient(serverAddress, credential, options);
             } else {

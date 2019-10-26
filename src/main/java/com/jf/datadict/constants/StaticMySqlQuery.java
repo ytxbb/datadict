@@ -1,6 +1,6 @@
 package com.jf.datadict.constants;
 
-import com.jf.datadict.model.MySqlVO;
+import com.jf.datadict.model.DataBaseVO;
 import com.jf.datadict.util.MyStringUtil;
 
 public class StaticMySqlQuery {
@@ -28,8 +28,8 @@ public class StaticMySqlQuery {
         return sql;
     }
 
-    public static String getMysqlUrl(MySqlVO vo){
-        if (MyStringUtil.isHasEmpty(vo.getIp(), vo.getPort())) {
+    public static String getMysqlUrl(DataBaseVO vo){
+        if (MyStringUtil.isEmpty(vo.getIp()) || vo.getPort() == null) {
             return null;
         }
         return "jdbc:mysql://" + vo.getIp() + ":" + vo.getPort() + "/mysql?useSSL=false&useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false";

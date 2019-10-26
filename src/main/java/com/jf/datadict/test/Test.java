@@ -3,7 +3,7 @@ package com.jf.datadict.test;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import com.jf.datadict.exception.ServiceException;
-import com.jf.datadict.model.MySqlVO;
+import com.jf.datadict.model.DataBaseVO;
 
 import java.io.FileOutputStream;
 import java.sql.Connection;
@@ -15,16 +15,16 @@ public class Test {
     private static String driverClassName = "com.mysql.jdbc.Driver";
 
     public static void main1(String[] args) {
-        MySqlVO vo = new MySqlVO();
+        DataBaseVO vo = new DataBaseVO();
         vo.setIp("1270.123.3.3");
-        vo.setPort("3306");
+        vo.setPort(3306);
         vo.setUserName("root");
         vo.setPassword("tantan");
         Boolean aBoolean = validauteMySqlConnection(vo);
         System.out.println("是否连接成功"+aBoolean);
     }
 
-    public static Boolean validauteMySqlConnection(MySqlVO vo){
+    public static Boolean validauteMySqlConnection(DataBaseVO vo){
         try {
             Class.forName(driverClassName);
             String url = "jdbc:mysql://" + vo.getIp() + ":" + vo.getPort() + "/mysql?useSSL=false";

@@ -3,9 +3,8 @@ package com.jf.datadict.service.impl;
 import com.jf.datadict.constants.StaticMySqlQuery;
 import com.jf.datadict.entity.DictMenu;
 import com.jf.datadict.exception.ServiceException;
+import com.jf.datadict.model.DataBaseVO;
 import com.jf.datadict.model.JSONResult;
-import com.jf.datadict.model.MongoDBVO;
-import com.jf.datadict.model.MySqlVO;
 import com.jf.datadict.service.CustomService;
 import com.jf.datadict.util.DBUtil;
 import com.jf.datadict.util.MongoDBUtil;
@@ -35,7 +34,7 @@ public class customServiceImpl implements CustomService {
     }
 
     @Override
-    public JSONResult validateMySqlConnection(MySqlVO vo) {
+    public JSONResult validateMySqlConnection(DataBaseVO vo) {
         Boolean resConnection = DBUtil.validauteMySqlConnection(vo);
         if (!resConnection) {
             return JSONResult.error500("Mysql数据库尝试连接失败！");
@@ -44,7 +43,7 @@ public class customServiceImpl implements CustomService {
     }
 
     @Override
-    public JSONResult validateMongoDBConnection(MongoDBVO vo) {
+    public JSONResult validateMongoDBConnection(DataBaseVO vo) {
         Boolean resConnection = MongoDBUtil.validateMongoDBConnect(vo);
         if (!resConnection) {
             return JSONResult.error500("Mongodb数据库尝试连接失败！");

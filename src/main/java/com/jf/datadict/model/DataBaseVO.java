@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * 表单填写所传VO
+ * 通用数据库连接
  */
 @Getter
 @Setter
-public class MySqlVO {
+public class DataBaseVO {
+    private Integer dbSupprot;
     private String ip;
-    private String port;
+    private Integer port;
     private String userName;
     private String password;
 }
