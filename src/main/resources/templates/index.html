@@ -371,17 +371,18 @@
         if (ip == "" || ip == undefined || typeof ip == "undefined") {
             layer.msg('请输入IP',{time:1000});
             return;
-        } else {
-            if (ip != 'localhost') {
-                // 判断ip地址的合法性
-                var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
-                var reg = ip.match(exp);
-                if(reg==null) {
-                    layer.msg("输入IP地址不合法！", {time: 1000});
-                    return;
-                }
-            }
         }
+        // else {
+        //     if (ip != 'localhost') {
+        //         // 判断ip地址的合法性
+        //         var exp=/^(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])$/;
+        //         var reg = ip.match(exp);
+        //         if(reg==null) {
+        //             layer.msg("输入IP地址不合法！", {time: 1000});
+        //             return;
+        //         }
+        //     }
+        // }
         if (port == "" || port == undefined || typeof port == "undefined") {
             layer.msg('请输入Port',{time:1000});
             return;
